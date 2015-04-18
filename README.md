@@ -1,10 +1,16 @@
 SW-Tutor
 ========
 
-SW-Tutor is This library is the first step of a journey that every markup file in a repository goes on before it is rendered on GitHub.com:
+**SW-Tutor** is a Windows application that is part of an educational project that includes a book entitled *O Jovem Programador* (The Young Programmer) and the SW-Tutor program. It provides an integrated programming environment, with facilities to edit, execute and debug programs. It implements an interpreter of the programming language used in the book, *Lume-br*, which is a mix of
+Pascal and C, using words in Portuguese. The idea is: the student reads the book, and practices everything using the SW-Tutor program.
 
-0. Run the *RAD Studio Command Prompt*. This library converts the raw markup to HTML. See the list of [supported markup formats](#markups) below.
-0. The HTML is sanitized, aggressively removing things that could harm you and your kin—such as `script` tags, inline-styles, and `class` or `id` attributes. See the [sanitization filter](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/sanitization_filter.rb) for the full whitelist.
+Interacting with the SW-Tutor application, the student optionally can see the so called "Memory Diagram". To facilitate the understanding of important dynamic aspects of the execution of a program, the SW-Tutor memory diagram shows the current value of variables, activation and
+deactivation of routines, passing of arguments, etc. In combination with the step by step execution, it is an interesting resource.
+
+
+
+0. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately.
+0. Using the command window, change the current directory (`cd`) to your working directory.
 0. Syntax highlighting is performed on code blocks. See [github/linguist](https://github.com/github/linguist#syntax-highlighting) for more information about syntax highlighting.
 0. The HTML is passed through other filters in the [html-pipeline](https://github.com/jch/html-pipeline) that add special sauce, such as [emoji](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/emoji_filter.rb), [task lists](https://github.com/github/task_list/blob/master/lib/task_list/filter.rb), [named anchors](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb), [CDN caching for images](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/camo_filter.rb), and  [autolinking](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/autolink_filter.rb).
 0. The resulting HTML is rendered on GitHub.com.
