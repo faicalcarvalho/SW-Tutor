@@ -7,60 +7,28 @@ Interacting with the SW-Tutor application, the student optionally can see the so
 
 You can find more information by visiting the site [O Jovem Programador] (http://www.ojovemprogramador.com.br). It is written in Portuguese, by the way.
 
-How to build SW-Tutor.exe
+Building the resource file
 -------
 
-Before building SW-Tutor.exe, you need an updated version of *sw_tutor.res*, the Windows resource file that is linked with the application. Considering that you have your working directory active, do:
+Before building SW-Tutor.exe, you need an updated version of *sw_tutor.res*, the Windows resource file that is linked with the application. Change the current directory to *rc* and run the resource compiler:
 
-    cd rc
-    rc /r sw_tutor.rc
-	cd ..
-	copy rc\sw_tutor.res
+    $ cd rc
+    $ rc /r sw_tutor.rc
 
+The resource compiler produces the *sw_tutor.res* file. You must copy this file to the main directory:
 
+	$ cd ..
+	$ copy rc\sw_tutor.res
 
-0. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately.
-0. Using the command window, change the current directory (`cd`) to your working directory.
-0. Syntax highlighting is performed on code blocks. See [github/linguist](https://github.com/github/linguist#syntax-highlighting) for more information about syntax highlighting.
-0. The HTML is passed through other filters in the [html-pipeline](https://github.com/jch/html-pipeline) that add special sauce, such as [emoji](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/emoji_filter.rb), [task lists](https://github.com/github/task_list/blob/master/lib/task_list/filter.rb), [named anchors](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb), [CDN caching for images](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/camo_filter.rb), and  [autolinking](https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/autolink_filter.rb).
-0. The resulting HTML is rendered on GitHub.com.
+After these steps, the resource file is ready to be linked to the application. Now you need to build the SW-Tutor executable.
 
-Please see our [contributing guidelines](CONTRIBUTING.md) before reporting an issue.
-
-Markups
+Building SW-Tutor.exe
 -------
 
-The following markups are supported.  The dependencies listed are required if
-you wish to run the library. You can also run `script/bootstrap` to fetch them all.
+To build SW-Tutor.exe, you will need *MSBuild*. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately.
 
-* [.markdown, .mdown, .mkdn, .md](http://daringfireball.net/projects/markdown/) -- `gem install redcarpet` (https://github.com/vmg/redcarpet)
-* [.textile](http://www.textism.com/tools/textile/) -- `gem install RedCloth`
-* [.rdoc](http://rdoc.sourceforge.net/) -- `gem install rdoc -v 3.6.1`
-* [.org](http://orgmode.org/) -- `gem install org-ruby`
-* [.creole](http://wikicreole.org/) -- `gem install creole`
-* [.mediawiki, .wiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth`
-* [.rst](http://docutils.sourceforge.net/rst.html) -- `easy_install docutils`
-* [.asciidoc, .adoc, .asc](http://asciidoc.org/) -- `gem install asciidoctor` (http://asciidoctor.org)
-* [.pod](http://search.cpan.org/dist/perl/pod/perlpod.pod) -- `Pod::Simple::HTML`
-  comes with Perl >= 5.10. Lower versions should install [Pod::Simple](http://search.cpan.org/~dwheeler/Pod-Simple-3.28/lib/Pod/Simple.pod) from CPAN.
+In the command window, change the current directory (`cd`) to the working directory, and run MSBuild using DSL_PORT.dproj as argument:
 
-Installation
------------
-
-    gem install github-markup
-
-Usage
------
-
-    require 'github/markup'
-    GitHub::Markup.render('README.markdown', "* One\n* Two")
-
-Or, more realistically:
-
-    require 'github/markup'
-    GitHub::Markup.render(file, File.read(file))
-
-Contributing
-------------
-
-See [Contributing](CONTRIBUTING.md)
+    $ MSBuild DSL_PORT.dproj
+	
+The build must have zero errors, although some warnings may be shown.
