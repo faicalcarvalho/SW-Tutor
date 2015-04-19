@@ -1,11 +1,17 @@
 SW-Tutor
 ========
 
-**SW-Tutor** is a Windows application that is part of an educational project that includes a book entitled *O Jovem Programador* (The Young Programmer) and the SW-Tutor program. It provides an integrated programming environment, with facilities to edit, execute and debug programs. It implements an interpreter of the programming language used in the book, *Lume-br*, which is a mix of Pascal and C, using words in Portuguese. The idea is: the student reads the book, and practices everything using the SW-Tutor program.
+**SW-Tutor** is a Windows application which is part of an educational project that includes a book entitled *O Jovem Programador* (The Young Programmer). It provides an integrated programming environment, with facilities to edit, execute and debug programs. It implements an interpreter of the programming language used in the book, *Lume-br*, which is a mix of Pascal and C, using words in Portuguese. The idea is: the student reads the book and practices everything using the SW-Tutor program.
 
-Interacting with the SW-Tutor application, the student optionally can see the so called "Memory Diagram". To facilitate the understanding of important dynamic aspects of the execution of a program, the SW-Tutor memory diagram shows the current value of variables, activation and deactivation of routines, passing of arguments, etc. In combination with the step by step execution, it is an interesting resource.
+Interacting with the SW-Tutor application, the student optionally can see the so called *Memory Diagram*. To facilitate the understanding of important dynamic aspects of the execution of a program, the SW-Tutor memory diagram shows the current value of variables, activation and deactivation of routines, passing of arguments, etc. In combination with the step by step execution, it is an interesting resource.
 
-You can find more information -- in Portuguese, by the way -- by visiting the site [O Jovem Programador] (www.ojovemprogramador.com.br).
+You can find more information by visiting the site [O Jovem Programador] (www.ojovemprogramador.com.br). It is written in Portuguese, by the way.
+
+How to build SW-Tutor.exe
+-------
+
+The following markups are supported.  The dependencies listed are required if
+you wish to run the library. You can also run `script/bootstrap` to fetch them all.
 
 0. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately.
 0. Using the command window, change the current directory (`cd`) to your working directory.
