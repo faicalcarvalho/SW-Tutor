@@ -3,7 +3,7 @@ SW-Tutor
 
 **SW-Tutor** is a Windows application which is part of an educational project that includes a book entitled *O Jovem Programador* (The Young Programmer). It provides an integrated programming environment, with facilities to edit, execute and debug programs. It implements an interpreter of the programming language used in the book, *Lume-br*, which is a mix of Pascal and C, using words in Portuguese. The idea is: the student reads the book and practices everything using the SW-Tutor program.
 
-Interacting with the SW-Tutor application, the student optionally can see the so called *Memory Diagram*. To facilitate the understanding of important dynamic aspects of the execution of a program, the SW-Tutor memory diagram shows the current value of variables, activation and deactivation of routines, passing of arguments, etc. In combination with the step by step execution, it is an interesting resource.
+Interacting with the SW-Tutor application, the student optionally can see the so called *Memory Diagram*. To facilitate the understanding of important dynamic aspects of the execution of a program, the SW-Tutor memory diagram shows the current value of variables, activation and deactivation of routines, passing of arguments, etc. In combination with the step by step execution, it is an interesting and didatic resource.
 
 You can find more information by visiting the site [O Jovem Programador] (http://www.ojovemprogramador.com.br). It is written in Portuguese, by the way.
 
