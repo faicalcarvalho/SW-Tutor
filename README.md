@@ -13,7 +13,11 @@ Building the resource file
 Before building SW-Tutor.exe, you need an updated version of *sw_tutor.res*, the Windows resource file that is linked with the application. Change the current directory to *rc* and run the resource compiler:
 
     $ cd rc
+    $ copy .\bin-bk\rc.exe-orig .\rc.exe
+    $ copy .\bin-bk\rcdll.dll-orig .\rcdll.dll
     $ rc /r sw_tutor.rc
+
+The two binary files necessary to run the resource compiler are preserved in the *bin-bk* direcoty. So the two *copy* commands above.
 
 The resource compiler produces the *sw_tutor.res* file. You must copy this file to the main directory:
 
