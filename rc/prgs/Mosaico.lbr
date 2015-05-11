@@ -1,0 +1,76 @@
+/* Mostra quadro dividido como num mosaico */
+programa Mosaico;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  DXY = 30;
+
+tipo
+  /* mosaico */
+  DescritorMosaico = registro
+    q: inteiro;
+    qm: inteiro;
+    x, y: inteiro;
+    largura, altura: inteiro;
+    dxy: inteiro;
+  fim;
+
+var
+  q: inteiro;
+  m: DescritorMosaico;
+
+/* iniMosaico - prepara a sequência de quadros */
+procedimento iniMosaico(var m: DescritorMosaico;
+    q: inteiro; dxy: inteiro);
+início
+  /* registre as informações do quadro */
+  m.q := q;
+  m.x := -dxy;
+  m.y := -dxy;
+  m.largura := gra_quadroLargura(q);
+  m.altura := gra_quadroAltura(q);
+  m.dxy := dxy;
+
+  /* prepare o quadro temporário */
+  m.qm := gra_quadroNovo();
+fim;
+
+/* temQuadro - retorna o próximo quadro do mosaico */
+função temQuadro(var m: DescritorMosaico; var q: inteiro): lógico;
+início
+  m.x := m.x + m.dxy;
+  se (m.x > m.largura)
+  início
+  fim;
+  m.y := m.y + m.dxy;
+  se ((m.x > m.largura) && (m.y > m.altura))
+    retorne não;
+  se (mx > m.largura
+  gra_quadroCopieDeQuadro(m.qm, m.q, m.x, m.y, m.x + m.dxy, m.y + m.dxy);
+  retorne sim;
+fim;
+
+início
+  /* obtenha o quadro original */
+  q := gra_quadroNovo();
+  gra_quadroLeiaDeArquivo(q, "vasoefruta.bmp");
+
+  /* prepare o mosaico */
+  iniMosaico(m, q, DXY);
+
+  /* obtém os quadros */
+  enquanto (temQuadro(m, 
+  q2 := gra_quadroNovo();
+
+  
+
+  gra_copieQuadro(q1, 10, 10);
+
+  q2 := gra_quadroNovo();
+  gra_quadroCopieDeQuadro(q2, q1, 50, 50, 190, 190);
+  gra_copieQuadro(q2, 10, 280);
+
+  gra_quadroLibere(q1);
+  gra_quadroLibere(q2);
+fim.

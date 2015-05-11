@@ -1,0 +1,22 @@
+/* Montagem com uma foto da Praça da
+   Liberdade, em Belo Horizonte */
+programa praça_da_liberdade;
+inclui "gra*";
+
+var
+  img: imagem;
+  larg, altu: inteiro;
+
+início
+  /* cria a imagem obtém as dimensões */
+  img := nova_imagem_crg("Foto-BH-1");
+  obt_tam_janela(img, larg, altu);
+
+  cop_imagem_ret(tela, 100, 100, 400, 300, img);
+  cop_imagem_ret(tela, 100, 10, 240, 90, img);
+  cop_imagem_ret(tela, 260, 10, 400, 90, img);
+  cop_imagem_ret(tela, 20, 100, 90, 300, img);
+  cop_imagem_ret(tela, 410, 100, 480, 300, img);
+  cop_imagem_ret(tela, 100, 310, 400, 390, img);
+ // cop_imagem(tela, 50, 50, img);
+fim.

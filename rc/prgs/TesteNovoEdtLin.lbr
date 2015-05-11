@@ -1,0 +1,9 @@
+/*
+  Decarva SW-Tutor Beta 0.96
+  Copyright (c) 1999 Decarva Software Ltda
+  Ola.pac
+*/
+programa Olá;
+início
+  escrevaLn("Olá!");
+fim.

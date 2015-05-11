@@ -1,0 +1,15 @@
+programa Olá;
+inclui "gra*";
+var
+  j: Janela;
+  b: Botão;
+  i: inteiro;
+início
+  j := novaJanela(150, 150, 300, 300, "Teste");
+  b := novoBotão(Tela, 10, 10, 50, 25, "OK");
+//  para (i := 0; i < 100; inc(i))
+//    altPos(j, 150+i, 150+i);
+  escrevaLn("Olá!");
+fim.
+
+

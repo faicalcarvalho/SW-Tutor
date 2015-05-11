@@ -1,0 +1,15 @@
+/* Exibe círculos sobrepostos com cores diferentes */
+programa TiroAoAlvo;
+inclui "gra*";
+início
+  altCorPincel(Tela, COR_PRETO);
+  dsnCir(Tela, 50, 50, 200, 200);
+  altCorPincel(Tela, COR_BRANCO);
+  dsnCir(Tela, 70, 70, 180, 180);
+  altCorPincel(Tela, COR_PRETO);
+  dsnCir(Tela, 90, 90, 160, 160);
+  altCorPincel(Tela, COR_BRANCO);
+  dsnCir(Tela, 110, 110, 140, 140);
+  altCorPincel(Tela, COR_PRETO);
+  dsnCir(Tela, 120, 120, 130, 130);
+fim.

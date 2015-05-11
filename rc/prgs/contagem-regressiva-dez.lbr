@@ -1,0 +1,14 @@
+/* Contagem regressiva de 10 a 0 em 10 segundos */
+programa contagem_regressiva_dez;
+inclui "evnt*";
+
+var
+  i: inteiro;
+
+início
+  para (i := 10; i >= 0; i--)
+  início
+    escreva(i, "\n");
+    espere_por(EV_TEMPO);
+  fim;
+fim.

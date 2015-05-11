@@ -1,0 +1,41 @@
+/* Jogo do Caos */
+programa jogo_do_caos;
+inclui "rgra.lbr";
+
+const
+  X1 = 70.0;     Y1 = 350.0;
+  X2 = 290.0;    Y2 = 40.0;
+  X3 = 510.0;    Y3 = 350.0;
+
+tipo
+  triângulo = arranjo [3] de ponto;
+
+/* próximo_pto - obtém o próximo ponto */
+função próximo_pto(t: triângulo; var p: ponto): ponto;
+início
+  p := pto_médio(p, t[random(3)]);
+  retorne p;
+fim;
+
+const
+  N = 100000; // número de "jogadas"
+  COR = COR_PRETO;
+
+var
+  t: triângulo;
+  p: ponto;
+  i: inteiro;
+
+início
+  /* define o triângulo */
+  t[0] := pto(X1, Y1);
+  t[1] := pto(X2, Y2);
+  t[2] := pto(X3, Y3);
+
+  /* escolhe o primeiro ponto; pode ser qualquer um */
+  p := pto(0, 0);
+
+  /* joga */  
+  para (i := 0; i < N; i++)
+    rgra_alt_pixel(tela, próximo_pto(t, p), COR)
+fim.

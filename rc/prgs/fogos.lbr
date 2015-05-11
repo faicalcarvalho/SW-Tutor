@@ -1,0 +1,42 @@
+/* Fogos de artifício em cada clique */
+programa fogos;
+inclui "mm*";
+inclui "rgra.lbr";
+inclui "da_um_tempo.lbr";
+inclui "qualquer_cor.lbr";
+
+/* bum - dispara os fogos */
+procedimento bum(x, y: inteiro; fogo: som);
+const
+  NPTOS = 100;
+  RAIO = 180;
+var
+  i: inteiro;
+  p: ponto;
+início
+  toq_som(fogo);
+  para (i := 0; i < NPTOS; i++)
+  início
+    p := pto_cir(pto(x, y), random(RAIO), i * (360.0 / NPTOS));
+    alt_cor_caneta(tela, qualquer_cor());
+    rgra_dsn_lin(tela, pto(x, y), p);
+  fim;
+fim;
+
+procedimento fundo(cor: inteiro);
+início
+  alt_cor_pincel(tela, cor);
+  dsn_ret_cheio(tela, 0, 0, 1000, 1000);
+fim;
+
+const
+  TPO = 1000;
+  X = 500; Y = 500;
+var
+  fogo: som;
+início
+  fogo := novo_som("tom-7");
+  fundo(COR_PRETO);
+  enquanto (da_um_tempo(TPO, sim))
+    bum(random(X), random(Y), fogo);
+fim.

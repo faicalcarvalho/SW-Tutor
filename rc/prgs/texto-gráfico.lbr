@@ -1,0 +1,13 @@
+/* Altera atributos da fonte de caracteres
+   e exibe um texto na saída gráfica */
+programa texto_gráfico;
+inclui "gra*";
+início
+  /* altera atributos */
+  alt_nome_fonte(tela, "Times New Roman");
+  alt_cor_fonte(tela, COR_AZUL);
+  alt_tam_fonte(tela, 50);
+  
+  /* exibe o texto */
+  dsn_txt(tela, 20, 20, "Texto na saída gráfica!");
+fim.

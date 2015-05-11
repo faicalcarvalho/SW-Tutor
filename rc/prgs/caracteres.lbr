@@ -1,0 +1,14 @@
+/* Separa um texto em caracteres */
+programa caracteres;
+var
+  i: inteiro;
+  txt: texto;
+  c: caractere;
+início
+  leia(txt);
+  para (i := 0; i < tamanho(txt); i++)
+  início
+    c := caractere_em(txt, i);
+    escreva(c, "\n");
+  fim;
+fim.

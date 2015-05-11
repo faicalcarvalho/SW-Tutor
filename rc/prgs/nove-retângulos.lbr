@@ -1,0 +1,14 @@
+/* Exibe nove retângulos superpostos */
+programa nove_retângulos;
+inclui "gra*";
+início
+  dsn_ret(tela, 10, 10, 90, 90);
+  dsn_ret(tela, 15, 15, 80, 80);
+  dsn_ret(tela, 20, 20, 70, 70);
+  dsn_ret(tela, 25, 25, 60, 60);
+  dsn_ret(tela, 30, 30, 50, 50);
+  dsn_ret(tela, 35, 35, 40, 40);
+  dsn_ret(tela, 40, 40, 30, 30);
+  dsn_ret(tela, 45, 45, 20, 20);
+  dsn_ret(tela, 50, 50, 10, 10);
+fim.

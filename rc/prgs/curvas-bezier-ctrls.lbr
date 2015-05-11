@@ -1,0 +1,36 @@
+/* Traça curvas Bezier variando os pontos
+   de controle */
+programa curvas_bezier_ctls;
+inclui "gra*";
+
+const
+  X1 = 20;   Y1 = 200; X2 = 500;  Y2 = 200;
+  X3 = 100;  Y3 = 15;   X4 = 300;  Y4 = 400;
+
+var
+  y3, y4: inteiro;
+
+procedimento marca(x, y: inteiro; t: texto);
+início
+  alt_cor_pincel(tela, COR_PRETO);
+  dsn_cir(tela, x-8, y-8, x+8, y+8);
+  dsn_txt(tela, x, y, t);
+fim;
+
+início
+  /* inicializa y3 e y4 para os pts de controle */
+  y3 := Y3; y4 := Y4;
+
+  alt_cor_pincel(tela, COR_BRANCO);
+  dsn_ret_cheio(tela, 0, 0, 1500, 1500);
+  alt_tam_fonte(tela, 20);
+
+//  alt_tam_caneta(tela, 2);
+  alt_pos_caneta(tela, X1, Y1);
+  dsn_bezier(tela, X3, y3, X4, y4, X2, Y2);
+
+  marca(X1, Y1, "  Ponto Inicial");
+  marca(X2, Y2, "  Ponto Final");
+  marca(X3, Y3, "  Controle 1");
+  marca(X4, Y4, "  Controle 2");
+fim.

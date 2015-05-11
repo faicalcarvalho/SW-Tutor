@@ -1,0 +1,33 @@
+/* Curva Bezier */
+programa CurvaBezier;
+inclui "gra*";
+inclui "evnt*";
+
+var
+  x1, y1, x2, y2: inteiro;
+  cx1, cy1, cx2, cy2: inteiro;
+
+início
+  escrevaLn("Clique no ponto inicial");
+  evnt_esperePor(EV_CLIQUE);
+  evnt_mouseXY(x1, y1);
+  gra_desenheRetângulo(x1 - 2, y1 - 2, x1 + 2, y1 + 2);
+  
+  escrevaLn("Clique no ponto final");
+  evnt_esperePor(EV_CLIQUE);
+  evnt_mouseXY(x2, y2);
+  gra_desenheRetângulo(x2 - 2, y2 - 2, x2 + 2, y2 + 2);
+
+  escrevaLn("Clique no primeiro ponto de controle");
+  evnt_esperePor(EV_CLIQUE);
+  evnt_mouseXY(cx1, cy1);
+  gra_desenheRetângulo(cx1 - 2, cy1 - 2, cx1 + 2, cy1 + 2);
+  
+  escrevaLn("Clique no segundo ponto de controle");
+  evnt_esperePor(EV_CLIQUE);
+  evnt_mouseXY(cx2, cy2);
+  gra_desenheRetângulo(cx2 - 2, cy2 - 2, cx2 + 2, cy2 + 2);
+
+  gra_mudeXY(x1, y1);
+  gra_desenheCurvaBezier(cx1, cy1, cx2, cy2, x2, y2);
+fim.

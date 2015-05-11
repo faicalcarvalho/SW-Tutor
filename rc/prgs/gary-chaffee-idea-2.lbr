@@ -1,0 +1,43 @@
+/* Toca uma música baseada em percussão. Esta 
+   implementação baseia-se na "Idea #2" publicada 
+   no livro "Linear Time Playing", de Gary Chaffee,
+   Belwin-Mills Publishing Corp., 1993 */
+programa gary_chaffee_idea_2;
+inclui "evnt*";
+inclui "mm*";
+
+const
+  TPO = 200;    // unidade de tempo mínima
+  MAX_TPO = 96; // duração da música
+  NDIV = 32;     // divisões por compasso
+
+var
+  i: inteiro;
+  bumbo, tom, caixa, chimbal: som;
+
+início
+  /* cria os sons */
+  bumbo := novo_som("Bumbo-1");
+  tom := novo_som("Tom-1");
+  caixa := novo_som("Caixa-2");
+  chimbal := novo_som("Chimbal-1");
+
+  /* altera a base do ritmo */
+  alt_ev_tempo(TPO);
+
+  /* toca */
+  para (i := 0; i < MAX_TPO; i++)
+  início
+    escolha (i mod NDIV)
+      caso 0, 3, 6, 19, 22:
+        toq_som(bumbo);
+      caso 1, 2, 7, 9, 10, 15, 18, 23, 25, 26, 31:
+        toq_som(tom);
+      caso 5, 12, 21, 27, 28:
+        toq_som(caixa);
+      caso 4, 8, 11, 14, 16, 17, 20, 24, 30:
+        toq_som(chimbal);
+    fim;
+    espere_por(EV_TEMPO);
+  fim;
+fim.

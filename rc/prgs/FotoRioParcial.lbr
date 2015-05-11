@@ -1,0 +1,10 @@
+/* Exibe parte de uma foto do Rio de Janeiro */
+programa FotoRioParcial;
+inclui "gra*";
+var
+  jan: Janela;
+início
+  jan := novaJanela();
+  crgImg(jan, "Foto-Rio-1");
+  crgJanela(Tela, jan, 480, 50, 610, 190);
+fim.

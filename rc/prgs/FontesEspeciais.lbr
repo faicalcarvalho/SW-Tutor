@@ -1,0 +1,12 @@
+/* Exibe caracteres de fontes especiais */
+programa FontesEspeciais;
+inclui "gra*";
+const
+  NOME_FONTE = "Wingdings";
+  TAM_FONTE = 120;
+  TXT = "ABC";
+início
+  altNomeFonte(Tela, NOME_FONTE);
+  altTamFonte(Tela, TAM_FONTE);
+  dsnTxt(Tela, 20, 20, TXT);
+fim.

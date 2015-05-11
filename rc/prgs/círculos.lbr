@@ -1,0 +1,18 @@
+/* Desenha uma elipse no clique */
+programa círculos;
+inclui "gra*";
+inclui "evnt*";
+
+var
+  x, y: inteiro;
+
+início
+  alt_cor_pincel(tela, COR_BRANCO);
+  repita
+    espere_por(EV_CLIQUE);
+    x := mouse_x();
+    y := mouse_y();
+    dsn_cir(tela, x, y, x, y);
+  até (x < 10); // clique na margem esquerda termina
+fim.
+

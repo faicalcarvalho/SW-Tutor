@@ -1,0 +1,43 @@
+/* Desenha várias figuras determinadas de 
+   forma aleatória */
+programa figuras_aleatórias_revisado;
+inclui "gra*";
+inclui "mat*";
+
+const
+  LADO = 250;
+  NFIGS = 500;
+
+/* qualquer_cor - retorna uma cor escolhida 
+   de forma aleatória */
+função qualquer_cor(): inteiro;
+início
+  retorne cor_rgb(random(256),  /* vermelho */
+                  random(256),  /* verde */
+                  random(256)); /* azul */
+fim;
+
+/* qualquer_figura - desenha uma figura com
+   características escolhidas de forma aleatória */
+procedimento qualquer_figura(lado: inteiro);
+var
+  x, y, z: inteiro;
+início
+  alt_cor_pincel(tela, qualquer_cor());
+  x := random(lado);
+  y := random(lado);
+  z := random(lado div 10);
+  escolha (random(3))
+    caso 0: dsn_ret(tela, x, y, x+z, y+z);
+    caso 1: dsn_cir(tela, x, y, x+z, y+z);
+    caso 2: dsn_tri(tela, x, y, x+z, y+z);
+  fim;
+fim;
+
+var
+  i: inteiro;
+
+início
+  para (i := 0; i < NFIGS; i++)
+    qualquer_figura(LADO);
+fim.

@@ -1,0 +1,20 @@
+/* Desenha "Teste" */
+programa teste_tam_fonte;
+inclui "gra*";
+
+início
+  alt_tam_fonte(tela, 60);
+  dsn_txt(tela, 10, 20, "T");
+
+  alt_tam_fonte(tela, 45);
+  dsn_txt(tela, 50, 38, "E");
+
+  alt_tam_fonte(tela, 30);
+  dsn_txt(tela, 88, 56, "S");
+
+  alt_tam_fonte(tela, 15);
+  dsn_txt(tela, 115, 73, "T");
+
+  alt_tam_fonte(tela, 10);
+  dsn_txt(tela, 127, 79, "E");
+fim.

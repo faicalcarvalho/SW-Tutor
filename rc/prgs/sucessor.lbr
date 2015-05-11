@@ -1,0 +1,15 @@
+/* Lê um número (n) e mostra o seu 
+   sucessor (n + 1) */
+programa sucessor;
+var
+  n, suc: inteiro;
+início
+  /* obtém do usuário o número */
+  leia(n);
+
+  /* calcula o sucessor */
+  suc := n + 1;
+
+  /* mostra o resultado */
+  escreva("O sucessor de ", n, " é ", suc);
+fim.

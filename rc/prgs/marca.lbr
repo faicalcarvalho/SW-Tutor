@@ -1,0 +1,18 @@
+/* Exibe uma marca em forma de X */
+programa Marca;
+inclui "gra*";
+
+/* dsnMarca - Desenha uma marca em forma de um X.
+   O retângulo delimitado por (x1, y1) e (x2, y2) 
+   define a localização e o tamanho do X */
+procedimento dsnMarca(x1, y1, x2, y2: inteiro);
+inicio
+  altXY(Tela, x1, y1);
+  dsnLin(Tela, x2, y2);
+  altXY(Tela, x1, y2);
+  dsnLin(Tela, x2, y1);
+fim;
+
+início
+  dsnMarca(50, 50, 100, 100);
+fim.

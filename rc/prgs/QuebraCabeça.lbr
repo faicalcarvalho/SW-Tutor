@@ -1,0 +1,192 @@
+/* Quebra-cabeça com imagem */
+programa QuebraCabeça;
+inclui "gra*";
+inclui "mat*";
+inclui "evnt*";
+
+const
+  /* linhas, colunas e tamanho de cada casa */
+  NLIN = 4;
+  NCOL = 4;
+  TAM = 100;
+  X1 = 30;
+  Y1 = 30;
+
+  /* imagem */
+  IMG = "VanGogh-2";
+
+tipo
+  /* linha e coluna */
+  Posição = registro
+    lin, col: inteiro;
+  fim;
+
+  /* tabuleiro */
+  Tabuleiro = registro
+    jogo: arranjo [0..NLIN-1, 0..NCOL-1] de Posição;
+    janOrig: Janela;
+    janDest: Janela;
+    janAux: Janela;
+  fim;
+
+/* altPos - altera posição p */
+procedimento altPos(var p: Posição; lin, col: inteiro);
+início
+  p.lin := lin;
+  p.col := col;
+fim;
+
+/* novoTab - cria o tabuleiro */
+procedimento novoTab(var tab: Tabuleiro; 
+                     janOrig, janDest: Janela);
+var
+  i, j: inteiro;
+início
+  tab.janOrig := janOrig;
+  tab.janDest := janDest;
+  tab.janAux := novaJanela();
+  para (i := 0; i < NLIN; inc(i))
+    para (j := 0; j < NCOL; inc(j))
+      altPos(tab.jogo[i, j], i, j);
+fim;
+
+/* libTab - destrói o tabuleiro */
+procedimento libTab(var tab: Tabuleiro);
+início
+  libJanela(tab.janAux);
+fim;
+
+/* obtCasa - obtém o retângulo correspondente à casa 
+   (lin, col) do tabuleiro */
+procedimento obtCasa(var tab: Tabuleiro; 
+                     lin, col: inteiro;
+                     var x1, y1, x2, y2: inteiro);
+início
+  x1 := (tab.jogo[lin, col].col * TAM) + 1;
+  y1 := (tab.jogo[lin, col].lin * TAM) + 1;
+  x2 := x1 + TAM - 1;
+  y2 := y1 + TAM - 1;
+fim;
+
+/* dsnCasa - desenha a casa (lin, col) do tabuleiro */
+procedimento dsnCasa(var tab: Tabuleiro; lin, col: inteiro);
+var
+  x1, y1, x2, y2: inteiro;
+  dx, dy: inteiro; // posição na janela destino
+início
+  obtCasa(tab, lin, col, x1, y1, x2, y2);
+  crgJanela(tab.janAux, tab.janOrig, x1, y1, x2, y2);
+  dx := col * TAM + 1;
+  dy := lin * TAM + 1;
+  dsnRet(tab.janDest, dx-1, dy-1, dx + TAM, dy + TAM);
+  copJanela(tab.janDest, dx, dy, tab.janAux);
+fim;
+
+/* dsnTab - desenha o tabuleiro */
+procedimento dsnTab(var tab: Tabuleiro);
+var
+  lin, col: inteiro;
+início
+  para (lin := 0; lin < NLIN; inc(lin))
+    para (col := 0; col < NCOL; inc(col))
+      dsnCasa(tab, lin, col);
+fim;
+
+/* troca - troca n1 com n2 */
+procedimento troca(var n1, n2: inteiro);
+var
+  aux: inteiro;
+início
+  aux := n1;
+  n1 := n2;
+  n2 := aux;
+fim;
+
+/* trocaPos - troca p1 com p2 */
+procedimento trocaPos(var p1, p2: Posição);
+início
+  troca(p1.lin, p2.lin);
+  troca(p1.col, p2.col);
+fim;
+
+/* sortLinCol - sorteia um par (lin, col) */
+procedimento sortLinCol(var lin, col: inteiro);
+início
+  lin := random(NLIN);
+  col := random(NCOL);
+fim;
+
+/* embTab - embaralha o tabuleiro */
+procedimento embTab(var tab: Tabuleiro);
+const
+  NEMB = 100; // número de embaralhadas
+var
+  lin1, col1, lin2, col2: inteiro;
+  i: inteiro;
+início
+  para (i := 0; i < NEMB; inc(i))
+  início
+    sortLinCol(lin1, col1); // sorteia posição 1
+    sortLinCol(lin2, col2); // sorteia posição 2
+    trocaPos(tab.jogo[lin1, col1], tab.jogo[lin2, col2]);
+  fim;
+fim;
+
+função foraTab(x, y: inteiro): lógico;
+início
+  retorne (x < X1) || (x > X1 + (NCOL * TAM)) ||
+          (y < Y1) || (y > Y1 + (NLIN * TAM));
+fim;
+
+/* temJogada - detecta a próxima jogada; retorna
+   não se o usuário pressionar o teclado */
+função temJogada(var lin, col: inteiro): lógico;
+var
+  x, y: inteiro;
+início
+  repita
+    esperePor(EV_CLIQUE + EV_TECLADO);
+    se (últimoEvento() = EV_TECLADO)
+      retorne não; /* teclado termina o jogo */
+    mouseXY(x, y);
+    col := (x + X1) div TAM;
+    lin := (y + Y1) div TAM;
+  até (não foraTab(x, y));
+  retorne sim;
+fim;
+
+var
+  tab: Tabuleiro;
+  janOrig, janDest: Janela;
+  lin, col, dx, dy: inteiro;
+
+início
+  /* cria as janelas */
+  janOrig := novaJanela();
+  crgImg(janOrig, IMG);
+  janDest := novaJanela();
+  altTamJanela(janDest, NLIN*TAM+1, NCOL*TAM+1);
+
+  /* cria e desenha o tabuleiro */
+  novoTab(tab, janOrig, janDest);
+  dsnTab(tab);
+  copJanela(Tela, X1, Y1, tab.janDest);
+
+  /* espera o primeiro clique */
+  se (não temJogada(lin, col))
+    termine("");
+  dx := col * TAM + 1;
+  dy := lin * TAM + 1;
+  dsnRet(tab.janDest, dx - 1, dy - 1, dx + TAM, dy + TAM);
+  copJanela(Tela, X1, Y1, tab.janDest);
+
+ /* 
+
+  embTab(tab);
+  dsnTab(tab);
+  copJanela(Tela, 30, 30, tab.janDest);
+
+  */
+  
+  escrevaLn("Olá!");
+fim.

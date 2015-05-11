@@ -1,0 +1,44 @@
+/* Ilha de Koch */
+programa TriSierp;
+inclui "qdr.pac";
+
+procedimento <><><><><>
+
+/* tri - traça triângulo entre p1, p2 e p3 */
+procedimento tri(qdr: QDR; p1, p2, p3: Ponto);
+início
+  qdr_desenheLinha(qdr, p1, p2);
+  qdr_desenheLinha(qdr, p2, p3);
+  qdr_desenheLinha(qdr, p3, p1);
+fim;
+
+/* triSierp - imagem do triângulo de Sierpinski */
+procedimento triSierp(qdr: QDR; p1, p2, p3: Ponto);
+const
+  DELTA = 5.0;
+início
+  /* verifica se o triângulo é grande o suficiente
+     para ser desenhado */
+  se (geom_distância(p1, p2) > DELTA)
+  início
+    /* desenha o triângulo */
+    tri(qdr, p1, p2, p3);
+    
+    /* desenha os três triângulos (inferior esquerdo,
+       superior e inferior direito) formados com base
+       nos pontos médios dos três lados */
+    triSierp(qdr, p1, geom_ptMédio(p1, p2), geom_ptMédio(p1, p3));
+    triSierp(qdr, geom_ptMédio(p1, p2), p2, geom_ptMédio(p2, p3));
+    triSierp(qdr, geom_ptMédio(p1, p3), geom_ptMédio(p2, p3), p3);
+  fim;
+fim;
+
+var
+  qdr: QDR;
+
+início
+  qdr := qdr_novo(300, 300);
+  qdr_mudeTelaXY(qdr, 10, 10);
+  triSierp(qdr, geom_pt(0, 0), geom_pt(150, 299), geom_pt(299, 0));
+  qdr_fim(qdr);
+fim.

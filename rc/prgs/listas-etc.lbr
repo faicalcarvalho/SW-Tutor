@@ -1,0 +1,92 @@
+/* Exibe uma breve saudação na tela */
+programa olá;
+
+tipo
+  /* lista */
+  lista = ponteiro para descritor_lista;
+  descritor_lista = registro
+    elem: inteiro; // informação genérica, elemento da lista
+    suc: lista;    // próximo item da lista
+  fim;
+
+/* lista_ini - inicializa a lista lst */
+procedimento lista_ini(var lst: lista);
+início
+  lst := nulo;
+fim;
+
+/* lista_vazia - informa se está vazia */
+função lista_vazia(var lst: lista): lógico;
+início
+  retorne lst = nulo;
+fim;
+
+/* lista_ins_ini - insere elemento no início da lista */
+procedimento lista_ins_ini(var lst: lista; elem: inteiro);
+var
+  item: lista;
+início
+  aloque(item);
+  item^.suc := lst;
+  item^.elem := elem;
+  lst := item;
+fim;
+
+/**/
+função lista_último(var lst: lista): lista;
+var
+  p: lista;
+início
+  se (lista_vazia(lst))
+    retorne nulo;
+  // lista tem pelo menos um elemento
+  p := lst;
+  enquanto (p^.suc <> nulo)
+    p := p^.suc;
+fim;
+
+/* lista_ins_fim - insere elemento no final da lista */
+procedimento lista_ins_fim(var lst: lista; elem: inteiro);
+var
+  item, ult: lista;
+início
+  aloque(item);
+  item^.suc := nulo;
+  item^.elem := elem;
+  ult := lista_último(lst);
+  se (ult = nulo) // lista vazia
+    lst := item
+  senão
+    ult^.suc := item;
+fim;
+
+função lista_psq(var lst: lista; elem: inteiro): lista;
+var
+  p: lista;
+início
+  para (p := lst; p <> nulo; p := p^.suc)
+    se (p^.elem = elem)
+      retorne p;
+  retorne nulo; // não encontrou
+fim;
+
+função lista_psq_rec(var lst: lista; elem: inteiro): lista;
+início
+  se (lst^.elem = elem)
+    retorne lst
+  senão
+    retorne lista_psq(lst^.suc, elem);
+fim;
+
+var
+  p, lst: lista;
+
+início
+  lista_ini(lst);
+  lista_ins_ini(lst, 1);
+  lista_ins_ini(lst, 2);
+  lista_ins_ini(lst, 3);
+
+  p := lista_psq(lst, 1);
+  escreva("Olá!");
+fim.

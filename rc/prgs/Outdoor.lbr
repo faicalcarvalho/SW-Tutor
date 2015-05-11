@@ -1,0 +1,75 @@
+/* Simula um outdoor mecânico */
+programa Outdoor;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  IMGORG = "VanGogh-1";
+  IMGDST = "VanGogh-5";
+
+/* transfCols - transfere colunas de jan2 para jan1;
+   a transferência é feita em colunas de 1 pixel;
+   indCol é o índice da coluna inicial;
+   largCol é a largura da coluna */
+procedimento transfCols(jan1, jan2: Janela; 
+                        indCol, largCol: inteiro);
+var
+  jan: Janela;
+  larg, altu: inteiro;
+início
+  /* cria a janela rascunho */
+  jan := novaJanela();
+
+  /* obtém o tamanho da janela */
+  obtTamJanela(jan1, larg, altu);
+
+  /* varre as colunas */
+  enquanto (indCol < larg)
+  início
+    crgJanela(jan, jan2, indCol, 0, indCol+1, altu);
+    copJanela(jan1, indCol, 0, jan);
+    indCol := indCol + largCol;
+  fim;
+
+  /* destrói a janela rascunho */
+  libJanela(jan);
+fim;
+
+/* obtImgs - obtém as duas imagens */
+procedimento obtImgs(var janOrig, janDest: Janela);
+início
+  janOrig := novaJanela();
+  crgImg(janOrig, IMGORG);
+  janDest := novaJanela();
+  crgImg(janDest, IMGDST);
+fim;
+
+const
+  X1 = 10;
+  Y1 = 10;
+  X2 = 290;
+  Y2 = 375;
+  INTERVALO = 200;
+  LARGURA = 30;
+
+var
+  janOrig, janDest: Janela;
+  i: inteiro;
+
+início
+  /* inicializa */
+  obtImgs(janOrig, janDest);
+  altEvTempo(INTERVALO);
+
+  /* exibe a imagem numa pequena moldura */
+  dsnRet(Tela, X1-3, Y1-3, X2+3, Y2+3);
+  copJanelaDist(Tela, X1, Y1, X2, Y2, janOrig);
+
+  /* produz o outdoor */
+  para (i := 0; i < LARGURA; inc(i))
+  início
+    transfCols(janDest, janOrig, i, LARGURA);
+    copJanelaDist(Tela, X1, Y1, X2, Y2, janDest);
+    esperePor(EV_TEMPO);
+  fim;
+fim.

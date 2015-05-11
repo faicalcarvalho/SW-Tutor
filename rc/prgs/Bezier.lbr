@@ -1,0 +1,29 @@
+/* Traça uma curva Bezier indicando os pontos
+   de controle */
+programa Bezier;
+inclui "gra*";
+
+const
+  X1 = 10;   Y1 = 200; // origem
+  X2 = 250;  Y2 = 200; // destino
+  X3 = 80;  Y3 = 40;   // controle 1
+  X4 = 220;  Y4 = 300; // controle 2
+
+procedimento marca(nome: texto; x, y: inteiro);
+início
+  alt_pos_caneta(tela, x-5, y-5);
+  dsn_lin(tela, x+5, y+5);
+  alt_pos_caneta(tela, x-5, y+5);
+  dsn_lin(tela, x+5, y-5);
+  dsn_txt(tela, x, y, nome);
+fim;
+
+início
+  alt_pos_caneta(tela, X1, Y1);
+  dsn_bezier(tela, X3, Y3, X4, Y4, X2, Y2);
+  marca("Ponto Inicial", X1, Y1);
+  marca("Ponto Final", X2, Y2);
+  marca("Controle 1", X3, Y3);
+  marca("Controle 2", X4, Y4);
+fim.
+

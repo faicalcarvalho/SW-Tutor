@@ -1,0 +1,55 @@
+/* Registra uma série de pontos e traça uma
+   linha conectando todos entre si */
+programa pontos_conectados;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  NUM_PONTOS = 15;
+
+tipo
+  pontos = arranjo [NUM_PONTOS] de inteiro;
+
+/* tem_clique - obtém em próximo clique em (x, y) */
+função tem_clique(var x, y: inteiro): lógico;
+início
+  espere_por(EV_CLIQUE + EV_TECLADO);
+  se (último_evento() = EV_TECLADO)
+    retorne não;
+  mouse_xy(x, y);
+  retorne sim;
+fim;
+
+/* marque - desenha pequeno retângulo em torno de (x, y) */
+procedimento marque(x, y: inteiro);
+início
+  dsn_ret(tela, x - 3, y - 3, 6, 6);
+fim;
+
+/* dsn_linha - traça linha entre (x1, y1) e (x2, y2) */
+procedimento dsn_linha(x1, y1, x2, y2: inteiro);
+início
+  alt_pos_caneta(tela, x1, y1);
+  dsn_lin(tela, x2, y2);
+fim;
+
+var
+  px, py: pontos;
+  i, j, pos: inteiro;
+
+início
+  /* obtém os pontos */
+  pos := 0;
+  enquanto (tem_clique(px[pos], py[pos]))
+  início
+    marque(px[pos], py[pos]);
+    pos++;
+    se (pos >= NUM_PONTOS)
+      quebre; /* não cabe mais */
+  fim;
+
+  /* conecta cada um com todos os demais */
+  para (i := 0; i < pos - 1; i++)
+    para (j := i + 1; j < pos; j++)
+      dsn_linha(px[i], py[i], px[j], py[j]);
+fim.

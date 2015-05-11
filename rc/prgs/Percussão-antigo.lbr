@@ -1,0 +1,41 @@
+/* Toca uma música baseada em percussão */
+programa Percussão;
+inclui "evnt*";
+inclui "mm*";
+
+const
+  TPO = 120; // unidade de tempo mínima
+  MAX_TPO = 96; // duração da música
+  SOM1 = "Chimbal1";
+  SOM2 = "Chimbal2"; //"Tom1";
+  SOM3 = "Baqueta1"; //"Bumbo1";
+  SOM4 = "Reco1";
+  SOM5 = "Ataque1";
+
+var
+  i, n: inteiro;
+
+início
+  /* altera a base do ritmo */
+  altEvTempo(TPO);
+
+  /* toca */
+  para (i := 0; i < MAX_TPO; inc(i))
+  início
+    n := i mod 32;
+    escolha (n)
+      caso 0:
+        toqSom(SOM5);
+      caso 4, 8, 11, 14, 16, 17, 20, 24, 30:
+        toqSom(SOM1);
+      caso 1, 2, 7, 9, 10, 15, 18, 23, 25, 26, 31:
+        toqSom(SOM2);
+      caso 3, 6, 19, 22:
+        toqSom(SOM3);    
+      caso 5, 12, 21, 27, 28:
+        toqSom(SOM4);
+    fim;
+    esperePor(EV_TEMPO);
+  fim;
+fim.
+

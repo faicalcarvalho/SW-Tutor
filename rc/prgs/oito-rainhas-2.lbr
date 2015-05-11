@@ -1,0 +1,187 @@
+/* Soluções para o problema das 8 rainhas
+   colocadas num tabuleiro de xadrez */
+programa oito_rainhas;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  N = 8; // tabuleiro 8 x 8
+
+tipo
+  /* posição */
+  posição = registro
+    lin, col: inteiro;
+  fim;
+
+  /* tabuleiro */
+  tabuleiro = registro
+    tab: arranjo [N, N] de inteiro; // controle
+    pilha: arranjo [N] de posição;
+    topo: inteiro;
+    finalizado: lógico;
+  fim;
+
+/* ini_tab - inicializa o tabuleiro */
+procedimento ini_tab(var tab: tabuleiro);
+var
+  lin, col: inteiro;
+início
+  para (lin := 0; lin < N; lin++)
+    para (col := 0; col < N; col++)
+      tab.tab[lin, col] := 0;
+  tab.topo := -1; // pilha vazia
+fim;
+
+/* dsn_tab - desenha o tabuleiro */
+procedimento dsn_tab(var tab: tabuleiro);
+const
+  TAM = 30;
+var
+  lin, col: inteiro;
+início
+  para (lin := 0; lin < N; lin++)
+    para (col := 0; col < N; col++)
+      se (tab.tab[lin, col] = 0)
+      início
+        alt_cor_pincel(tela, COR_BRANCO);
+        dsn_ret(tela, col*TAM, lin*TAM, col*TAM+TAM, lin*TAM+TAM);
+      fim
+      senão
+      início
+        alt_cor_pincel(tela, COR_VERMELHO);
+        dsn_ret(tela, col*TAM, lin*TAM, col*TAM+TAM, lin*TAM+TAM);
+      fim;
+  durma(20);
+fim;
+
+/* empilha - empilha uma rainha na posição p */
+procedimento empilha(var tab: tabuleiro; var p: posição);
+início
+  tab.topo++;
+  se (tab.topo >= N)
+    termine("empilha: Ultrapassada a capacidade da pilha");
+  tab.pilha[tab.topo] := p;
+  tab.tab[p.lin, p.col] := 1; // marca no tabuleiro
+
+  /* desenha o tabuleiro */
+  dsn_tab(tab);
+fim;
+
+/* desempilha - desempilha uma rainha do topo da pilha */
+procedimento desempilha(var tab: tabuleiro; var p: posição);
+início
+  se (tab.topo < 0)
+    termine("desempilha: Pilha vazia");
+  p := tab.pilha[tab.topo];
+  tab.topo--;
+  tab.tab[p.lin, p.col] := 0; // desmarca no tabuleiro
+
+  /* desenha o tabuleiro */
+  dsn_tab(tab);
+fim;
+
+/* num_rainhas - número de rainhas no tabuleiro */
+função num_rainhas(var tab: tabuleiro): inteiro;
+início
+  retorne tab.topo + 1;
+fim;
+
+/* ameaça - verifica se a posição p ameaça alguma outra
+   já presente no tabuleiro */
+função ameaça(var tab: tabuleiro; var p: posição): lógico;
+var
+  lin, col, diag: inteiro;
+início
+  /* verifica se está fora */
+  se (p.col >= N)
+    retorne sim;
+
+  /* verifica a linha */
+  para (col := 0; col < N; col++)
+    se (tab.tab[p.lin, col] > 0)
+      retorne sim;
+
+  /* verifica a coluna */
+  para (lin := 0; lin < N; lin++)
+    se (tab.tab[lin, p.col] > 0)
+      retorne sim;
+
+  /* verifica as diagonais */
+  diag := 1;
+  para (lin := p.lin - 1; lin >= 0; lin--)
+  início
+    col := p.col - diag; // diagonal esquerda
+    se ((col >= 0) && (tab.tab[lin, col] > 0))
+      retorne sim;
+    col := p.col + diag; // diagonal direita
+    se ((col < N) && (tab.tab[lin, col] > 0))
+      retorne sim;
+    diag++;
+  fim;
+  retorne não;
+fim;
+
+/* próxima_pos_ok - a partir da posição p, descobre a
+   próxima posição que não ameaça as demais; se encontrar,
+   coloca em p e retorna sim; senão, retorna não */
+função próxima_pos_ok(var tab: tabuleiro;
+                       var p: posição): lógico;
+início
+  /* verifica se está fora */
+  se (p.col >= N)
+    retorne não;
+
+  repita
+    se (não ameaça(tab, p))
+      retorne sim;
+    p.col++;
+  até (p.col >= N);
+  retorne não;
+fim;
+
+/* rainhas - descobre uma configuração para N rainhas */
+procedimento rainhas(var tab: tabuleiro; var p: posição);
+início
+  repita
+    se (não ameaça(tab, p))
+    início
+      empilha(tab, p);
+      p.lin++; // avança a linha
+      p.col := 0;
+    fim
+    senão
+    início
+      p.col++; // avança a coluna
+      se (p.col >= N)
+      início
+        desempilha(tab, p);
+        p.col++;
+      fim;
+    fim;
+  até (num_rainhas(tab) = N);
+
+  repita
+    se (não ameaça(tab, p))
+      p := empilha(tab, p)
+    senão se (não tem_mais_na_linha(tab, p))
+      p := desempilha(tab, p);
+  até ((num_rainhas(tab) = N) || (tab.finalizado = sim);
+fim;
+
+
+var
+  tab: tabuleiro;
+  p: posição;
+  n: inteiro;
+
+início
+  ini_tab(tab);
+  p.lin := 0; p.col := 0;
+  repita
+    rainhas(tab, p);
+    n++; escreva(n, "\n");
+    desempilha(tab, p);
+    p.col++;
+  até ((p.col >= N) && (p.lin = 0));
+fim.
+

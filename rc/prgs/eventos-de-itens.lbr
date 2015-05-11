@@ -1,0 +1,37 @@
+/* Tratando eventos de itens gráficos */
+programa eventos_de_itens;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  EVT_FECHAR = 1000;
+  EVT_LIMPAR = 1001;
+  
+var
+  fechar, limpar: botão;
+  edt: editor_lin;
+  fechou: lógico;
+
+início
+  /* cria os itens */
+  fechar := novo_botão(tela, 10, 100, 100, 30, "Fechar");
+  limpar := novo_botão(tela, 130, 100, 100, 30, "Limpar");
+  edt := novo_editor_lin(tela, 10, 30, 220, 30, "");
+
+  /* registra os eventos */
+  reg_evento(fechar, EV_CLIQUE, EVT_FECHAR);
+  reg_evento(limpar, EV_CLIQUE, EVT_LIMPAR);
+
+  /* trata os eventos */
+  fechou := não;
+  enquanto (não fechou)
+  início
+    espere_por(EV_CLIQUE);
+    escolha (último_evento())
+      caso EVT_FECHAR:
+        fechou := sim;
+      caso EVT_LIMPAR:
+        alt_txt_janela(edt, "");
+    fim;
+  fim;
+fim.

@@ -1,0 +1,285 @@
+programa Serpente;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  /* limites */
+  X1 = 0;
+  Y1 = 0;
+  X2 = 250;
+  Y2 = 250;
+
+  /* movimentos */
+  NORTE = 1;
+  SUL = 2;
+  LESTE = 3;
+  OESTE = 4;
+
+  /* tamanho de cada anel da serpente */
+  TAM = 8;
+
+  /* deslocamento (depende de TAM) */
+  DXY = TAM + 1;
+
+  /* cores */
+  COR_ANEL = COR_AZUL;
+
+tipo
+  /* posição */
+  Posição = registro
+    x, y: inteiro;
+  fim;
+
+  /* anel */
+  PtrAnel = ponteiro para Anel;
+  Anel = registro
+    pos: Posição;
+    prox: PtrAnel; // próximo anel
+  fim;
+
+  /* serpente */
+  Serpente = registro
+    n: inteiro; // número de anéis
+    pri, ult: PtrAnel; // primeiro e último anel
+    comida: Posição; // localização da comida
+  fim;
+
+/* desenheAnel - desenha um anel da serpente */
+procedimento desenheAnel(pos: Posição);
+início
+  gra_mudeCorDaCaneta(COR_PRETO);
+  gra_mudeCorDoPincel(COR_ANEL);
+  gra_desenheRetângulo(pos.x, pos.y, pos.x + TAM, pos.y + TAM);
+fim;
+
+/* apagueAnel - apaga um anel da serpente */
+procedimento apagueAnel(pos: Posição);
+início
+  gra_mudeCorDaCaneta(gra_corDoFundo());
+  gra_mudeCorDoPincel(gra_corDoFundo());
+  gra_desenheRetângulo(pos.x, pos.y, pos.x + TAM, pos.y + TAM);
+fim;
+
+/* próximaPosição - retorna próxima posição, conforme dir */
+função próximaPosição(serpente: Serpente; dir: inteiro): Posição;
+var
+  pos: Posição;
+início
+  pos := serpente.pri^.pos;
+  escolha (dir)
+    caso NORTE: pos.y := pos.y - DXY;
+    caso SUL:   pos.y := pos.y + DXY;
+    caso LESTE: pos.x := pos.x + DXY;
+    caso OESTE: pos.x := pos.x - DXY;
+  fim;
+  retorne pos;
+fim;
+
+/* altereAnel - altera para pos a posição do anel; 
+   retorna posição em que estava */
+função altereAnel(anel: PtrAnel; pos: Posição): Posição;
+var
+  p: Posição;
+início
+  p := anel^.pos;
+  anel^.pos := pos;
+  retorne p;
+fim;
+
+/* movimenteSerpente - altere a posição dos anéis da serpente */
+procedimento movimenteSerpente(var serpente: Serpente; 
+    dir: inteiro);
+var
+  pos: Posição;
+  anel: PtrAnel;
+início
+  /* desenhe o anel na próxima posição da serpente */
+  pos := próximaPosição(serpente, dir);
+  desenheAnel(pos);
+
+  /* altera a posição de cada anel */
+  anel := serpente.pri;
+  enquanto (anel <> nulo)
+  início
+    /* altera a posição do anel; guarde a posição 
+       a ser aplicada ao seguinte */
+    pos := altereAnel(anel, pos);
+
+    /* próximo anel */
+    anel := anel^.prox;
+  fim;
+
+  /* apague o último anel */
+  apagueAnel(pos);
+fim;
+
+/* mesmaPosição - verifica se as posições são iguais */
+função mesmaPosição(var pos1, pos2: Posição): lógico;
+início
+  se (pos1.x <> pos2.x) retorne não;
+  se (pos1.y <> pos2.y) retorne não;
+  retorne sim;
+fim;
+
+/* houveErro - verifica se o primeiro anel colidiu com
+   algum outro */
+função houveErro(var serpente: Serpente): lógico;
+var
+  anel: PtrAnel;
+  pos: Posição;
+início
+  /* guarde a posição do primeiro anel */
+  pos := serpente.pri^.pos;
+
+  /* pesquise nos demais anéis */
+  anel := serpente.pri^.prox;
+  enquanto (anel <> nulo)
+  início
+    se (mesmaPosição(pos, anel^.pos))
+      retorne sim; // colisão
+    anel := anel^.prox;
+  fim;
+  retorne não;
+fim;
+
+/* temEvento - aguarda próximo evento; tecla ESC
+   termina o programa */
+função temEvento(var dir: inteiro): lógico;
+var
+  ok: lógico;
+início
+  evnt_esperePor(EV_TEMPO + EV_TECLADO);
+  enquanto (evnt_últimoEvento() = EV_TECLADO)
+  início
+    escolha (evnt_tecla())
+      caso TECLA_CIMA:     dir := NORTE;
+      caso TECLA_BAIXO:    dir := SUL;
+      caso TECLA_DIREITA:  dir := LESTE;
+      caso TECLA_ESQUERDA: dir := OESTE;
+      caso TECLA_ESC: 
+        retorne não;
+    fim;
+    evnt_esperePor(EV_TEMPO + EV_TECLADO);
+  fim;
+  retorne sim;
+fim;
+
+/* incluaAnel - inclui novo anel na posição pos */
+procedimento incluaAnel(var serpente: Serpente; pos: Posição);
+var
+  anel: PtrAnel;
+início
+  novo(anel);
+  anel^.pos := pos;
+  anel^.prox := nulo;
+  se (serpente.n = 0)
+  início
+    serpente.ult := anel;
+    serpente.pri := anel;
+  fim
+  senão
+  início
+    serpente.ult^.prox := anel;
+    serpente.ult := anel;
+  fim;
+  inc(serpente.n);
+fim;
+
+/* posiçãoLivre - verifica se pos está livre */
+função posiçãoLivre(var serpente: Serpente; pos: Posição): lógico;
+var
+  anel: PtrAnel;
+início
+  anel := serpente.pri;
+  enquanto (anel <> nulo)
+  início
+    se (mesmaPosição(pos, anel^.pos))
+      retorne não; // anel está ocupando pos
+    anel := anel^.prox;
+  fim;
+  retorne sim;
+fim;
+
+/* inicieSerpente */
+procedimento inicieSerpente(var serpente: Serpente);
+const
+  N = 5;
+var
+  anel: PtrAnel;
+  i: inteiro;
+  pos: Posição;
+início
+  /* primeiro anel */
+  serpente.n := 0;
+  pos.x := 0;
+  pos.y := 0;
+  incluaAnel(serpente, pos);
+  desenheAnel(serpente.ult^.pos);
+
+  /* próximos anéis */
+  para (i := 1; i < N; inc(i))
+  início
+    pos.x := pos.x - DXY;
+    incluaAnel(serpente, pos);
+    desenheAnel(serpente.ult^.pos);
+  fim;
+fim;
+
+/* encontrouComida - verifica se o primeiro anel coincide com
+   a posição da comida */
+função encontrouComida(var serpente: Serpente): lógico;
+início
+  retorne mesmaPosição(serpente.comida, serpente.pri^.pos);
+fim;
+
+/* coloqueComida - determine posição para comida */
+procedimento coloqueComida(var serpente: Serpente);
+início
+  repita
+    serpente.comida.x := mat_random(30) * DXY;
+    serpente.comida.y := mat_random(30) * DXY;
+  até (posiçãoLivre(serpente, serpente.comida));
+fim;
+
+/* maisComida - registra localização de comida */
+procedimento maisComida(var serpente: Serpente);
+início
+  coloqueComida(serpente);
+  gra_mudeCorDaCaneta(COR_PRETO);
+  gra_mudeCorDoPincel(COR_VERMELHO);
+  gra_desenheRetângulo(serpente.comida.x, serpente.comida.y, 
+      serpente.comida.x + TAM, serpente.comida.y + TAM);
+fim;
+
+var
+  serpente: Serpente;
+  dir: inteiro;
+  posUlt: Posição;
+
+início
+  inicieSerpente(serpente);
+  maisComida(serpente);
+  evnt_mudeIntervaloEventoTempo(100);
+  dir := LESTE;
+  enquanto (temEvento(dir))
+  início
+    /* guarda a posição do último anel */
+    posUlt := serpente.ult^.pos;
+
+    /* movimenta a serpente */
+    movimenteSerpente(serpente, dir);
+
+    /* verifica se houve erro */
+    se (houveErro(serpente))
+      quebre;
+
+    /* verifica se encontrou comida */
+    se (encontrouComida(serpente))
+    início
+      incluaAnel(serpente, posUlt);
+      desenheAnel(posUlt);
+      maisComida(serpente);
+    fim;
+  fim;
+fim.

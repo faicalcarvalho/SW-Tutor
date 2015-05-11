@@ -1,0 +1,33 @@
+/* Toca a batida do tamborim do bloco do bairro
+   Santa Tereza, em Belo Horizonte, MG, Brasil.
+   Num ciclo de 16 tempos: 0123456789012345
+                 Tocar em: xx xx xxx xx xx 
+*/
+programa BatidaStaTereza;
+inclui "evnt*";
+inclui "mm*";
+
+const
+  TPO = 120; // unidade de tempo, em milissegundos
+  MAX_TPO = 64; // duração da batida
+
+var
+  i, n: inteiro;
+
+início
+  /* altera a base de tempo do ritmo */
+  altEvTempo(TPO);
+
+  /* toca */
+  para (i := 0; i < MAX_TPO; inc(i))
+  início
+    n := i mod 16;
+    escolha (n)
+      caso 0:
+        toqSom("Caixa-1");
+      caso 1, 3, 4, 6, 7, 8, 10, 11, 13, 14:
+        toqSom("Conduc-2");
+    fim;
+    esperePor(EV_TEMPO);
+  fim;
+fim.

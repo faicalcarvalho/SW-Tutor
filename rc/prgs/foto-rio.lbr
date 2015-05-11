@@ -1,0 +1,11 @@
+/* Exibe na tela uma foto do Rio de Janeiro */
+programa foto_rio;
+inclui "gra*";
+
+var
+  img: imagem;
+
+início
+  img := nova_imagem_crg("Foto-Rio-1");
+  cop_imagem(tela, 10, 10, img);
+fim.

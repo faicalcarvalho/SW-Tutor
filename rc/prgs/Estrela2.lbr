@@ -1,0 +1,60 @@
+/* Exibe forma circular com os pontos interligados */
+programa Estrela;
+inclui "qdr.pac";
+
+const
+  NUM_PTS = 23;
+  RAIO = 250;
+
+tipo
+  Estrela = registro
+    pts: arranjo [0..NUM_PTS - 1] de Ponto;
+    qdr: QDR;
+  fim;
+
+/* ligaEstrela - liga todos os pontos ao ponto p */
+procedimento ligaEstrela(var estrela: Estrela; p: Ponto);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NUM_PTS; inc(i))
+    qdr_desenheLinha(estrela.qdr, p, estrela.pts[i]);
+fim;
+
+/* conectaEstrela - conecta todos os pontos entre si */
+procedimento conectaEstrela(var estrela: Estrela);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NUM_PTS; inc(i))
+    ligaEstrela(estrela, estrela.pts[i]);
+fim;
+
+/* inicieEstrela - prepara os n pontos da estrela */
+procedimento inicieEstrela(var estrela: Estrela);
+var
+  centro: Ponto;
+  graus: real;
+  i: inteiro;
+início
+  graus := 360.0 / NUM_PTS;
+  centro := geom_pt(RAIO, RAIO);
+  estrela.qdr := qdr_novo(RAIO * 2, RAIO * 2);
+  para (i := 0; i < NUM_PTS; inc(i))
+    estrela.pts[i] := geom_ptNoCírculo(centro, RAIO, graus * i);
+fim;
+
+/* termineEstrela */
+procedimento termineEstrela(var estrela: Estrela);
+início
+  qdr_fim(estrela.qdr);
+fim;
+
+var
+  estrela: Estrela;
+
+início
+  inicieEstrela(estrela);
+  conectaEstrela(estrela);
+  termineEstrela(estrela);
+fim.

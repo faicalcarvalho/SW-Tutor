@@ -1,0 +1,50 @@
+/* Equações paramétricas */
+programa eq_params;
+inclui "gra*";
+inclui "rgra.pac";
+
+/* retorna ponto parametrizado */
+função fxy1(t: real): ponto;
+var
+  p: ponto;
+início
+  p.x := (1.5 * cos(t)) - cos(30 * t);
+  p.y := (1.5 * sen(t)) - sen(30 * t);
+  retorne p;
+fim;
+
+/* retorna ponto parametrizado */
+função fxy2(t: real): ponto;
+var
+  p: ponto;
+início
+  p.x := sen(t + cos(100 * t));
+  p.y := cos(t + sen(100 * t));
+  retorne p;
+fim;
+
+/* retorna ponto parametrizado */
+função fxy3(t: real): ponto;
+var
+  p: ponto;
+início
+  p.x := 3 * t / (1 + (t*t*t));
+  p.y := 3 * t * t / (1 + (t*t*t));
+  retorne p;
+fim;
+
+const
+  XORIG = 300; YORIG = 300;
+  DT = 0.005;
+
+var
+  rg: rgra;
+  t: real;
+
+início
+  rg := rgra_novo(tela, XORIG, YORIG, 100.0, 100.0);
+
+  para (t := 1.0; t <= 400.0; t := t + DT)
+    rgra_marque(rg, fxy3(t), COR_AZUL);
+fim.
+

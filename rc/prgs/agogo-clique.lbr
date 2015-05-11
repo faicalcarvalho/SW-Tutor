@@ -1,0 +1,40 @@
+/* Toca agogô a cada clique */
+programa agogô_clique;
+inclui "evnt*";
+inclui "mm*";
+
+const
+  TPO = 700;    // duração da unidade mínima
+  MAX_TPO = 10; // duração da música
+
+var
+  i, n: inteiro;
+  agogô1, agogô2: som;
+  rtl: rótulo;
+  n: inteiro;
+
+
+procedimento pisca();
+início
+  n++;
+  se (n > N) 
+    n := 0;
+  alt_txt_janela(rtl, "editor de uma linha");
+
+  dsn_ret(tela, 10, 10, 100, 100);
+
+fim;
+
+início
+  /* cria os sons */
+  agogô1 := novo_som("Agogo-1");
+  agogô2 := novo_som("Agogo-2");
+
+  /* toca */
+  para (i := 0; i < MAX_TPO; i++)
+  início
+    espere_por(EV_CLIQUE);
+    toq_som(agogô1);
+  fim;
+fim.
+

@@ -1,0 +1,22 @@
+/*
+  Decarva SW-Tutor Beta 0.96
+  Copyright (c) 1999 Decarva Software Ltda
+  Ola.pac
+*/
+programa Olá;
+inclui "gra*";
+
+const
+  X1 = 200;
+  Y1 = 200;
+
+var
+  j, jan: Janela;  
+  i: inteiro;
+
+início
+  jan := novaJanela();
+  crgImg(jan, "VanGogh-1");
+  copJanelaRot(Tela, X1, Y1, 30.0, jan);
+  dsnRet(Tela, X1-2, Y1-2, X1+2, Y1+2);
+fim.

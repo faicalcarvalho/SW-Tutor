@@ -1,0 +1,63 @@
+/* Copia quadro para a tela */
+programa CopiaQuadro;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  ALTURA = 50;
+  LARGURA = 50;
+  COR_FUNDO = COR_BRANCA;
+  PASSO = 1;
+
+/* quadroComFiguras - retorna um quadro contendo 
+   algumas figuras */
+função quadroComFiguras(): inteiro;
+var
+  q: inteiro;
+início
+  q := gra_quadroNovo();
+  gra_quadroMudeAltura(q, ALTURA);
+  gra_quadroMudeLargura(q, LARGURA);
+  gra_quadroMudeCorDoPincel(q, COR_AMARELO);
+  gra_quadroDesenheRetângulo(q, 10, 10, 40, 40);
+  gra_quadroMudeCorDoPincel(q, COR_AZUL);
+  gra_quadroDesenheElipse(q, 5, 15, 35, 35);
+  gra_quadroMudeCorDoPincel(q, COR_VERMELHO);
+  gra_quadroDesenheTriângulo(q, 20, 25, 40, 45);
+  retorne q;
+fim;
+
+procedimento apague(q: inteiro; x, y: inteiro);
+início
+  gra_mudeCorDaCaneta(COR_FUNDO);
+  gra_mudeCorDoPincel(COR_FUNDO);
+  gra_desenheRetângulo(x, y, x + LARGURA, y + ALTURA);
+fim;
+
+procedimento movimente(q, x1, y1, x2, y2: inteiro);
+início
+  apague(q, x1, y1);
+  gra_copieQuadro(q, x2, y2);
+  evnt_esperePor(EV_TEMPO);
+fim;
+
+var
+  q: inteiro;
+  x, y, i, j: inteiro;
+
+início
+  gra_desenheRetângulo(0, 0, 300, 300);
+  /* cria quadro com algumas figuras */
+  q := quadroComFiguras();
+
+  /* copia para a tela */
+  gra_copieQuadro(q, 1, 1);
+
+  y := 1;
+  para (x := 1; x < 200; inc(x))
+    movimente(q, x, y, x+PASSO, y);
+
+        
+  /* libera */
+  gra_quadroLibere(q);
+fim.

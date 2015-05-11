@@ -1,0 +1,100 @@
+/* Curva de Sierpinski - Publicado em
+   "Algorithms and Data Structures",
+   de Niklaus Wirth (Prentice-Hall, 1986) */
+programa curva_sierpinski;
+inclui "gra*";
+inclui "mat*";
+
+const
+  TAM_QUAD = 500;
+  LARG = 500;
+  ALTU = 500;
+var
+  i, x0, y0, u: inteiro;
+
+procedimento dsn_lin_rel(dx, dy: inteiro);
+var
+  x,y: inteiro;
+início
+  x := obt_caneta_x(tela) + dx;
+  y := obt_caneta_y(tela) + dy;
+  dsn_lin(tela, x, y);
+fim;
+
+procedimento lin(dir, dist: inteiro);
+var
+  x: inteiro;
+início
+  x := arredonde(dist * sen(PI/4));
+  escolha (dir)
+    caso 0: dsn_lin_rel(dist, 0);
+    caso 1: dsn_lin_rel(x, -x);
+    caso 2: dsn_lin_rel(0, -dist);
+    caso 3: dsn_lin_rel(-x, -x);
+    caso 4: dsn_lin_rel(-dist, 0);
+    caso 5: dsn_lin_rel(-x, x);
+    caso 6: dsn_lin_rel(0, dist);
+    caso 7: dsn_lin_rel(x, x);
+  fim;
+fim;
+
+/* forwards */
+procedimento b(i: inteiro); adiante;
+procedimento c(i: inteiro); adiante;
+procedimento d(i: inteiro); adiante;
+
+procedimento a(i: inteiro);
+início
+  se (i>0)
+  início
+    a(i-1); lin(7,u); b(i-1); lin(0, 2*u);
+    d(i-1); lin(1,u); a(i-1);
+  fim;
+fim;
+
+procedimento b(i: inteiro);
+início
+  se (i>0)
+  início
+    b(i-1); lin(5,u); c(i-1); lin(6,2*u);
+    a(i-1); lin(7,u); b(i-1);
+  fim;
+fim;
+
+procedimento c(i: inteiro);
+início
+  se (i>0)
+  início
+    c(i-1); lin(3,u); d(i-1); lin(4,2*u);
+    b(i-1); lin(5,u); c(i-1);
+  fim;
+fim;
+
+procedimento d(i: inteiro);
+início
+  se (i>0)
+  início
+    d(i-1); lin(1,u); a(i-1); lin(2,2*u);
+    c(i-1); lin(3,u); d(i-1);
+  fim;
+fim;
+
+início
+  alt_cor_pincel(tela, COR_PRETO);
+  dsn_ret_cheio(tela, 0, 0, 1000, 1000);
+  alt_cor_caneta(tela, COR_BRANCO);
+  alt_tam_caneta(tela, 3);
+  i := 0;
+  u := TAM_QUAD div 4;
+  x0 := LARG div 2;
+  y0 := ALTU div 2 - u;
+  repita
+    i := i+1;
+    x0 := x0 - u;
+    u := u div 2;
+    y0 := y0 - u;
+    alt_pos_caneta(tela, x0, y0);
+  até (i = 4);
+  a(i); lin(7,u); b(i); lin(5,u);
+  c(i); lin(3,u); d(i); lin(1,u);
+fim.

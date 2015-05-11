@@ -1,0 +1,313 @@
+/* Teste de algoritmos de ordenação */
+programa teste_ordenação;
+inclui "mat*";
+
+const
+  N = 100;
+
+tipo
+  itens = arranjo [N] de inteiro;
+
+  tst_ord = registro
+    cnt: inteiro;                   // contador de testes
+    orig: itens;                    // arranjo original
+    testado: arranjo [N] de lógico; // elemento já testado?
+  fim;
+
+/* tst_ord_ini_random - valores aleatórios */
+procedimento tst_ord_ini_random(var a: itens);
+var
+  i: inteiro;
+início
+  para (i := 0; i < N; i++)
+    a[i] := random(1000);
+fim;
+
+/* tst_ord_ini_crescente - valores em ordem
+   crescente */
+procedimento tst_ord_ini_crescente(var a: itens);
+var
+  i: inteiro;
+início
+  para (i := 0; i < N; i++)
+    a[i] := i;
+fim;
+
+/* tst_ord_ini_decrescente - valores em ordem
+   decrescente */
+procedimento tst_ord_ini_decrescente(var a: itens);
+var
+  i: inteiro;
+início
+  para (i := N - 1; i >= 0; i--)
+    a[i] := i;
+fim;
+
+/* tst_ord_ini_igual - valores iguais */
+procedimento tst_ord_ini_igual(var a: itens);
+var
+  i: inteiro;
+início
+  para (i := 0; i < N; i++)
+    a[i] := 100;
+fim;
+
+/* tst_ord_ini - inicializa um teste de ordenação */
+procedimento tst_ord_ini(var a: itens; var tst: tst_ord);
+var
+  i: inteiro;
+início
+  /* incrementa cnt para variar os dados */
+  tst.cnt++;
+  escolha (tst.cnt mod 4)
+    caso 0: tst_ord_ini_random(a);
+    caso 1: tst_ord_ini_crescente(a);
+    caso 2: tst_ord_ini_decrescente(a);
+    caso 3: tst_ord_ini_igual(a);
+  fim;
+
+  /* copia o arranjo original */
+  para (i := 0; i < N; i++)
+    tst.orig[i] := a[i];
+fim;
+
+/* tst_ord_psq - testa se item está presente no original,
+   guardado no registro tst; marca o item encontrado de modo
+   que ele não seja considerado nas pesquisas seguintes */
+função tst_ord_psq(var tst: tst_ord; item: inteiro): lógico;
+var
+  i: inteiro;
+início
+  para (i := 0; i < N; i++)
+    se ((tst.orig[i] = item) && (tst.testado[i] = não))
+    início
+      tst.testado[i] := sim;
+      retorne sim;
+    fim;
+  retorne não; // item não presente no original
+fim;
+
+/* tst_ord_fim - testa se a ordem está correta e se foram
+   mantidos todos os elementos do arranjo original */
+procedimento tst_ord_fim(var a: itens; var tst: tst_ord);
+var
+  i: inteiro;
+início
+  /* verifica se a ordem está correta */
+  para (i := 0; i < N - 1; i++)
+    se (a[i] > a[i + 1])
+      termine("Arranjo NÃO está ordenado");
+
+  /* verifica se todos os elementos estão presentes */
+  para (i := 0; i < N; i++)
+    tst.testado[i] := não;
+  para (i := 0; i < N; i++)
+    se (tst_ord_psq(tst, a[i]) = não)
+      termine("Arranjo NÃO está com todos os elementos");
+fim;
+
+/* menor - retorna o índice do menor elemento de a,
+   a partir do índice inf */
+função menor(var a: itens; inf: inteiro): inteiro;
+var
+  i: inteiro;    /* controle do loop */
+  im: inteiro;   /* índice do menor elemento */
+início
+  im := inf;
+  para (i := inf + 1; i < N; i++)
+    se (a[i] < a[im])
+      im := i;
+  retorne im;
+fim;
+
+
+procedimento imprime(var a: itens);
+var
+  i: inteiro;
+início
+  para (i:=0; i<N; i++)
+    escreva(a[i], "\n");
+fim;
+
+/* troca_adj - troca, se necessário, posições
+   ajacentes a[ind] e a[ind+1] */
+função troca_adj(var a: itens; ind: inteiro): lógico;
+var
+  aux: inteiro; /* auxiliar para a troca */
+início
+  se (a[ind] <= a[ind + 1])
+    retorne não;
+  aux := a[ind];
+  a[ind] := a[ind + 1];
+  a[ind + 1] := aux;
+  retorne sim;
+fim;
+
+/* glup - mecanismo de troca entre posições adjacentes,
+   a[i] e a[i+1], do início de a até sup; retorna a
+   última posição em que houve troca */
+função glup(var a: itens; sup: inteiro): inteiro;
+var
+  i: inteiro;    /* índice inicial */
+  ult: inteiro;  /* índice da última troca */
+início
+  ult := 0;
+  para (i := 0; i <= sup; i++)
+    se (troca_adj(a, i))
+      ult := i;
+  retorne ult;
+fim;
+
+/* ord_bolha - ordena a em ordem crescente
+   usando o método da bolha (bubble sort) */
+procedimento ord_bolha(var a: itens);
+var
+  n: inteiro;
+início
+  n := N - 1; /* último par: a[N-2] e a[N-1] */
+  repita
+    n := glup(a, n - 1);
+  até (n = 0);
+fim;
+
+/* troca_ind - troca a[ind1] com a[ind2] */
+procedimento troca_ind(var a: itens; ind1, ind2: inteiro);
+var
+  aux: inteiro;
+início
+  se (ind1 = ind2)
+    retorne; // não é necessário fazer a troca
+  aux := a[ind1];
+  a[ind1] := a[ind2];
+  a[ind2] := aux;
+fim;
+
+/* ord_seleção - ordena a em ordem crescente
+   usando o método da seleção (selection sort) */
+procedimento ord_seleção(var a: itens);
+var
+  i: inteiro;
+início
+  para (i := 0; i < N - 1; i++)
+    troca_ind(a, i, menor(a, i));
+fim;
+
+/* ord_seleção2 - ordena a em ordem crescente
+   usando o método da seleção (selection sort) */
+procedimento ord_seleção2(var a: itens);
+var
+  i, j, im: inteiro;
+início
+  para (i := 0; i < N - 1; i++)
+  início
+    /* coloca em im o índice do menor */
+    im := i;
+    para (j := i + 1; j < N; j++)
+      se (a[j] < a[im])
+        im := j;
+    /* coloca em a[i] o menor encontrado em a[im] */
+    troca_ind(a, i, im);
+  fim;
+fim;
+
+/* ord_seleção3 - ordena a em ordem crescente
+   usando o método da seleção (selection sort) */
+procedimento ord_seleção3(var a: itens);
+var
+  i, j: inteiro;
+início
+  para (i := 0; i < N - 1; i++)
+    para (j := i + 1; j < N; j++)
+      se (a[j] < a[i])
+        troca_ind(a, i, j);
+fim;
+
+/* mistura - mistura ordenadamente em a os
+   arranjos a[inf..meio] e a[meio+1..sup] */
+procedimento mistura(var a: itens;
+                     inf, meio, sup: inteiro);
+var
+  aux: itens;  // para armazenar o arranjo ordenado
+  i: inteiro;  // índice do arranjo com a mistura
+  i1: inteiro; // índice do arranjo da primeira metade
+  i2: inteiro; // índice do arranjo da segunda metade
+início
+  /* distribui em aux os dois arranjos, até um dos dois acabar */
+  i := inf;
+  i1 := inf;
+  i2 := meio + 1;
+  enquanto ((i1 <= meio) && (i2 <= sup))
+    se (a[i1] <= a[i2])
+    início
+      aux[i] := a[i1]; i1++; i++;
+    fim
+    senão
+    início
+      aux[i] := a[i2]; i2++; i++;
+    fim;
+
+  /* esgota a metade que ainda tem elementos */
+  se (i1 <= meio)
+    repita
+      aux[i] := a[i1]; i1++; i++;
+    até (i1 > meio)
+  senão
+    repita
+      aux[i] := a[i2]; i2++; i++;
+    até (i2 > sup);
+
+  /* copia aux para a */
+  para (i := inf; i <= sup; i++)
+    a[i] := aux[i];
+fim;
+
+/* ord_mistura - ordena a em ordem crescente,
+   do índice inf ao sup, usando o método da
+   mistura (merge sort) */
+procedimento ord_mistura(var a: itens; inf, sup: inteiro);
+var
+  meio: inteiro;
+início
+  se (inf < sup)
+  início
+    meio := (inf + sup) div 2;
+    ord_mistura(a, inf, meio);
+    ord_mistura(a, meio + 1, sup);
+    mistura(a, inf, meio, sup);
+  fim;
+fim;
+
+
+const
+  TST = 0;       // seleciona o algoritmo
+  NTST = 1000;   // determina o número de testes
+
+var
+  a: itens;      // arranjo base
+  tst: tst_ord;  // estrutura para teste
+  i: inteiro;    // para o loop de testes
+
+início
+  para (i := 0; i < NTST; i++)
+  início
+    tst_ord_ini(a, tst);
+    escolha (TST)
+      caso 0: ord_seleção(a);
+      caso 1: ord_seleção2(a);
+      caso 2: ord_seleção3(a);
+      caso 3: ord_bolha(a);
+      caso 4: ord_mistura(a, 0, N-1);
+    fim;
+    tst_ord_fim(a, tst);
+  fim;
+
+  escolha (TST)
+    caso 0: escreva("seleção - ");
+    caso 1: escreva("seleção2 - ");
+    caso 2: escreva("seleção3 - ");
+    caso 3: escreva("bolha - ");
+    caso 4: escreva("mistura - ");
+  fim;
+  escreva(tst.cnt, " testes\n");
+fim.
+

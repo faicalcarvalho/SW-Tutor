@@ -1,0 +1,28 @@
+/* Colagem de alguns retângulos */
+programa ret_colagens;
+inclui "gra*";
+
+const
+  X = 30; Y = 60;
+  DX = 50; DY = 40;
+
+procedimento dsn_colagem(lin, col: inteiro);
+var
+  x, y: inteiro;
+início
+  x := X + (col * (DX - 1));
+  y := Y + (lin * (DY - 1));
+  dsn_ret(tela, x, y, x + DX, y + DY);
+fim;
+
+início
+  alt_cor_pincel(tela, COR_BRANCO);
+  dsn_colagem(0, 0);
+  dsn_colagem(1, 1);
+  dsn_colagem(2, 2);
+  dsn_colagem(3, 1);
+  dsn_colagem(1, 3);
+  dsn_colagem(0, 4);
+  dsn_colagem(-1, 3);
+fim.
+

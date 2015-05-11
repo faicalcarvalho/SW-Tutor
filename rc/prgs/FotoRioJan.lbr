@@ -1,0 +1,11 @@
+/* Exibe numa janela uma foto do Rio de Janeiro */
+programa FotoRioJan;
+inclui "gra*";
+
+var
+  jan: Janela;
+início
+  jan := novaJanela();
+  altVisJanela(jan, sim);
+  crgImg(jan, "Foto-Rio-1");
+fim.

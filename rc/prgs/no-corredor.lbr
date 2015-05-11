@@ -1,0 +1,27 @@
+/* Desenha duas linhas verticais e testa se o próximo
+   clique está dentro do "corredor" formado por elas */
+programa no_corredor;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  X1 = 100; X2 = 200;
+
+var
+  x, y: inteiro;
+
+início
+  /* desenha o corredor */
+  alt_pos_caneta(tela, X1, 0);
+  dsn_lin(tela, X1, 1000);
+  alt_pos_caneta(tela, X2, 0);
+  dsn_lin(tela, X2, 1000);
+
+  /* verifica posição do clique */
+  espere_por(EV_CLIQUE);
+  mouse_xy(x, y);
+  se ((x > X1) && (x < X2))
+    dsn_txt(tela, x, y, "dentro")
+  senão
+    dsn_txt(tela, x, y, "fora");
+fim.

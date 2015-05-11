@@ -1,0 +1,32 @@
+/* Toca uma música baseada em percussão */
+programa tic_tac;
+inclui "evnt*";
+inclui "mm*";
+
+const
+  TPO = 400;    // duração da unidade mínima
+  MAX_TPO = 8;  // duração da música
+  NDIV = 2;     // divisões por compasso
+  
+var
+  i: inteiro;
+  tic, tac: som;
+
+início
+  /* cria os sons */
+  tic := novo_som("Agogo-1");
+  tac := novo_som("Agogo-2");
+
+  /* altera a base do ritmo */
+  alt_ev_tempo(TPO);
+
+  /* toca */
+  para (i := 0; i < MAX_TPO; i++)
+  início
+    escolha (i mod NDIV)
+      caso 0: toq_som(tic);
+      caso 1: toq_som(tac);
+    fim;
+    espere_por(EV_TEMPO);
+  fim;
+fim.

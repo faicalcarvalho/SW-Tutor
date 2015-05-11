@@ -1,0 +1,41 @@
+programa Olá;
+inclui "mat*";
+
+const
+  N = 5;
+  VALMAX = 10;
+
+tipo
+  Vetor = registro
+    n: inteiro; // número de elementos
+    elem: arranjo [0..N-1] de inteiro; // os elementos
+  fim;
+
+/* psqVal - pesquisa o valor val no vetor v;
+   se encontrar, retorna índice (0..n-1); senão,
+   retorna -1 */
+função psqVal(var v: Vetor; val: inteiro): inteiro;
+var
+  i: inteiro;
+início
+  para (i := 0; i < v.n; inc(i))
+    se (v.elem[i] = val)
+      retorne i;
+  retorne -1;  
+fim;
+
+procedimento iniVetor(var v: Vetor);
+var
+  i: inteiro;
+início
+  para (i := 0; i < N; inc(i))
+    v.elem[i] := random(VALMAX);
+fim;
+
+var
+  v: Vetor;
+
+início
+  iniVetor(v);
+  escrevaLn("Olá!");
+fim.

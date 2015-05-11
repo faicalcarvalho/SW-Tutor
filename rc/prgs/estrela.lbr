@@ -1,0 +1,33 @@
+/* Exibe forma circular com os pontos interligados */
+programa estrela;
+inclui "rgra.lbr";
+
+const
+  NPTOS = 22;
+  CX = 200; CY = 200;
+  RAIO = 180;
+
+tipo
+  roda = arranjo [NPTOS] de ponto;
+
+procedimento conecta(p: ponto; var r: roda);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NPTOS; i++)
+    rgra_dsn_lin(tela, p, r[i]);
+fim;
+
+var
+  pts: roda;
+  i: inteiro;
+
+início
+  /* obtém os pontos */
+  para (i := 0; i < NPTOS; i++)
+    pts[i] := pto_cir(pto(CX, CY), RAIO, i * (360.0 / NPTOS));
+
+  /* conecta cada ponto a todos os demais */
+  para (i := 0; i < NPTOS; i++)
+    conecta(pts[i], pts);
+fim.

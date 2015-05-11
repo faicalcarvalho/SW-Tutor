@@ -1,0 +1,12 @@
+/* Mostra os N primeiros quadrados (n * n) */
+programa tab_quadrados;
+const
+  N = 20;
+
+var
+  i: inteiro;
+
+início
+  para (i := 0; i < N; i++)
+    escreva(i, " - ", i * i, "\n");
+fim.

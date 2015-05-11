@@ -1,0 +1,202 @@
+/* Implementação simplificada do jogo "Campo Minado", 
+   distribuído com o Windows. Na janela "Sobre o Campo 
+   Minado", aparece a seguinte mensagem: "Copyright (c) 
+   1981-2001 Microsoft Corporation por Robert Donner e 
+   Curt Johnson" */
+programa CampoMinado;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  /* número de linhas e colunas */
+  N = 8;
+
+  /* tamanho das casas */
+  TAM = 20;
+
+  /* total de minas */
+  NUM_MINAS = 10;
+
+  /* jogadas */
+  PISOU = 1;
+  DESMONTOU = 2;
+  TERMINOU = 3;
+
+  /* valores especiais para as casas */
+  MINA = -1;
+  MINA_DESMONTADA = -2;
+
+  /* caractere para a mina (fonte Wingdings) */
+  CRT_MINA = 77;  
+
+tipo
+  Tabuleiro = arranjo [N, N] de botão;
+  Campo = arranjo [N, N] de inteiro;
+
+/* botãoClique - retorna o botão clicado */
+função botãoClique(var tab: Tabuleiro; 
+                   var lin, col: inteiro): lógico;
+início
+  para (lin := 0; lin < N; inc(lin))
+    para (col := 0; col < N; inc(col))
+      se (tstEvento(tab[lin, col], EV_MOUSE_CIMA))
+        retorne sim;
+  retorne não; // não encontrou
+fim;
+
+/* obtJogada - obtém próxima jogada */ 
+função obtJogada(var tab: Tabuleiro; 
+                 var lin, col: inteiro): inteiro;
+var
+  result: inteiro;
+início
+  repita
+    espere_por(EV_MOUSE_BAIXO + EV_TECLADO);
+    se (último_evento() = EV_TECLADO)
+      retorne TERMINOU; // teclado termina o jogo
+
+    /* verifica botão direito ou esquerdo */
+    se (botão_mouse(BM_DIREITO))
+      result := DESMONTOU
+    senão
+      result := PISOU;
+
+    /* espera soltar o botão do mouse */
+    espere_por(EV_MOUSE_CIMA);
+    mouse_xy(lin, col);
+  até (botãoClique(tab, lin, col));
+  retorne result;
+fim;
+
+/* criaTab - cria o tabuleiro */
+procedimento criaTab(var tab: Tabuleiro);
+var
+  i, j: inteiro;
+início
+  para (i := 0; i < N; i++)
+    para (j := 0; j < N; j++)
+      tab[i, j] := novo_botão(tela, j*TAM+5, i*TAM+5, TAM-2, TAM-2, "");
+fim;
+
+/* obtémCasaLivre - determina posição (lin, col) onde
+   uma mina pode ser colocada; 
+   quando campo[lin,col] <> MINA, a posição está vaga */
+procedimento obtémCasaLivre(var campo: Campo; 
+    var lin, col: inteiro);
+início
+  repita
+    lin := random(N);
+    col := random(N);
+  até (campo[lin, col] <> MINA);
+fim;
+
+/* registreEfeitoMina - registre que há uma mina vizinha */
+procedimento registreEfeitoMina(var campo: Campo;
+    lin, col: inteiro);
+início
+  /* nada a fazer se (lin, col) fora do campo */
+  se ((lin < 0) || (lin >= N))
+    retorne;
+  se ((col < 0) || (col >= N))
+    retorne;
+
+  /* nada a fazer se (lin, col) já tem uma mina */
+  se (campo[lin, col] = MINA)
+    retorne;
+
+  /* registre que há mina vizinha a campo[lin, col] */
+  inc(campo[lin, col]);
+fim;
+
+/* registreMina - registre presença de mina em (lin,col) e
+   o efeito na vizinhança */
+procedimento registreMina(var campo: Campo; lin, col: inteiro);
+início
+  campo[lin, col] := MINA;
+  registreEfeitoMina(campo, lin - 1, col - 1);
+  registreEfeitoMina(campo, lin - 1, col);
+  registreEfeitoMina(campo, lin - 1, col + 1);
+  registreEfeitoMina(campo, lin,     col + 1);
+  registreEfeitoMina(campo, lin + 1, col + 1);
+  registreEfeitoMina(campo, lin + 1, col);
+  registreEfeitoMina(campo, lin + 1, col - 1);
+  registreEfeitoMina(campo, lin,     col - 1);
+fim;
+
+/* coloqueMinas - coloque n minas no campo */
+procedimento coloqueMinas(var campo: Campo; n: inteiro);
+var
+  lin, col: inteiro;
+  i: inteiro;
+início
+  para (i := 0; i < n; inc(i))
+  início
+    obtémCasaLivre(campo, lin, col);
+    registreMina(campo, lin, col);
+  fim;
+fim;
+
+/* desmontou - verifica se desmontou uma mina */
+função desmontou(var campo: Campo; jogada, lin, col: inteiro): lógico;
+início
+  se ((jogada = DESMONTOU) && (campo[lin, col] <> MINA_DESMONTADA))
+  início
+    campo[lin, col] := MINA_DESMONTADA;
+    retorne sim;
+  fim;
+  retorne não;
+fim;
+
+/* pisou - verifica se pisou numa mina */
+função pisou(var campo: Campo; var tab: Tabuleiro;
+             jogada, lin, col: inteiro): lógico;
+início
+  se ((jogada = PISOU) && (campo[lin, col] = MINA))
+  início
+    campo[lin, col] := MINA_DESMONTADA;
+    retorne sim;
+  fim;
+  retorne não;
+fim;
+
+
+var
+  tab: Tabuleiro;
+  campo: Campo;
+  jogada: inteiro;
+  lin, col: inteiro;
+  desmontadas: inteiro;
+
+  b: botão;
+início
+  /* prepara o campo */
+  desmontadas := 0;
+  coloqueMinas(campo, NUM_MINAS);
+  criaTab(tab);
+
+  /* joga */
+  jogada := obtJogada(tab, lin, col);
+  enquanto (jogada <> TERMINOU)
+  início
+    /* verifica erros */
+    se ((jogada = PISOU) && (campo[lin, col] = MINA))
+      quebre;
+    se ((jogada = DESMONTOU) && (campo[lin, col] >= 0))
+      quebre;
+
+    /* verifica se desmontou corretamente uma mina */
+    se (desmontou(campo, jogada, lin, col))
+      inc(desmontadas);
+    se (desmontadas = NUM_MINAS)
+      quebre;
+    jogada := obtJogada(tab, lin, col);
+  fim;
+  
+
+  b := tab[2, 2];
+  alt_txt_janela(b, int_para_crt(CRT_MINA)); //77
+  alt_fonte_janela(b, "Wingdings", 11, 0, COR_VERMELHO);
+
+  altTxt(tab[3, 3], "3");
+fim.

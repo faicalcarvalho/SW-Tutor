@@ -1,0 +1,22 @@
+programa OlaMundo;
+inclui "gra*";
+
+const
+  T = "SW-Tutor";
+  TAM_INICIAL = 50;
+
+var
+  x, y, largura, altura: inteiro;
+
+início
+  gra_mudeNomeDaFonte("Arial");
+  gra_mudeTamanhoDaFonte(TAM_INICIAL);
+  x := 0;
+  y := 0;
+  repita
+    gra_desenheTexto(x, y, T);
+    x := x + (gra_larguraDoTexto(T) div 8);
+    y := y + gra_alturaDoTexto(T);
+    gra_mudeTamanhoDaFonte(gra_tamanhoDaFonte() - 5);
+  até (gra_tamanhoDaFonte() < 1);
+fim.

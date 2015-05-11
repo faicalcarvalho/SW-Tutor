@@ -1,0 +1,69 @@
+/* Registra e processa em arquivo as coordenadas 
+   e a cor de linhas conforme cliques do usuário */
+programa LinhasColoridas;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+inclui "arq*";
+
+/* temClique - obtém coordenadas (x, y) do próximo 
+   clique e retorna sim; se o usuário usar o teclado, 
+   retorna não */
+função temClique(var x, y: inteiro): lógico;
+início
+  esperePor(EV_CLIQUE + EV_TECLADO);
+  se (últimoEvento() = EV_TECLADO)
+    retorne não;
+  mouseXY(x, y);
+  retorne sim;
+fim;
+
+/* qualquerCor - retorna uma cor escolhida 
+   de forma aleatória */
+função qualquerCor(): inteiro;
+início
+  retorne corRGB(random(256),  /* vermelho */
+                 random(256),  /* verde */
+                 random(256)); /* azul */
+fim;
+
+/* obtInt - obtém o valor inteiro extraído a partir
+   da posição pos de t */
+função obtInt(t: texto; pos: inteiro): inteiro;
+var
+  txt: texto;
+início
+  txt := "0";
+  enquanto (caractereEm(t, pos) <> ",")
+  início
+    txt := txt + caractereEm(t, pos);
+    inc(pos);
+  fim;
+  retorne txtParaInt(txt);
+fim;
+
+const
+  ARQ = "linhascoloridas.txt";
+  N = 400;
+  Y = 300;
+
+var
+  txt: texto;
+  x, y: inteiro;
+  i: inteiro;
+
+início
+  altEvTempo(50);
+  i := 0;
+  enquanto (i < N)
+  início
+    esperePor(EV_TEMPO + EV_MOV_MOUSE); 
+    se (últimoEvento() = EV_TEMPO)
+    início
+      mouseXY(x, y);
+      altXY(Tela, i, Y) ;
+      dsnLin(Tela, i, y);
+      inc(i);
+    fim;
+  fim;
+fim.

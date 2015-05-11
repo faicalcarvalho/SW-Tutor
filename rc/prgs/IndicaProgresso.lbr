@@ -1,0 +1,22 @@
+/* Desenha indicador de progresso */
+programa IndicaProgresso;
+inclui "gra*";
+inclui "evnt*";
+const
+  X1 = 10; 
+  Y1 = 10;
+  X2 = X1 + 50; 
+  Y2 = Y1 + 20;
+var
+  x: inteiro;
+
+início
+  altEvTempo(50);
+  dsnRet(Tela, X1, Y1, X2, Y2);
+  para (x := X1 + 1; x < X2; inc(x))
+  início
+    altXY(Tela, x, Y1 + 1);
+    dsnLin(Tela, x, Y2);
+    esperePor(EV_TEMPO);
+  fim;
+fim.

@@ -1,0 +1,5 @@
+/* Exibe uma breve saudação na tela */
+programa olá;
+início
+  escreva("Olá!");
+fim.

@@ -1,0 +1,6 @@
+/* Exibe um retângulo na tela */
+programa retângulo;
+inclui "gra*";
+início
+  dsn_ret(tela, 20, 20, 150, 100);
+fim.

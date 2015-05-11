@@ -1,0 +1,35 @@
+/* Toca uma música baseada em percussão */
+programa agogô;
+inclui "evnt*";
+inclui "mm*";
+
+const
+  TPO = 700;    // duração da unidade mínima
+  MAX_TPO = 10; // duração da música
+
+var
+  i, n: inteiro;
+  agogô1, agogô2: som;
+
+início
+  /* cria os sons */
+  agogô1 := novo_som("Agogo-1");
+  agogô2 := novo_som("Agogo-2");
+
+  /* altera a base do ritmo */
+  alt_ev_tempo(TPO);
+
+  /* toca */
+  para (i := 0; i < MAX_TPO; i++)
+  início
+    n := i mod 2;
+    escolha (n)
+      caso 0:
+        toq_som(agogô1);
+      caso 1:
+        toq_som(agogô2);
+    fim;
+    espere_por(EV_TEMPO);
+  fim;
+fim.
+

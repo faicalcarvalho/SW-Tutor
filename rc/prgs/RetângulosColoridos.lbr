@@ -1,0 +1,19 @@
+/* Exibe alguns retângulos sobrepostos */
+programa retângulos_coloridos;
+inclui "gra*";
+início
+  /* primeiro retângulo */
+  dsn_ret(tela, 10, 10, 150, 100);
+
+  /* segundo */
+  alt_cor_pincel(tela, COR_VERMELHA);
+  dsn_ret(tela, 60, 60, 250, 200);
+
+  /* terceiro */
+  alt_cor_pincel(tela, COR_AZUL);
+  dsn_ret(tela, 30, 30, 130, 130);
+  
+  /* quarto */
+  alt_cor_pincel(tela, COR_VERDE);
+  dsn_ret(tela, 110, 80, 200, 250);
+fim.

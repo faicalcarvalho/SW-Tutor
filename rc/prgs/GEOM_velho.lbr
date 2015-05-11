@@ -1,0 +1,80 @@
+/* módulo geom */
+inclui "gra*";
+inclui "mat*";
+
+tipo
+  /* Ponto */
+  Ponto = registro
+    x, y: real;
+  fim;
+
+  /* Retângulo */
+  Retângulo = registro
+    p1, p2: Ponto;
+  fim;
+
+var
+  orig_x, orig_y: inteiro;
+
+/* geom_altOrig - altera as coordenadas da origem */
+procedimento geom_altOrig(x, y: inteiro);
+início
+  orig_x := x;
+  orig_y := y;
+fim;
+
+/* geom_lin - traça linha entre p1 e p2 */
+procedimento geom_lin(p1, p2: Ponto);
+var
+  x, y: inteiro;
+início
+  x := mat_arredonde(p1.x) + orig_x;
+  y := orig_y - mat_arredonde(p1.y);
+  gra_mudeXY(x, y);
+  x := mat_arredonde(p2.x) + orig_x;
+  y := orig_y - mat_arredonde(p2.y);
+  gra_desenheLinha(x, y);
+fim;
+
+/* geom_ret - traça retângulo */
+procedimento geom_ret(r: Retângulo);
+var
+  x1, y1, x2, y2: inteiro;
+início
+  x1 := mat_arredonde(r.p1.x) + orig_x;
+  y1 := orig_y - mat_arredonde(r.p1.y);
+  x2 := mat_arredonde(r.p2.x) + orig_x;
+  y2 := orig_y - mat_arredonde(r.p2.y);
+  gra_desenheRetângulo(x1, y1, x2, y2);
+fim;
+
+/* geom_pt - retorna registro tipo Ponto */
+função geom_pt(x, y: real): Ponto;
+var
+  p: Ponto;
+início
+  p.x := x;
+  p.y := y;
+  retorne p;
+fim;
+
+/* geom_rt - retorna registro tipo Retângulo */
+função geom_rt(p1, p2: Ponto): Retângulo;
+var
+  r: Retângulo;
+início
+  r.p1 := p1;
+  r.p2 := p2;
+  retorne r;
+fim;
+
+/* geom_ptMédio - retorna o ponto médio entre p1 e p2 */
+função geom_ptMédio(p1, p2: Ponto): Ponto;
+var
+  p: Ponto;
+início
+  p.x := p1.x + ((p2.x - p1.x) / 2);
+  p.y := p1.y + ((p2.y - p1.y) / 2);
+  retorne p;
+fim;
+

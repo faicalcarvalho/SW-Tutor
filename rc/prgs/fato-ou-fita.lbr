@@ -1,0 +1,8 @@
+/* Exibe os versos de uma antiga canção */
+programa fato_ou_fita;
+início
+  escreva("Não sei se é fato ou se é fita\n");
+  escreva("Não sei se é fita ou se é fato\n");
+  escreva("O fato é que ela me fita, ai, ai, ai\n");
+  escreva("Me fita mesmo de fato\n");
+fim.

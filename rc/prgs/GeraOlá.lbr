@@ -1,0 +1,8 @@
+programa ReGeraOlá;
+início
+  escrevaLn("/* Exibe breve saudação na tela */");
+  escrevaLn("programa Olá;");
+  escrevaLn("início");
+  escrevaLn("  escrevaLn(""Olá!"");");
+  escrevaLn("fim.");
+fim.

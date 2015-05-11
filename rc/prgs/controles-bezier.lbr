@@ -1,0 +1,50 @@
+/* Controles da curva Bezier */
+programa controles_bezier;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  X1 = 40; Y1 = 200;
+  X2 = 400; Y2 = 200;
+  EV_B1_BAIXO = 1000;
+  EV_B1_CIMA  = 1001;
+  EV_B2_BAIXO = 1002;
+  EV_B2_CIMA  = 1003;
+
+função controlando(var b: botão): lógico;
+início
+fim;
+
+var
+  b1, b2, b: botão;
+  x3, y3, x4, y4: inteiro;
+  ev: inteiro;
+
+início
+  /* cria os botões de controle e eventos */
+  b1 := novo_botão(tela, 60, 20, 20, 20, "1");
+  b2 := novo_botão(tela, 360, 250, 20, 20, "2");
+  reg_evento(b1, EV_MOUSE_BAIXO, EV_B1_BAIXO);
+  reg_evento(b1, EV_MOUSE_CIMA, EV_B1_CIMA);
+  reg_evento(b2, EV_MOUSE_BAIXO, EV_B2_BAIXO);
+  reg_evento(b2, EV_MOUSE_CIMA, EV_B2_CIMA);
+
+  para (;;)
+  início
+    espere_por(EV_MOUSE_BAIXO);
+    ev := último_evento();
+    se (ev = EV_B1_BAIXO)
+      escreva("b1 baixo\n")
+    senão se (ev = EV_B2_BAIXO)
+      escreva("b2 baixo\n");
+  fim;
+
+
+fim.
+    alt_pos_caneta(tela, X1, Y1);
+    dsn_bezier(tela, X3, y3, X4, y4, X2, Y2);
+    y3 := y3 - DXY;
+    y4 := y4 + DXY;
+
+
+

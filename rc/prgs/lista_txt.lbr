@@ -1,0 +1,45 @@
+/*
+  Decarva SW-Tutor Beta 0.96
+  Copyright (c) 1999 Decarva Software Ltda
+  Ola.pac
+*/
+programa Olá;
+
+módulo lstxt;
+
+função lstxt_ini(txt: texto)
+: lst_txt;
+
+função lstxt_obt_txt(var lt: lst_txt; ind: inteiro)
+: texto;
+
+tipo
+  
+  lista_txt = registro
+    t: arranjo [NUM_LINHAS] de texto;
+    cont: inteiro;
+  fim;
+
+procedimento lstxt_ini(var lst: lista_txt);
+início
+fim;
+ 
+procedimento lstxt_ins(var lst: lista_txt; t: texto);
+início
+fim;
+
+função lstxt_psq(var lst: lista_txt; t: texto): inteiro;
+início
+fim;
+
+
+
+
+
+início
+
+fim.
+
+início
+  escrevaLn("Olá!");
+fim.

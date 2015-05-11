@@ -1,0 +1,211 @@
+/* Implementação simplificada do jogo "Campo Minado", 
+   distribuído com o Windows.
+   Obs: Na janela "Sobre o Campo Minado", aparece a seguinte
+   mensagem: "Copyright (c) 1981-2001 Microsoft Corporation
+   por Robert Donner e Curt Johnson" */
+programa CampoMinado;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  /* número de casas */
+  N = 8;
+
+  /* tamanho de uma casa */
+  TAM = 20;
+
+  /* total de minas */
+  NUM_MINAS = 10;
+
+  /* jogadas */
+  PISOU = 1;
+  DESMONTOU = 2;
+
+  /* valor especial para mina */
+  MINA = -1;
+  MINA_DESMONTADA = -2;
+
+tipo
+  Campo = arranjo [0..N - 1, 0..N - 1] de inteiro;
+  Base  = arranjo [0..N - 1, 0..N - 1] de Botão;
+
+
+var
+  campo: Campo;
+  casas: Casas;
+  desmontadas: inteiro;
+  jogada: inteiro;
+  lin, col: inteiro;
+
+/* temJogada - detecta a próxima jogada; retorna
+   não se o usuário pressionar o teclado */
+função temJogada(var jogada, lin, col: inteiro): lógico;
+var
+  tem: lógico;
+início
+  repita
+    esperePor(EV_MOUSE_BAIXO + EV_TECLADO);
+    se (últimoEvento() = EV_TECLADO)
+      retorne não; /* teclado termina o jogo */
+
+    se (botãoMouse(BM_DIREITO))
+      jogada := DESMONTOU
+    senão
+      jogada := PISOU;
+    esperePor(EV_MOUSE_CIMA);
+    mouseXY(col, lin);
+    col := col div TAM;
+    lin := lin div TAM;
+  até ((col < N) && (lin < N));
+  retorne sim;
+fim;
+
+/* desenheCasa - desenha a casa (lin, col) */
+procedimento desenheCasa(var campo: Campo; lin, col: inteiro; 
+    visível: lógico);
+var
+  x1, y1, x2, y2: inteiro;
+  corPincel: inteiro;
+  t: texto;
+  b: Botão;
+início
+  /* retângulo associado à casa (lin, col) */
+  x1 := col * TAM;
+  y1 := lin * TAM;
+  x2 := x1 + TAM + 1;
+  y2 := y1 + TAM + 1;
+  
+  /* prepara o desenho */
+  t := "";
+  se (visível = não)
+    corPincel := COR_BRANCO//gra_corDoFundo()
+  senão se (campo[lin, col] < 0)
+    corPincel := COR_VERMELHO
+  senão
+  início
+    corPincel := COR_CINZA;
+    t := intParaTxt(campo[lin, col]);
+  fim;
+
+  /* desenha */
+  altCorPincel(Tela, corPincel);
+  dsnRet(Tela, x1, y1, x2, y2);
+  dsnTxt(Tela, x1 + 2, y1 + 2, t);
+fim;
+
+/* desenheCampo - desenha o conteúdo de todas as casas */
+procedimento desenheCampo(var campo: Campo; visível: lógico);
+var
+  lin, col: inteiro;
+início
+  para (lin := 0; lin < N; inc(lin))
+    para (col := 0; col < N; inc(col))
+      desenheCasa(campo, lin, col, visível);
+fim;
+
+/* obtémCasaLivre - determina posição (lin, col) onde
+   uma mina pode ser colocada; 
+   quando campo[lin,col] <> MINA, a posição está vaga */
+procedimento obtémCasaLivre(var campo: Campo; 
+    var lin, col: inteiro);
+início
+  repita
+    lin := random(N);
+    col := random(N);
+  até (campo[lin, col] <> MINA);
+fim;
+
+/* registreEfeitoMina - registre que há uma mina vizinha */
+procedimento registreEfeitoMina(var campo: Campo;
+    lin, col: inteiro);
+início
+  /* nada a fazer se (lin, col) fora do campo */
+  se ((lin < 0) || (lin >= N))
+    retorne;
+  se ((col < 0) || (col >= N))
+    retorne;
+
+  /* nada a fazer se (lin, col) já tem uma mina */
+  se (campo[lin, col] = MINA)
+    retorne;
+
+  /* registre que há mina vizinha a campo[lin, col] */
+  inc(campo[lin, col]);
+fim;
+
+/* registreMina - registre presença de mina em (lin,col) e
+   o efeito na vizinhança */
+procedimento registreMina(var campo: Campo; lin, col: inteiro);
+início
+  campo[lin, col] := MINA;
+  registreEfeitoMina(campo, lin - 1, col - 1);
+  registreEfeitoMina(campo, lin - 1, col);
+  registreEfeitoMina(campo, lin - 1, col + 1);
+  registreEfeitoMina(campo, lin,     col + 1);
+  registreEfeitoMina(campo, lin + 1, col + 1);
+  registreEfeitoMina(campo, lin + 1, col);
+  registreEfeitoMina(campo, lin + 1, col - 1);
+  registreEfeitoMina(campo, lin,     col - 1);
+fim;
+
+/* coloqueMinas - coloque n minas no campo */
+procedimento coloqueMinas(var campo: Campo; n: inteiro);
+var
+  lin, col: inteiro;
+  i: inteiro;
+início
+  para (i := 0; i < n; inc(i))
+  início
+    obtémCasaLivre(campo, lin, col);
+    registreMina(campo, lin, col);
+  fim;
+fim;
+
+/* mostreResultado - desenhe figura indicando o resultado */
+procedimento mostreResultado(desmontadas: inteiro);
+var
+  t: texto;
+início
+  altNomeFonte(Tela, "Wingdings");
+  altTamFonte(Tela, 40);
+  se (desmontadas = NUM_MINAS)
+    t := intParaCrt(74)
+  senão
+    t := intParaCrt(76);
+  dsnTxt(Tela, TAM * N + TAM, TAM, t);
+fim;
+
+/* terminou - verifica se descobriu todas as minas */
+função terminou(var campo: Campo; jogada, lin, col: inteiro): lógico;
+início
+  se ((jogada = DESMONTOU) && (campo[lin, col] <> MINA_DESMONTADA))
+  início
+    inc(desmontadas);
+    campo[lin, col] := MINA_DESMONTADA;
+  fim;
+  retorne (desmontadas = NUM_MINAS);
+fim;
+
+início
+  /* prepara */
+  desmontadas := 0;
+  coloqueMinas(campo, NUM_MINAS);
+  desenheCampo(campo, não);
+
+  /* joga */
+  enquanto (temJogada(jogada, lin, col))
+  início
+    desenheCasa(campo, lin, col, sim);
+    se ((jogada = PISOU) && (campo[lin, col] = MINA))
+      quebre;
+    se ((jogada = DESMONTOU) && (campo[lin, col] >= 0))
+      quebre;
+    se (terminou(campo, jogada, lin, col))
+      quebre;
+  fim;
+
+  /* mostra o resultado */
+  desenheCampo(campo, sim);
+  mostreResultado(desmontadas);
+fim.

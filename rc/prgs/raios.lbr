@@ -1,0 +1,33 @@
+/* Detecta movimento do mouse e exibe linhas radiais */
+programa raios;
+inclui "gra*";
+inclui "evnt*";
+
+/* tem_mov_mouse - detecta movimento do mouse;
+   coloca em (x, y) a posição corrente;
+   se o usuário usar o teclado, retorna 'não' */
+função tem_mov_mouse(var x, y: inteiro): lógico;
+início
+  espere_por(EV_MOV_MOUSE + EV_TECLADO);
+  se (último_evento() = EV_TECLADO)
+    retorne não;
+  mouse_xy(x, y);
+  retorne sim;
+fim;
+
+/* dsn_raio - desenha uma linha entre (X, Y) e (x, y) */
+procedimento dsn_raio(x, y: inteiro);
+const
+  X = 200; Y = 200;
+início
+  alt_pos_caneta(tela, X, Y);
+  dsn_lin(tela, x, y);
+fim;
+
+var
+  x, y: inteiro;
+
+início
+  enquanto (tem_mov_mouse(x, y))
+    dsn_raio(x, y);
+fim.

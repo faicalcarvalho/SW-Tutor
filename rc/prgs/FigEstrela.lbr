@@ -1,0 +1,83 @@
+programa Quad;
+inclui "qdr.pac";
+
+var
+  qdr: QDR;
+
+função dsnLin(qdr: QDR; p1, p2: Ponto): Ponto;
+início
+  qdr_desenheLinha(qdr, p1, p2);
+  retorne p2;
+fim;
+
+procedimento dsnQuad(qdr: QDR; p: Ponto; lado: real);
+var
+  pt: Ponto;
+início
+  pt := dsnLin(qdr, p, geom_pt(p.x + lado, p.y));
+  pt := dsnLin(qdr, pt, geom_pt(pt.x, pt.y - lado));
+  pt := dsnLin(qdr, pt, geom_pt(p.x, pt.y));
+  pt := dsnLin(qdr, pt, p);
+fim;
+
+const
+  DIR_NORTE = 1;
+  DIR_LESTE = 2;
+  DIR_SUL = 3;
+  DIR_OESTE = 4;
+
+função ptDir(p: Ponto; lado: real; dir: inteiro): Ponto;
+var
+  pt: Ponto;
+início
+  escolha (dir)
+    caso DIR_NORTE:
+    início
+      pt.x := p.x + lado;
+      pt.y := p.y + lado;
+    fim;
+
+    caso DIR_LESTE:
+    início
+      pt.x := p.x + (lado * 4.0);
+      pt.y := p.y - lado;
+    fim;
+
+    caso DIR_SUL:
+    início
+      pt.x := p.x + (lado * 2.0);
+      pt.y := p.y - (lado * 4.0);
+    fim;
+
+    caso DIR_OESTE:
+    início
+      pt.x := p.x - lado;
+      pt.y := p.y - (lado * 2.0);
+    fim;
+  fim;
+  retorne pt;
+fim;
+
+procedimento quad(qdr: QDR; p: Ponto; lado: real);
+const
+  MIN_LADO = 1.0;
+var
+  pt: Ponto;
+início
+  se (lado > MIN_LADO)
+  início
+    dsnQuad(qdr, p, lado);
+    lado := lado / 4.0;
+    pt := ptDir(p, lado, DIR_NORTE); quad(qdr, pt, lado);
+    pt := ptDir(p, lado, DIR_LESTE); quad(qdr, pt, lado);
+    pt := ptDir(p, lado, DIR_SUL); quad(qdr, pt, lado);
+    pt := ptDir(p, lado, DIR_OESTE); quad(qdr, pt, lado);
+  fim;
+fim;
+
+início
+  qdr := qdr_novo(200, 200);
+  quad(qdr, geom_pt(50, 150), 100);
+  qdr_fim(qdr);
+  escrevaLn("Olá, mundo!");
+fim.

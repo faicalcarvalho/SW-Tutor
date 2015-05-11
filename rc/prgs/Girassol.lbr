@@ -1,0 +1,79 @@
+/* Apresenta quadro de Van Gogh girando */
+programa Girassol;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  /* tamanho da tela */
+  LARGURA = 300;
+  ALTURA = 300;
+
+  /* centro */
+  CX = 150; CY = 150;
+
+/* centralize - determina retângulo de modo a
+   janFig ficar centralizada em janTela; 
+   considera 
+procedimento centralize(janTela, janFig: Janela;
+                        proporção: real;
+                        var x1, y1, x2, y2: inteiro);
+var
+  largTela, altuTela, largFig, altuFig: inteiro;
+  rx, ry: real;
+início
+  obtTamJanela(janFig, largFig, altuFig);
+  obtTamJanela(janTela, largTela, altuTela);
+  rx :=
+  
+
+fim;
+
+var
+  janTela, janFig: Janela;
+  a: real;
+  x1, y1, x2, y2: inteiro;
+
+
+
+início
+  /* cria a janela para a tela */
+  janTela := novaJanela();
+  altTamJanela(janTela, LARGURA, ALTURA);
+
+  /* cria a janela com a imagem */
+  janFig := novaJanela();
+  crgImg(janFig, "VanGogh-1");
+
+  /* determina */
+
+  /* prepara pra rodar */
+  a := 0.0;
+  obtTamJanela(janFig, x2, y2);
+
+  /* roda */
+  para (;;)
+  início
+    /* limpa a janela para um novo desenho */
+    dsnRet(janTela, 0, 0, LARGURA, ALTURA);
+
+    /* desenha o próximo giro */
+    copJanelaDistRot(janTela, x1, y1, x2, y2,
+                     a, cx, cy, janFig);
+
+    /* exibe */
+    copJanela(Tela, 10, 10, janFig);
+    
+  fim;
+  
+  crgImg(jan, "LoboMexicano");
+  j := novaJanela();
+  altVisJanela(j, sim);
+
+  jan := sw_tutor();
+  /* sem rotação */
+  copJanelaDistRot(j, X1, Y1, X2, Y2, 0.0, 
+                   XR, YR, jan);
+  copJanelaDistRot(j, X1, Y1, X2, Y2, ROT,
+                   XR, YR, jan);
+  marca(j, XR, YR);
+fim.

@@ -1,0 +1,33 @@
+/* Este programa mostra um padrão gráfico
+   chamado "Estrela Fractal".
+   Publicado em "Algorithms in C",
+   de Robert Sedgewick(Prentice-Hall, 1990) */
+programa estrela_fractal;
+inclui "gra*";
+inclui "qualquer_cor.lbr";
+
+procedimento quad(x, y, r: inteiro);
+início
+  alt_cor_pincel(tela, qualquer_cor());
+  dsn_ret(tela, x - r, y - r, x + r, y + r);
+fim;
+
+procedimento estrela(x, y, r: inteiro);
+início
+  se (r > 1)
+  início
+    estrela(x - r, y + r, r div 2);
+    estrela(x + r, y + r, r div 2);
+    estrela(x - r, y - r, r div 2);
+    estrela(x + r, y - r, r div 2);
+    quad(x, y, r);
+  fim;
+fim;
+
+const
+  X = 150; Y = 150; L = 70;
+
+início
+  estrela(X, Y, L);
+fim.';
+

@@ -1,0 +1,11 @@
+/* Exibe um quadrado cujo tamanho do lado é 
+   determinado pelo usuário */
+programa quadrado;
+inclui "gra*";
+var
+  lado: inteiro;
+início
+  escreva("Lado do quadrado: ");
+  leia(lado);
+  dsn_ret(tela, 10, 10, 10 + lado, 10 + lado);
+fim.

@@ -1,0 +1,17 @@
+programa GravaProgramaOlá;
+inclui "arq*";
+
+const
+  CRLF = #13#10;
+
+var
+  prg: texto;
+
+início
+  prg := "/* Exibe breve saudação na tela */" + CRLF +
+         "programa Olá;" + CRLF +
+         "início" + CRLF +
+         "  escrevaLn(""Olá!"");" + CRLF +
+         "fim." + CRLF;
+  txtParaArq("ProgramaOlá.pac", prg); 
+fim.

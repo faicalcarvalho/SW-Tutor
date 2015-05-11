@@ -1,0 +1,59 @@
+/*
+  Decarva SW-Tutor Beta 0.96
+  Copyright (c) 1999 Decarva Software Ltda
+  Ola.pac
+*/
+programa Olá;
+inclui "gra*";
+
+const
+  NLIN = 4;
+  NCOL = 4;
+  TAM = 100;
+
+/* obtRet - obtém o retângulo interno correspondente
+   à região (lin, col) de uma matriz; considera que
+   cada casa tem largura e altura iguais a tam */
+procedimento obtRet(lin, col, tam: inteiro;
+                    var x1, y1, x2, y2: inteiro);
+início
+  x1 := (col * tam) + 1;
+  y1 := (lin * tam) + 1;
+  x2 := (col * tam) + tam;
+  y2 := (lin * tam) + tam;
+fim;
+
+var
+  j, jan, janDest: Janela;
+  lin, col: inteiro;
+  x1, y1, x2, y2: inteiro;
+início
+  j := novaJanela();
+
+  jan := novaJanela();
+  crgImg(jan, "VanGogh-3");
+
+  janDest := novaJanela();
+  altTamJanela(janDest, NLIN*TAM+1, NCOL*TAM+1);
+
+  para (lin := 0; lin < NLIN; inc(lin))
+    para (col := 0; col < NCOL; inc(col))
+      dsnRet(janDest, col*TAM, lin*TAM, col*TAM+TAM+1, lin*TAM+TAM+1);
+
+  copJanela(Tela, 30, 30, janDest);
+
+  para (lin := 0; lin < NLIN; inc(lin))
+    para (col := 0; col < NCOL; inc(col))
+    início
+      obtRet(lin, col, TAM, x1, y1, x2, y2);
+      crgJanela(j, jan, x1, y1, x2, y2);
+      copJanela(janDest, x1, y1, j);
+    fim;
+
+  obtRet(7, 7, TAM, x1, y1, x2, y2);
+  dsnRet(janDest, x1-1, y1-1, x2+1, y2+1);
+
+  copJanela(Tela, 30, 30, janDest);
+
+
+fim.

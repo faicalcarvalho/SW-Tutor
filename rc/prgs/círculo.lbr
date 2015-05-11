@@ -1,0 +1,6 @@
+/* Exibe um círculo na tela */
+programa círculo;
+inclui "gra*";
+início
+  dsn_cir(tela, 20, 20, 150, 150);
+fim.

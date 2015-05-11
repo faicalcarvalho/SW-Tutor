@@ -1,0 +1,23 @@
+/* Desenha um cone curvo */
+programa cone_curvo;
+inclui "gra*";
+
+const
+  X1 = 150; Y1 = 50;
+  LARG = 1; ALTU = 150; ALTMIN = 20;
+  DXY = 4;
+
+var
+  x, y, larg, altu: inteiro;
+
+início
+  x := X1; y := Y1;
+  larg := LARG; altu := ALTU;
+  repita
+    dsn_cir(tela, x, y, larg, altu);
+    x := x - DXY;
+    y := y + DXY;
+    larg := larg + 2 * DXY;
+    altu := altu - DXY;
+  até (altu < ALTMIN);
+fim.

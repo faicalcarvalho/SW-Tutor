@@ -1,0 +1,20 @@
+/* Exibe marcas em forma de X na tela */
+programa marcas;
+inclui "gra*";
+
+/* dsn_marca - Desenha uma marca em forma de um X.
+   (x, y) é a posição do canto superior esquerdo,
+   larg a largura e altu a altura do X */
+procedimento dsn_marca(x, y, larg, altu: inteiro);
+inicio
+  alt_pos_caneta(tela, x, y);
+  dsn_lin(tela, x + larg, y + altu);
+  alt_pos_caneta(tela, x, y + altu);
+  dsn_lin(tela, x + larg, y);
+fim;
+
+início
+  dsn_marca(50, 50, 100, 100);
+  dsn_marca(170, 20, 200, 50);
+  dsn_marca(220, 130, 240, 200);;
+fim.

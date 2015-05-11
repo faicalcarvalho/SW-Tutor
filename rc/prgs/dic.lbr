@@ -1,0 +1,209 @@
+/* módulo dic - operações sobre um dicionário */
+inclui "arq*";
+
+const
+  NDIC = 10; // máximo de palavras
+
+tipo
+  dicionário = ponteiro para reg_dicionário;
+
+  reg_dicionário = registro
+    d: arranjo [NDIC] de texto;
+    cont: inteiro;
+  fim;
+
+/* interface dic */
+função dic_novo(): dicionário; adiante;
+procedimento dic_lib(dic: dicionário); adiante;
+procedimento dic_ins(dic: dicionário; item: texto); adiante;
+procedimento dic_rmv_ind(dic: dicionário; ind: inteiro); adiante;
+procedimento dic_rmv(dic: dicionário; item: texto); adiante;
+função dic_psq(dic: dicionário; item: texto): inteiro; adiante;
+função dic_cont(dic: dicionário): inteiro; adiante;
+função dic_item(dic: dicionário; n: inteiro): texto; adiante;
+
+/* dic_novo - cria um novo dicionário */
+função dic_novo(): dicionário;
+var
+  dic: dicionário;
+início
+  aloque(dic);
+  dic^.cont := 0;
+  retorne dic;
+fim;
+
+/* dic_lib - libera a área de um dicionário */
+procedimento dic_lib(dic: dicionário);
+início
+  libere(dic);
+fim;
+
+/* dic_ins - insere novo item em dic */
+procedimento dic_ins(dic: dicionário; item: texto);
+início
+  se (dic^.cont >= NDIC)
+    termine("dic_ins: atingido o limite máximo de itens");
+  dic^.d[dic^.cont] := item;
+  dic^.cont++;
+fim;
+
+/* dic_rmv_ind - remove ind-ésimo item de dic;
+   presume que ind é índice válido de um item de dic */
+procedimento dic_rmv_ind(dic: dicionário; ind: inteiro);
+var
+  i: inteiro;
+início
+  dic^.cont--;
+  para (i := ind; i < dic^.cont; i++)
+    dic^.d[i] := dic^.d[i + 1]; // desloca
+fim;
+
+/* dic_rmv - remove item de dic */
+procedimento dic_rmv(dic: dicionário; item: texto);
+início
+  se (dic^.cont >= NDIC)
+    termine("dic_ins: atingido o limite máximo de itens");
+  dic^.d[dic^.cont] := item;
+  dic^.cont++;
+fim;
+
+/* dic_psq - pesquisa a ocorrência de um item no 
+   dicionário; retorna índice (>=0) ou, se não
+   encontrou, -1 */
+função dic_psq(dic: dicionário; item: texto): inteiro;
+var
+  i: inteiro;
+início
+  para (i := 0; i < dic^.cont; i++)
+    se (dic^.d[i] = item)
+      retorne i;
+  retorne -1;
+fim;
+
+/* dic_cont - retorna o número de itens no dicionário */
+função dic_cont(dic: dicionário): inteiro;
+início
+  retorne dic^.cont;
+fim;
+
+/* dic_item - retorna o n-ésimo item do dicionário;
+   índice do primeiro item é 0 */
+função dic_item(dic: dicionário; n: inteiro): texto;
+início
+  se ((n < 0) || (n >= dic^.cont))
+    termine("dic_item: índice inválido");
+  retorne dic^.d[n];
+fim;
+
+/* dic_tem_linha - extrai a próxima linha de t,
+   a partir da posição ind */ 
+função dic_tem_linha(t: texto; var ind: inteiro; 
+                     var linha: texto): lógico;
+var
+  tam: inteiro;
+  c: caractere;
+início
+  /* verifica se índice está fora */
+  tam := tamanho(t);
+  se (ind >= tam)
+    retorne não;
+
+  /* extrai a linha */
+  linha := "";
+  repita
+    c := caractere_em(t, ind);
+    ind++;
+    se (c = "\n")
+      quebre;
+    linha := linha + c;
+  até (ind = tam);
+  retorne sim;
+fim; 
+
+/* dic_crg_arq - carrega dic lendo o arquivo arq;
+   considera cada linha como um item a inserir */
+procedimento dic_crg_arq(dic: dicionário; arq: texto);
+var
+  t, lin: texto;
+  ind: inteiro;
+início
+  t := arq_para_txt(arq);
+  ind := 0;
+  enquanto (dic_tem_linha(t, ind, lin))
+    dic_ins(dic, lin);
+fim;
+
+/* exp - retorna n elevado a e */
+função exp(n, e: inteiro): inteiro;
+var
+  result, i: inteiro;
+início
+  result := 1;
+  para (i := 0; i < e; i++)
+    result := result * n;
+  retorne result;
+fim;
+
+/* anagramas - coloca em dic_angrs todos os anagramas
+   formados com as letras do texto t */
+procedimento anagramas(dic_angrs: dicionário; t: texto);
+var
+  n: inteiro;
+início
+fim;
+
+função div2(var n, r: inteiro): inteiro;
+var
+  q: inteiro;
+início
+  q := n div 2;
+  r := n mod 2;
+  n := q;
+  retorne q;
+fim;
+
+função dec_bin(n: inteiro): texto;
+var
+  t: texto;
+  r: inteiro;
+início
+  t := "";
+  enquanto (div2(n, r) > 0)
+    se (r = 1)
+      t := "1" + t
+    senão
+      t := "0" + t;
+
+  se (r = 1)
+    t := "1" + t;
+  retorne t;
+fim;
+
+var
+  dic: dicionário;
+  i: inteiro;
+início
+  /* carrega o dicionário */
+  dic := dic_novo();
+//  dic_crg_arq(dic, "dic-pt-br.txt");
+
+  /* escolhe a palavra base */
+//  pal := pal_base(dic);
+
+
+  dic_ins(dic, "cada");
+  dic_ins(dic, "macaco");
+  dic_ins(dic, "no");
+  dic_ins(dic, "seu");
+  dic_ins(dic, "galho");
+  para (i:=0; i<dic_cont(dic); i++)
+    escreva(dic_item(dic, i), "\n");
+  
+//  dic_lib(dic);  
+
+  escreva(exp(2, 30));
+  para (i:=1; i<33; i++)
+  escreva("\n", i, " - ",
+    dec_bin(i)
+);
+fim.

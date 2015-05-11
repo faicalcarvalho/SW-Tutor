@@ -1,0 +1,48 @@
+programa editor_lin;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  X1 = 10; Y1 = 10;
+  TAMX = 300;
+  TAMY = 40;
+  DX = 16;
+  DY = 32;
+
+var
+  cx, cy: inteiro; // cursor
+  txt: texto;
+
+início
+  /* prepara */
+  txt := "";
+  cx := X1 + 4;
+  cy := Y1 + 4;
+  alt_ev_tempo(500);
+
+  /* desenha a caixa */
+  alt_cor_pincel(tela, COR_BRANCO);
+  dsn_ret(tela, X1, Y1, X1 + TAMX, Y1 + TAMY);
+
+  /* altera a fonte para uma de tamanho fixo */
+  alt_nome_fonte(tela, "Courier New");
+
+  enquanto (txt <> "fim")
+  início
+    espere_por(EV_TECLADO+EV_TEMPO);
+    escolha (último_evento())
+      caso EV_TEMPO:
+      início
+        alt_pos_caneta(tela, cx, cy);
+        dsn_lin_sel(tela, cx, cy+DY);
+      fim;
+      caso EV_TECLADO:
+      início
+        txt := txt + 
+      fim;
+    fim;
+    se (último_evento() = EV_TEMPO)
+    início
+    fim
+  fim;
+fim.

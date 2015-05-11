@@ -1,0 +1,99 @@
+/* Este programa mostra um padrão gráfico
+   chamado "curvas de Hilbert", em homenagem
+   a seu inventor, o matemático D. Hilbert.
+   Publicado em "Algorithms and Data
+   Structures", de Niklaus Wirth
+   (Prentice-Hall, 1986) */
+programa hilbert;
+inclui "gra*";
+inclui "mat*";
+
+const
+  TAM_QUAD = 300;
+  LARG = 300;
+  ALTU = 300;
+
+var
+  i, x0, y0, u: inteiro;
+
+procedimento lin_rel(dx, dy: inteiro);
+var
+  x, y: inteiro;
+início
+  x := obt_caneta_x(tela) + dx;
+  y := obt_caneta_y(tela) + dy;
+  dsn_lin(tela, x, y);
+fim;
+
+procedimento lin(dir, dist: inteiro);
+var
+  x: inteiro;
+início
+  x := arredonde(dist * sen(PI/4));
+  escolha (dir)
+    caso 0: lin_rel(dist, 0);
+    caso 1: lin_rel(x, -x);
+    caso 2: lin_rel(0, -dist);
+    caso 3: lin_rel(-x, -x);
+    caso 4: lin_rel(-dist, 0);
+    caso 5: lin_rel(-x, x);
+    caso 6: lin_rel(0, dist);
+    caso 7: lin_rel(x, x);
+  fim;
+fim;
+
+/* adiante */
+procedimento a(i: inteiro); adiante;
+procedimento b(i: inteiro); adiante;
+procedimento c(i: inteiro); adiante;
+procedimento d(i: inteiro); adiante;
+
+procedimento a(i: inteiro);
+início
+  se (i > 0)
+  início
+    d(i - 1); lin(4, u); a(i - 1); lin(6, u);
+    a(i - 1); lin(0, u); b(i-1);
+  fim;
+fim;
+
+procedimento b(i: inteiro);
+início
+  se (i > 0)
+  início
+    c(i - 1); lin(2, u); b(i - 1); lin(0, u);
+    b(i - 1); lin(6, u); a(i - 1);
+  fim;
+fim;
+
+procedimento c(i: inteiro);
+início
+  se (i > 0)
+  início
+    b(i - 1); lin(0, u); c(i - 1); lin(2, u);
+    c(i - 1); lin(4, u); d(i - 1);
+  fim;
+fim;
+
+procedimento d(i: inteiro);
+início
+  se (i > 0)
+  início
+    a(i - 1); lin(6, u); d(i - 1); lin(4, u);
+    d(i - 1); lin(2, u); c(i - 1);
+  fim;
+fim;
+
+início
+  alt_tam_caneta(tela, 5);
+  x0 := LARG div 2; y0 := ALTU div 2;
+  u := TAM_QUAD; i := 0;
+  repita
+    i := i + 1;
+    u := u div 2;
+    x0 := x0 + (u div 2);
+    y0 := y0 - (u div 2);
+    alt_pos_caneta(tela, x0, y0);
+  até (i = 5);
+  a(i);
+fim.

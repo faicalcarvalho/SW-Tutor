@@ -1,0 +1,8 @@
+/* Contagem regressiva de 10 a 0 */
+programa contagem_regressiva;
+var
+  i: inteiro;
+início
+  para (i := 10; i >= 0; i--)
+    escreva(i, "\n");
+fim.

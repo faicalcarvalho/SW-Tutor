@@ -1,0 +1,34 @@
+programa TesteNovoBotão;
+inclui "gra*";
+inclui "evnt*";
+
+var
+  jan: Janela;
+  i, j: inteiro;
+
+  m: arranjo [0..7, 0..7] de Botão;
+  b: Botão;
+
+início
+  jan := novaJanela(100, 100, 300, 300, "Teste");
+  para (i := 0; i < 8; inc(i))
+    para (j := 0; j < 8; inc(j))
+      m[i, j] := novoBotão(jan, j*30, i*30, 30, 30, "T");
+  b := novoBotão(Tela, 30, 30, 30, 30, "T");
+
+  para (;;)
+  início
+    esperePor(EV_CLIQUE+EV_TECLADO);
+    se (últimoEvento() = EV_TECLADO) quebre;
+    se (tstEvento(m[0, 0], EV_CLIQUE))
+      escrevaLn("ok")
+    senão se (tstEvento(Tela, EV_CLIQUE))
+      escrevaLn("Tela")
+    senão se (tstEvento(jan, EV_CLIQUE))
+      escrevaLn("jan")
+    senão se (tstEvento(b, EV_CLIQUE))
+      escrevaLn("b")
+    senão
+      escrevaLn("não")
+  fim;
+fim.

@@ -1,0 +1,25 @@
+programa Pilha;
+
+inclui "lista.pac";
+
+tipo
+  Pilha = Lista;
+
+função pilha_nova(): Pilha;
+início
+  retorne lista_nova();
+fim;
+
+procedimento pilha_fim(pilha: Pilha);
+início
+  lista_fim(pilha);
+fim;
+
+procedimento empilhe(pilha: Pilha; x: inteiro);
+início
+
+fim;
+
+início
+  escrevaLn("olá");
+fim.

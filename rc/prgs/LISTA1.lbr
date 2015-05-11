@@ -1,0 +1,169 @@
+/* módulo Lista */
+
+tipo
+  /* ponteiro para item da lista */
+  PtrItemLista = ponteiro para ItemLista;
+
+  /* item da lista */
+  ItemLista = registro
+    elem: inteiro;
+    prox: PtrItemLista;
+  fim;
+
+  /* descritor da lista */
+  DescritorLista = registro
+    primeiro: PtrItemLista;
+    último: PtrItemLista;
+  fim;
+
+  /* ponteiro para descritor da lista */
+  Lista = ponteiro para DescritorLista;
+
+/* lista_nova - cria nova lista */
+função lista_nova(): Lista;
+var
+  lista: Lista;
+início
+  novo(lista);
+  lista^.primeiro := nulo;
+  lista^.último := nulo;
+  retorne lista;
+fim;
+
+/* lista_fim - finaliza uma lista */
+procedimento lista_fim(lista: Lista);
+var
+  item, itemLib: PtrItemLista;
+início
+  /* libere os itens */
+  item := lista^.primeiro;
+  enquanto (item <> nulo)
+  início
+    itemLib := item;
+    item := item^.prox;
+    libere(itemLib);
+  fim;
+
+  /* libere o descritor */
+  libere(lista);
+fim;
+
+/* lista_vazia - retorna 'sim' quando lista vazia */
+função lista_vazia(lista: Lista): lógico;
+início
+  retorne (lista^.primeiro = nulo);
+fim;
+
+/* lista_tamanho - retorna número de itens da lista */
+função lista_tamanho(lista: Lista): inteiro;
+var
+  tam: inteiro;
+  item: PtrItemLista;
+início
+  tam := 0;
+  item := lista^.primeiro;
+  enquanto (item <> nulo)
+  início
+    inc(tam);
+    item := item^.prox;
+  fim;
+  retorne tam;
+fim;
+
+/* lista_inclInício - inclui elem no início da lista */
+procedimento lista_inclInício(lista: Lista; elem: inteiro);
+var
+  item: PtrItemLista;
+início
+  /* cria novo item */
+  novo(item);
+  item^.elem := elem;
+  item^.prox := lista^.primeiro;
+
+  /* insere no início */
+  se (lista_vazia(lista))
+    lista^.último := item;
+  lista^.primeiro := item;
+fim;
+
+/* lista_inclFinal - inclui elem no final da lista */
+procedimento lista_inclFinal(lista: Lista; elem: inteiro);
+var
+  item: PtrItemLista;
+início
+  /* cria novo item */
+  novo(item);
+  item^.elem := elem;
+  item^.prox := nulo;
+
+  /* insere no final */
+  se (lista_vazia(lista))
+    lista^.primeiro := item
+  senão
+    lista^.último^.prox := item;
+  lista^.último := item;
+fim;
+
+/* lista_exclInício - exclui primeiro item da lista */
+procedimento lista_exclInício(lista: Lista);
+var
+  item: PtrItemLista;
+início
+  se (lista_vazia(lista))
+    retorne; /* nada a fazer */
+  item := lista^.primeiro;
+  lista^.primeiro := lista^.primeiro^.prox;
+  se (lista_vazia(lista))
+    lista^.último := nulo;
+  libere(item);
+fim;
+
+/* lista_erro - registra erro */
+procedimento lista_erro(msg: texto);
+início
+  termine(msg);
+fim;
+
+/* lista_primeiro - retorna o primeiro elemento */
+função lista_primeiro(lista: Lista): inteiro;
+início
+  se (lista_vazia(lista))
+    lista_erro("lista_primeiro: lista vazia");
+  retorne lista^.primeiro^.elem;
+fim;
+
+/* lista_último - retorna o último elemento */
+função lista_último(lista: Lista): inteiro;
+início
+  se (lista_vazia(lista))
+    lista_erro("lista_último: lista vazia");
+  retorne lista^.último^.elem;
+fim;
+
+/* lista_pesquise - retorna 'sim' caso elem esteja na lista */
+função lista_pesquise(lista: Lista; elem: inteiro): lógico;
+var
+  item: PtrItemLista;
+início
+  item := lista^.primeiro;
+  enquanto (item <> nulo)
+  início
+    se (item^.elem = elem)
+      retorne sim;
+    item := item^.prox;
+  fim;
+  retorne não;
+fim;
+
+
+
+
+var
+  lst: Lista;
+  i: inteiro;
+início
+  lst := lista_nova();
+  para (i := 0; i < 10; inc(i))
+    lista_inclInício(lst, i);
+  lista_fim(lst);  
+fim.

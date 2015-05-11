@@ -1,0 +1,65 @@
+/* Desenho livre com o mouse, através de pontos
+   (pixels) escolhidos aleatoriamente seguindo
+   o movimento do mouse pressionado */
+programa Spray;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+função qualquerCor(): inteiro;
+início
+  retorne corRGB(random(256),  /* vermelho */
+                 random(256),  /* verde */
+                 random(256)); /* azul */
+fim;
+
+/* randNeg - calcula x = random(n) e, aleatoriamente,
+   retorna x ou -x */
+função randNeg(n: inteiro): inteiro;
+var
+  result: inteiro;
+início
+  result := random(n);
+  se (random(2) = 0)
+    result := -result; // inverte, talvez
+  retorne result;
+fim;
+
+/* ptPerto - coloca em (xp, yp) as coordenadas
+   de um ponto qualquer próximo a (x, y) */
+procedimento ptPerto(x, y: inteiro; 
+                     var xp, yp: inteiro);
+const
+  RAIO = 20;
+início
+  xp := x + randNeg(RAIO);
+  yp := y + randNeg(RAIO);
+fim;
+
+/* desenha NUM_PONTOS ao redor de (x, y) */
+procedimento spray(x, y, cor: inteiro);
+const
+  NUM_PONTOS = 50;
+var
+  i, xp, yp: inteiro;
+início
+  para (i := 0; i < NUM_PONTOS; inc(i))
+  início
+    ptPerto(x, y, xp, yp);
+    altPixel(Tela, xp, yp, cor);
+  fim;
+fim;
+
+início
+  /* aguarda o EV_MOUSE_BAIXO */
+  esperePor(EV_MOUSE_BAIXO);
+
+  /* desenha */  
+  repita
+    /* trata o movimento com o botão apertado */
+    esperePor(EV_MOUSE_CIMA + EV_MOV_MOUSE);
+
+    /* aperta o spray */
+    spray(mouseX(), mouseY(), qualquerCor());
+  até (últimoEvento() = EV_MOUSE_CIMA);
+fim.

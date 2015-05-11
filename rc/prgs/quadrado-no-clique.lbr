@@ -1,0 +1,23 @@
+/* Desenha um quadrado colorido no clique */
+programa quadrado_no_clique;
+inclui "gra*";
+inclui "qualquer_cor.lbr";
+inclui "tem_clique.lbr";
+
+/* dsn_quad_cor - desenha um quadrado em x, y */
+procedimento dsn_quad_cor(x, y, lado, cor: inteiro);
+início
+  alt_cor_pincel(tela, cor);
+  dsn_ret(tela, x, y, lado, lado);
+fim;
+
+const
+  LADO = 40;
+
+var
+  x, y: inteiro;
+
+início
+  enquanto (tem_clique(x, y))
+    dsn_quad_cor(x, y, LADO, qualquer_cor());
+fim.

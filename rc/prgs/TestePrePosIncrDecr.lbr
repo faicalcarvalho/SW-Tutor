@@ -1,0 +1,33 @@
+programa Olá;
+var
+  i: inteiro;
+
+tipo
+  X = arranjo [0..0] de
+       registro
+         a: inteiro;
+         b: arranjo [0..1] de
+              registro
+                x, y, z: real;
+                ok: lógico;
+              fim;
+         c: inteiro;
+       fim;
+      
+var
+  x: X;
+  p: ponteiro para X;
+          
+
+início
+  inc(x[0].a);
+  x[0].b[0].ok := não;
+  x[0].b[0].x :=1.333;
+  x[0].b[0].y :=1.333;
+  x[0].b[0].z :=-x[0].b[0].y;
+  aloque(p);
+  p^[0].b[0].ok := não x[0].b[0].ok;
+  p^[0].b[0].y :=1.333;
+  p^[0].b[0].z :=-p^[0].b[0].y;
+  enquanto (
+fim.

@@ -1,0 +1,42 @@
+/* Exibe fatias coloridas */
+programa fatias_coloridos;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  X1 = 10; Y1 = 10; X2 = 350; Y2 = 350;
+
+var
+  x3, y3, x4, y4: inteiro;
+  cor, ncor: inteiro;
+
+início
+  /* prepara para alternar a cor */
+  ncor := 0;
+
+  /* obtém os dois pontos de referência 
+     e desenha o arco */
+  para (;;)
+  início
+    espere_por(EV_CLIQUE); // x3, y3
+    mouse_xy(x3, y3);
+    se (x3 > X2) 
+      quebre;
+    espere_por(EV_CLIQUE); // x4, y4
+    mouse_xy(x4, y4);
+    se (x4 > X2)
+      quebre;
+    
+    /* varia a cor e desenha */
+    ncor := (ncor + 1) mod 5;
+    escolha (ncor)
+      caso 0: cor := COR_AZUL;
+      caso 1: cor := COR_VERDE;
+      caso 2: cor := COR_AMARELO;
+      caso 3: cor := COR_VERMELHO; 
+      caso 4: cor := COR_VIOLETA;
+    fim;
+    alt_cor_pincel(tela, cor);
+    dsn_fatia(tela, X1, Y1, X2, Y2, x3, y3, x4, y4);
+  fim;
+fim.

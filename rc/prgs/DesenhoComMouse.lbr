@@ -1,0 +1,30 @@
+/* Desenho livre com o mouse, através de pequenas
+   linhas sucessivas que acompanham os movimentos
+   feitos pelo usuário com um dos botões do mouse
+   pressionado */
+programa DesenhoComMouse;
+inclui "gra*";
+inclui "evnt*";
+
+início
+  /* aguarda o EV_MOUSE_BAIXO e posiciona a
+     origem da primeira linha */
+  esperePor(EV_MOUSE_BAIXO);
+  altXY(Tela, mouseX(), mouseY());
+  
+  /* altera a cor da caneta, de acordo com 
+     o botão do mouse */
+  se (botãoMouse(BM_DIREITO))
+    altCorCaneta(Tela, COR_VERMELHO)
+  senão
+    altCorCaneta(Tela, COR_AZUL);
+
+  repita
+    /* trata o movimento com o botão apertado */
+    esperePor(EV_MOUSE_CIMA + EV_MOV_MOUSE);
+
+    /* traça a (pequena) linha entre a última posição e
+       a posição corrente */
+    dsnLin(Tela, mouseX(), mouseY());
+  até (últimoEvento() = EV_MOUSE_CIMA);
+fim.

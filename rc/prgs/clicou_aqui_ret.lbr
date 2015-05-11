@@ -1,0 +1,23 @@
+/* Desenha um retângulo no clique do mouse */
+programa clicou_aqui_ret;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  DX = 15;
+  DY = 5;
+
+var
+  x, y: inteiro;
+
+início
+  /* aguarda */
+  espere_por(EV_CLIQUE);
+
+  /* registra as coordenadas do ponto */
+  mouse_xy(x, y);
+
+  /* mostra as coordenadas e desenha o retângulo */
+  escreva("Clicou: ", x, ", ", y);
+  dsn_ret(tela, x - DX, y - DY, x + DX, y + DY);
+fim.

@@ -1,0 +1,28 @@
+/* Traça curvas Bezier variando os pontos 
+   de controle */
+programa CurvasBezier;
+inclui "gra*";
+const
+  X1 = 10;   Y1 = 200; X2 = 400;  Y2 = 200;
+  X3 = 100;  Y3 = 0;   X4 = 300;  Y4 = 400;
+  DXY = 15;
+  NUM_CURVAS = 30;
+var
+  y3, y4: inteiro;
+  i: inteiro;
+início
+  /* inicializa y3 e y4 para os pts de controle */
+  y3 := Y3; y4 := Y4;
+
+  /* posiciona o ponto inicial */
+  altXY(Tela, X1, Y1);
+
+  /* traça as curvas variando os pts de controle */
+  para (i := 0; i < NUM_CURVAS; i++)
+  início
+    altXY(Tela, X1, Y1);
+    dsnBezier(Tela, X3, y3, X4, y4, X2, Y2);
+    y3 := y3 - DXY;
+    y4 := y4 + DXY;
+  fim;
+fim.

@@ -1,0 +1,20 @@
+/* Exibe algumas linhas com diferentes
+   tamanhos para a caneta */
+programa tamanhos_caneta;
+inclui "gra*";
+início
+  alt_pos_caneta(tela, 50, 50);
+  dsn_lin(tela, 300, 50);
+
+  alt_pos_caneta(tela, 50, 100);
+  alt_tam_caneta(tela, 5);
+  dsn_lin(tela, 300, 100);
+
+  alt_pos_caneta(tela, 50, 150);
+  alt_tam_caneta(tela, 15);
+  dsn_lin(tela, 300, 150);
+
+  alt_pos_caneta(tela, 50, 200);
+  alt_tam_caneta(tela, 35);
+  dsn_lin(tela, 300, 200);
+fim.

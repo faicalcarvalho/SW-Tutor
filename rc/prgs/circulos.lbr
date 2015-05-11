@@ -1,0 +1,19 @@
+/* Desenha círculo no clique */
+programa círculos;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  DXY = 5;
+
+var
+  x, y: inteiro;
+
+início
+  repita
+    espere_por(EV_CLIQUE);
+    x := mouse_x();
+    y := mouse_y();
+    dsn_cir(tela, x - DXY, y - DXY, x + DXY, y + DXY);
+  até (x < 10); // clique na margem esquerda termina
+fim.

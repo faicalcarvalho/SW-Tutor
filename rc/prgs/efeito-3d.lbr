@@ -1,0 +1,14 @@
+/* Desenha "Teste" */
+programa teste_tam_fonte;
+inclui "gra*";
+
+início
+  alt_tam_fonte(tela, 60);
+
+  alt_cor_fonte(tela, COR_CINZA);
+  dsn_txt(tela, 30, 30, "Efeito 3D");
+  alt_cor_fonte(tela, COR_PRETO);
+  dsn_txt(tela, 26, 26, "Efeito 3D");
+  alt_cor_fonte(tela, COR_BRANCO);
+  dsn_txt(tela, 22, 22, "Efeito 3D");
+fim.

@@ -1,0 +1,165 @@
+/* Simula o movimento de bolas numa mesa de bilhar */
+programa MesaDeBilhar;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  /* total de bolas */
+  NUM_BOLAS = 8;
+
+  /* limites para o movimento das bolas */
+  X1 = 50; Y1 = 50;
+  X2 = 300; Y2 = 300;
+
+  /* raio de cada bola */
+  RAIO = 15;
+  
+  /* cores */
+  COR_FUNDO = COR_BRANCO;
+
+  /* deslocamentos */
+  DX = 2;
+  DY = 2;
+
+  /* intervalo EV_TEMPO */
+  INTERVALO = 20;
+
+tipo
+  Bola = registro
+    x: inteiro;
+    y: inteiro;
+    dx: inteiro;
+    dy: inteiro;
+    cor: inteiro;
+  fim;
+
+  Bilhar = registro
+    numBolas: inteiro;
+    bolas: arranjo [NUM_BOLAS] de Bola;
+  fim;
+
+/* qualquerCor - retorna uma cor aleatória */
+função qualquerCor(): inteiro;
+início
+  retorne corRGB(random(255),  /* vermelho */
+                 random(255),  /* verde */
+                 random(255)); /* azul */
+fim;
+
+/* temEvento - aguarda próximo evento; teclado
+   termina o programa */
+função temEvento(): lógico;
+início
+  esperePor(EV_TEMPO + EV_TECLADO);
+  se (últimoEvento() = EV_TECLADO)
+    retorne não;
+  retorne sim;
+fim;
+
+/* dsnBola - desenha a bola */
+procedimento dsnBola(var bola: Bola);
+início
+  altCorCaneta(Tela, bola.cor);
+  altCorPincel(Tela, bola.cor);
+  dsnCir(Tela, bola.x - RAIO, bola.y - RAIO, 
+      bola.x + RAIO, bola.y + RAIO);
+fim;
+
+/* apgBola - apaga a bola */
+procedimento apgBola(var bola: Bola);
+início
+  altCorCaneta(Tela, COR_FUNDO);
+  altCorPincel(Tela, COR_FUNDO);
+  dsnCir(Tela, bola.x - RAIO, bola.y - RAIO, 
+      bola.x + RAIO, bola.y + RAIO);
+fim;
+
+/* iniBola - determina atributos iniciais da bola */
+procedimento iniBola(var bola: Bola);
+início
+  /* posição inicial */
+  bola.x := random(X2 - X1) + X1;
+  bola.y := random(Y2 - Y1) + Y1;  
+
+  /* direção inicial */
+  bola.dx := DX;
+  bola.dy := DY;
+
+  /* cor */
+  bola.cor := qualquerCor();
+fim;
+
+/* incluaBola - insere nova bola no bilhar */
+procedimento insBola(var bilhar: Bilhar);
+início
+  se (bilhar.numBolas >= NUM_BOLAS)
+    termine("Excedido o número máximo de bolas");
+  iniBola(bilhar.bolas[bilhar.numBolas]);
+  bilhar.numBolas++;
+fim;
+
+/* próximaPosição - determina a próxima posição, de acordo
+   com a posição e os deslocamentos correntes; considera o
+   retângulo (X1,Y1)-(X2,Y2) como limite */
+procedimento próximaPosição(var bola: Bola);
+início
+  /* se necessário, inverte deslocamento horizontal */
+  se ((bola.x + bola.dx > X2) || (bola.x + bola.dx < X1))
+    bola.dx := -bola.dx;
+
+  /* se necessário, inverte deslocamento vertical */
+  se ((bola.y + bola.dy > Y2) || (bola.y + bola.dy < Y1))
+    bola.dy := -bola.dy;
+
+  /* desloca */
+  bola.x := bola.x + bola.dx;
+  bola.y := bola.y + bola.dy;
+fim;
+
+/* movBola - desenha a bola na sua próxima posição */
+procedimento movBola(var bola: Bola);
+início
+  apgBola(bola);
+  próximaPosição(bola);
+  dsnBola(bola);
+fim;
+
+/* movMesa - desenha todas as bolas na sua próxima
+   posição */
+procedimento movMesa(var bilhar: Bilhar);
+var
+  i: inteiro;
+início
+  para (i := 0; i < bilhar.numBolas; i++)
+    movBola(bilhar.bolas[i]);
+fim;
+
+/* MesaDeBilhar */
+procedimento MesaDeBilhar();
+var
+  bilhar: Bilhar;
+  i: inteiro;
+início
+  /* iniciação */
+  altCorPincel(Tela, COR_FUNDO);
+  dsnRet(Tela, X1 - RAIO - 1, Y1 - RAIO - 1, 
+      X2 + RAIO + 1, Y2 + RAIO + 1);
+  altEvTempo(INTERVALO);
+  bilhar.numBolas := 0;
+
+  /* distribuição inicial */
+  para (i := 0; i < NUM_BOLAS; i++)
+  início
+    insBola(bilhar);
+    dsnBola(bilhar.bolas[i]);
+  fim;
+
+  /* movimento */
+  enquanto (temEvento())
+    movMesa(bilhar);
+fim;
+
+início
+  MesaDeBilhar();
+fim.

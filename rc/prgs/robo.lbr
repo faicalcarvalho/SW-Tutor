@@ -1,0 +1,78 @@
+/* Desenha a figura de um robô */
+programa robô;
+inclui "gra*";
+
+/* Desenha os olhos */
+procedimento dsn_olhos();
+início
+  dsn_ret(tela, 105, 20, 115, 27);
+  dsn_ret(tela, 125, 20, 135, 27);
+fim;
+
+/* Desenha a boca */
+procedimento dsn_boca();
+início
+  dsn_ret(tela, 110, 35, 130, 42);
+fim;
+
+/* Desenha o pescoço */
+procedimento dsn_pescoço();
+início
+  dsn_ret(tela, 110, 51, 130, 58);
+fim;
+
+/* Desenha a cabeça */
+procedimento dsn_cabeça();
+início
+  dsn_ret(tela, 100, 10, 140, 50);
+  dsn_olhos();
+  dsn_boca();
+  dsn_pescoço();
+fim;
+
+/* Desenha o tronco */
+procedimento dsn_tronco();
+início
+  dsn_ret(tela, 70, 59, 170, 120);
+fim;
+
+/* Desenha os braços */
+procedimento dsn_braços();
+início
+  dsn_ret(tela, 50, 59, 68, 80);
+  dsn_ret(tela, 30, 59, 48, 130);
+  dsn_ret(tela, 172, 59, 190, 80);
+  dsn_ret(tela, 192, 59, 210, 130);
+fim;
+
+/* Desenha as pernas */
+procedimento dsn_pernas();
+início
+  dsn_ret(tela, 80, 122, 120, 160);
+  dsn_ret(tela, 122, 122, 160, 160);
+  dsn_ret(tela, 80, 162, 120, 200);
+  dsn_ret(tela, 122, 162, 160, 200);
+  dsn_ret(tela, 85, 202, 115, 220);
+  dsn_ret(tela, 124, 202, 154, 220);
+  dsn_ret(tela, 80, 222, 120, 235);
+  dsn_ret(tela, 122, 222, 160, 235);
+fim;
+
+procedimento dsn_membros();
+início
+  dsn_braços();
+  dsn_pernas();
+fim;
+
+/* Desenha o robô */
+procedimento dsn_robô();
+início
+  alt_cor_pincel(tela, COR_BRANCO);
+  dsn_cabeça();
+  dsn_tronco();
+  dsn_membros();
+fim;
+
+início
+  dsn_robô();
+fim.

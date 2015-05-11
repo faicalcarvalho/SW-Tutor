@@ -1,0 +1,20 @@
+/* Um botão de apertar e um texto */
+programa botão_olá;
+inclui "gra*";
+
+var
+  b: botão;
+  e: editor_lin;
+
+início
+  b := novo_botão(tela, 10, 10, 300, 50, "Olá!");
+  alt_tam_fonte(b, 20);
+  alt_tam_fonte(tela, 20);
+  dsn_txt(tela, 10, 80, "Olá!");
+  dsn_txt(b, 0, 0, "Ts");
+
+  e := novo_editor_lin(tela, 10, 120, 300, 50, "Olá!");
+  alt_tam_fonte(e, 20);
+  dsn_txt(e, 0, 0, "Ts");
+
+fim.

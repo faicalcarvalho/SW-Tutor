@@ -1,0 +1,133 @@
+/* Pequeno (e muito simples) editor */
+programa PequenoEditor;
+inclui "evnt*";
+inclui "gra*";
+
+const
+  POSX = 20;
+  POSY = 20;
+
+/* suprima - suprime de t o caractere da posição pos */
+procedimento suprima(var t: texto; pos: inteiro);
+var
+  i: inteiro;
+  result: texto;
+início
+  /* parte inicial */
+  result := "";
+  para (i := 0; i < pos; inc(i))
+    result := result + caractereEm(t, i);
+
+  /* parte final */
+  para (i := pos + 1; i < tamanho(t); inc(i))
+    result := result + caractereEm(t, i);
+  t := result;
+fim;
+
+/* insira - insere na posição pos de t o caractere 
+   tecla; atualiza pos */
+procedimento insira(var t: texto; var pos: inteiro;
+    tecla: caractere);
+var
+  i: inteiro;
+  result: texto;
+início
+  /* parte inicial */
+  result := "";
+  para (i := 0; i < pos; inc(i))
+    result := result + caractereEm(t, i);
+
+  /* insere */
+  result := result + tecla;
+
+  /* parte final */
+  para (i := pos; i < tamanho(t); inc(i))
+    result := result + caractereEm(t, i);
+  inc(pos);
+  t := result;
+fim;
+
+/* edite - trata a edição de t, de acordo com a tecla */
+procedimento edite(var t: texto; var pos: inteiro;
+    tecla: caractere);
+início
+  escolha (tecla)
+    caso TECLA_DEL:
+      suprima(t, pos);
+
+    caso TECLA_BACKSPACE:
+      se (pos > 0)
+      início
+        dec(pos);
+        suprima(t, pos);
+      fim;
+
+    caso TECLA_HOME:
+      pos := 0;
+
+    caso TECLA_END:
+      pos := tamanho(t);
+
+    caso TECLA_ESQUERDA:
+      se (pos > 0) 
+        dec(pos);
+
+    caso TECLA_DIREITA:
+      se (pos < tamanho(t)) 
+        inc(pos);
+
+    senão
+      insira(t, pos, tecla);
+  fim;
+fim;
+
+/* mostreCursor - mostre a posição corrente do cursor */
+procedimento mostreCursor(t: texto; pos: inteiro);
+var
+  i, x, y: inteiro;
+  cor: inteiro;
+início
+  x := POSX;
+  y := POSY + gra_alturaDoTexto("X") + 2;
+  para (i := 0; i < pos; inc(i))
+    x := x + gra_larguraDoTexto(caractereEm(t, i));
+  cor := gra_corDoPincel();
+  gra_mudeCorDoPincel(COR_PRETO);
+  gra_desenheTriângulo(x - 4, y - 4, x + 4, y + 4);
+  gra_mudeCorDoPincel(cor);
+fim;
+
+/* exiba - exibe o texto t */
+procedimento exiba(t: texto; pos: inteiro);
+início
+  gra_desenheRetângulo(POSX - 5, POSY - 5, POSX + 200, POSY + 25);
+  gra_desenheTexto(POSX, POSY, t);
+  mostreCursor(t, pos);
+fim;
+
+/* temTecla - espera pela próxima tecla */
+função temTecla(var tecla: caractere): lógico;
+início
+  evnt_esperePor(EV_TECLADO);
+  tecla := evnt_tecla();
+  retorne (tecla <> TECLA_ESC);
+fim;
+
+var
+  t: texto;
+  pos: inteiro;
+  tecla: caractere;
+
+início
+  /* iniciação */
+  t := "";
+  pos := 0;
+  exiba(t, pos);
+
+  /* trata as teclas */
+  enquanto (temTecla(tecla))
+  início
+    edite(t, pos, tecla);
+    exiba(t, pos);
+  fim;
+fim.

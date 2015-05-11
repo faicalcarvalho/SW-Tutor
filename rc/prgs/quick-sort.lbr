@@ -1,0 +1,74 @@
+/* QuickSort */
+programa quick_sort;
+inclui "gra*";
+inclui "mat*";
+inclui "evnt*";
+
+const
+  N = 150;
+
+tipo
+  Arranjo = arranjo [N] de inteiro;
+
+var
+  a: Arranjo;
+
+procedimento linha(i, tam: inteiro);
+início
+  alt_pos_caneta(tela, 0, i * 2 + 1);
+  dsn_lin(tela, tam, i * 2 + 1);
+fim;
+
+procedimento inicia();
+var
+  i: inteiro;
+início
+  alt_cor_caneta(tela, COR_VERMELHA);
+  para (i := 0; i < N; i++)
+  início
+    a[i] := random(400);
+    linha(i, a[i]);
+  fim;
+fim;
+
+procedimento troca_visual(a, b, i, j: inteiro);
+const
+  PAUSA = 25;
+início
+  alt_cor_caneta(tela, cor_do_fundo());
+  linha(i, a);
+  linha(j, b);
+  durma(PAUSA);
+  alt_cor_caneta(tela, COR_VERMELHA);
+  linha(i, b);
+  linha(j, a);
+fim;
+
+procedimento quick_sort(var a: Arranjo; ind_inf, ind_sup: inteiro);
+var
+  inf, sup, med, t: inteiro;
+início
+  inf := ind_inf;
+  sup := ind_sup;
+  med := a[(inf + sup) div 2];
+  repita
+    enquanto (a[inf] < med) inf := inf + 1;
+    enquanto (a[sup] > med) sup := sup - 1;
+    se (inf <= sup)
+    início
+      troca_visual(a[inf], a[sup], inf, sup);
+      t := a[inf];
+      a[inf] := a[sup];
+      a[sup] := t;
+      inf := inf + 1;
+      sup := sup - 1;
+    fim;
+  até (inf > sup);
+  se (sup > ind_inf) quick_sort(a, ind_inf, sup);
+  se (inf < ind_sup) quick_sort(a, inf, ind_sup);
+fim;
+
+início
+  inicia();
+  quick_sort(a, 0, N-1);
+fim.

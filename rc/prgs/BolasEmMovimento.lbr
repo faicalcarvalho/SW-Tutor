@@ -1,0 +1,154 @@
+/* Simula o movimento de bolas numa mesa de bilhar */
+programa MesaDeBilhar;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  /* total de bolas */
+  NUM_BOLAS = 10;
+
+  /* limites para o movimento das bolas */
+  X1 = 50; Y1 = 50;
+  X2 = 300; Y2 = 300;
+
+  /* raio de cada bola */
+  RAIO = 4;
+  
+  /* cores */
+  COR_BOLA = COR_PRETO;
+  COR_FUNDO = COR_BRANCO;
+
+  /* deslocamentos */
+  DX = 5;
+  DY = 5;
+
+  /* intervalo EV_TEMPO */
+  INTERVALO = 10;
+
+tipo
+  Bola = registro
+    x: inteiro;
+    y: inteiro;
+    dx: inteiro;
+    dy: inteiro;
+  fim;
+
+  Bilhar = registro
+    numBolas: inteiro;
+    bolas: arranjo [0..NUM_BOLAS - 1] de Bola;
+  fim;
+
+/* temEvento - aguarda próximo evento; teclado
+   termina o programa */
+função temEvento(): lógico;
+início
+  evnt_esperePor(EV_TEMPO + EV_TECLADO);
+  se (evnt_últimoEvento() = EV_TECLADO)
+    retorne não;
+  retorne sim;
+fim;
+
+/* desenheBola - desenha a bola */
+procedimento desenheBola(var bola: Bola);
+início
+  gra_mudeCorDaCaneta(COR_BOLA);
+  gra_mudeCorDoPincel(COR_BOLA);
+  gra_desenheElipse(bola.x - RAIO, bola.y - RAIO, 
+      bola.x + RAIO, bola.y + RAIO);
+fim;
+
+/* apagueBola - apaga a bola */
+procedimento apagueBola(var bola: Bola);
+início
+  gra_mudeCorDaCaneta(COR_FUNDO);
+  gra_mudeCorDoPincel(COR_FUNDO);
+  gra_desenheElipse(bola.x - RAIO, bola.y - RAIO, 
+      bola.x + RAIO, bola.y + RAIO);
+fim;
+
+/* inicieBola - determina atributos iniciais da bola */
+procedimento inicieBola(var bola: Bola);
+início
+  /* posição inicial */
+  bola.x := mat_random(X2 - X1) + X1;
+  bola.y := mat_random(Y2 - Y1) + Y1;  
+
+  /* direção inicial */
+  bola.dx := DX;
+  bola.dy := DY;
+fim;
+
+/* incluaBola - insere nova bola no bilhar */
+procedimento incluaBola(var bilhar: Bilhar);
+início
+  se (bilhar.numBolas >= NUM_BOLAS)
+    termine("Excedido o número máximo de bolas");
+  inicieBola(bilhar.bolas[bilhar.numBolas]);
+  inc(bilhar.numBolas);
+fim;
+
+/* próximaPosição - determina a próxima posição, de acordo
+   com a posição e os deslocamentos correntes; considera o
+   retângulo (X1,Y1)-(X2,Y2) como limite */
+procedimento próximaPosição(var bola: Bola);
+início
+  /* se necessário, inverte deslocamento horizontal */
+  se ((bola.x + bola.dx > X2) || (bola.x + bola.dx < X1))
+    bola.dx := -bola.dx;
+
+  /* se necessário, inverte deslocamento vertical */
+  se ((bola.y + bola.dy > Y2) || (bola.y + bola.dy < Y1))
+    bola.dy := -bola.dy;
+
+  /* desloca */
+  bola.x := bola.x + bola.dx;
+  bola.y := bola.y + bola.dy;
+fim;
+
+/* movimenteBola - desenhe a bola na sua próxima posição */
+procedimento movimenteBola(var bola: Bola);
+início
+  apagueBola(bola);
+  próximaPosição(bola);
+  desenheBola(bola);
+fim;
+
+/* movimenteMesa - desenhe todas as bolas na sua próxima
+   posição */
+procedimento movimenteMesa(var bilhar: Bilhar);
+var
+  i: inteiro;
+início
+  para (i := 0; i < bilhar.numBolas; inc(i))
+    movimenteBola(bilhar.bolas[i]);
+fim;
+
+/* MesaDeBilhar */
+procedimento MesaDeBilhar();
+var
+  bilhar: Bilhar;
+  i: inteiro;
+início
+  /* iniciação */
+  gra_mudeCorDoPincel(COR_FUNDO);
+  gra_desenheRetângulo(X1 - RAIO - 1, Y1 - RAIO - 1, 
+      X2 + RAIO + 1, Y2 + RAIO + 1);
+  evnt_mudeIntervaloEventoTempo(INTERVALO);
+  bilhar.numBolas := 0;
+
+  /* distribuição inicial */
+  para (i := 0; i < NUM_BOLAS; inc(i))
+  início
+    incluaBola(bilhar);
+    desenheBola(bilhar.bolas[i]);
+  fim;
+
+  /* aguarda até não ter o próximo evento */
+  enquanto (temEvento())
+    movimenteMesa(bilhar);
+fim;
+
+início
+  MesaDeBilhar();
+fim.

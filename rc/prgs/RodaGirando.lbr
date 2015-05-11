@@ -1,0 +1,85 @@
+/* Exibe uma "roda" girando */
+programa RodaGirando;
+inclui "gra*";
+inclui "evnt*";
+inclui "ggra.pac";
+inclui "roda.pac";
+
+const
+  /* aspecto da roda */
+  NPTOS = 17;  RAIO = 150.0;  CTROX = RAIO;  CTROY = RAIO;
+
+  /* origem na tela */
+  XORIG = 20;  YORIG = 320;
+
+  /* código dos eventos */
+  ESQ   = 1;
+  DIR   = 2;
+  OUTRA = 3;
+  TPO   = 4;
+
+/* obtTecla - verifica a tecla pressionada e retorna
+   o evento correspondente */
+função obtTecla(var result: inteiro): inteiro;
+var 
+  tecla: caractere;
+início
+  tecla := últimaTecla();
+  se (tecla = TECLA_ESQUERDA)
+    result := ESQ
+  senão se (tecla = TECLA_DIREITA)
+    result := DIR
+  senão 
+    result := OUTRA;
+  retorne result;
+fim;
+
+/* temEvento - espera pelo teclado ou por tempo;
+   retorna uma das constantes:
+     ESQ,   seta para esquerda;
+     DIR,   seta para direita;
+     OUTRA, outra tecla
+     TPO,   se venceu tempo;
+     FIM,   se usuário teclou ESC (escape) */
+função temEvento(var evento: inteiro): inteiro;
+início
+  esperePor(EV_TECLADO + EV_TEMPO);
+  se (últimoEvento() = EV_TECLADO)
+    retorne obtTecla(evento)
+  senão
+    retorne TPO;
+fim;
+
+/* conPtos - liga todos os pontos da roda ao ponto p */
+procedimento conPtos(roda: Roda; p: Ponto);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NPTOS; inc(i))
+    gDsnLin(Tela, p, ptoRoda(roda, i));
+fim;
+
+/* dsnRoda - desenha uma roda gigante */
+procedimento dsnRoda(jan: Janela; r: RodaGigante);
+início
+  
+fim;
+
+
+var
+  roda: Roda;
+  i: inteiro;
+  jan: Janela;
+
+início
+  /* ajusta o centro */
+  gAltOrig(XORIG, YORIG);
+
+  /* cria a roda */
+  roda := novaRoda(pto(CTROX, CTROY), RAIO, NPTOS);
+
+  /* conecta cada ponto a todos os demais */
+  para (i := 0; i < NPTOS; inc(i))
+    conPtos(roda, ptoRoda(roda, i));
+fim.
+

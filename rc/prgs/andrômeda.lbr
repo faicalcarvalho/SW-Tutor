@@ -1,0 +1,69 @@
+/* Imagens que parecem galáxias girando.
+   Baseado no trabalho publicado em http://blog.marmakoide.org/?p=1
+   e no código em JavaScript do programa Spinning Galaxy, em
+   http://www.khanacademy.org/cs/spinning-galaxy/846913979 */
+programa andrômeda;
+inclui "gra*";
+inclui "evnt*";
+inclui "rgra.lbr";
+
+const
+  R = 200.0;   // raio da galáxia
+  N = 250;     // número de estrelas
+  RE = 10;     // raio das estrelas
+
+/* pos_estrela - retorna a posição da ind-ésima estrela */
+função pos_estrela(ind: inteiro; ang: real): ponto;
+var
+  result: ponto;
+  r, ang_aux: real;
+início
+  r := R * raiz(ind / N);
+  ang_aux := ang * ind;
+  result.x := R + r * cos(ang_aux);
+  result.y := R + r * sen(ang_aux);
+  retorne result;
+fim;
+
+/* dsn_estrelas - Desenha as estrelas */
+procedimento dsn_estrelas(jan: janela; var ang: real);
+var
+  i: inteiro;
+início
+  para (i := 0; i < N; i++)
+    rgra_dsn_cir(jan, pos_estrela(i, ang), RE, RE);
+  ang := ang + 0.0001;
+fim;
+
+/* dsn_galáxia - Desenha a galáxia */
+procedimento dsn_galáxia(jan: janela; var ang: real);
+início
+  alt_cor_pincel(jan, COR_PRETO);
+  dsn_ret_cheio(jan, 0, 0, 1000, 1000);
+  alt_cor_pincel(jan, COR_AMARELO);
+  dsn_estrelas(jan, ang);
+  cop_imagem_ret(tela, 0, 0, 1000, 1000, jan);
+fim;
+
+/* teclou - sinaliza que alguma tecla foi pressionada */
+função teclou(): lógico;
+início
+  espere_por(EV_TEMPO + EV_TECLADO);
+  retorne (último_evento() = EV_TECLADO);
+fim;
+
+const
+  TPO = 10; // altere para aumentar/diminuir a velocidade
+
+var
+  ang: real;
+  jan: janela;
+
+início
+  jan := nova_janela();
+  ang := 137.5; // com esse valor, a primeira imagem já é "cheia"
+  alt_ev_tempo(TPO);
+  enquanto (não teclou())
+    dsn_galáxia(jan, ang);
+fim.
+

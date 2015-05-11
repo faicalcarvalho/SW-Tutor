@@ -1,0 +1,21 @@
+programa TesteAltFonte;
+inclui "gra*";
+var
+  j: Janela;
+  b: Botão;
+  i: inteiro;
+início
+  j := novaJanela(150, 150, 300, 300, "Teste");
+  b := novoBotão(Tela, 100, 100, 250, 25, "OK");
+  altFonte(j, "Symbol", 30, EF_NEGRITO+EF_SUBLINHADO, COR_VERDE);
+  altFonte(b, "Symbol", 30, EF_NEGRITO+EF_RISCADO, COR_VERDE);
+  altFonte(Tela, "Wingdings", 30, EF_NEGRITO+EF_RISCADO, COR_VERMELHO);
+
+
+  dsnTxt(j, 30, 30, "Testando fontes...");
+  dsnTxt(Tela, 30, 30, "Testando fontes...");
+
+  escrevaLn("Olá!");
+fim.
+
+

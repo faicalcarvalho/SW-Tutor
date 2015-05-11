@@ -1,0 +1,10 @@
+/* Gera o programa olá */
+programa gera_olá;
+início
+  escreva("/* Exibe uma breve saudação na tela */\n");
+  escreva("programa olá;\n");
+  escreva("início\n");
+  escreva("  escreva(\"Olá!\");\n");
+  escreva("fim.\n");
+fim.
+

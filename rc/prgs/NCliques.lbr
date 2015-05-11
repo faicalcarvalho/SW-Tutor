@@ -1,0 +1,43 @@
+/* Registra N cliques do mouse e, caso estejam
+   dentro de um retângulo, marca a posição e
+   traça uma linha reta conectando os cliques */
+programa NCliques;
+inclui "gra*";
+inclui "evnt*";
+const
+  X1 = 10;   Y1 = 10;
+  X2 = 300;  Y2 = 300;
+  N = 20;
+var
+  x1, y1, x2, y2, i: inteiro;
+  clicouFora: lógico;
+início
+  /* desenha o retângulo grande */
+  dsnRet(Tela, X1, Y1, X2, Y2);
+  
+  /* considera que houve um primeiro clique em X1, Y1 */
+  x2 := X1; y2 := Y1;
+  altXY(Tela, x2, y2);
+
+  /* registra N cliques */
+  para (i := 0; i < N; i++)
+  início
+    /* aguarde o clique e obtenha as coordenadas */
+    esperePor(EV_CLIQUE);
+    mouseXY(x1, y1);
+
+    /* verifique se foi fora do retângulo */
+    clicouFora := (x1 < X1) || (y1 < Y1) ||
+                  (x1 > X2) || (y1 > Y2);
+    se (clicouFora)
+      continue; // descarta clique fora do retângulo
+      
+    /* desenha a marca e traça a linha */
+    dsnRet(Tela, x1 - 3, y1 - 3, x1 + 3, y1 + 3);
+    dsnLin(Tela, x1, y1);
+    
+    /* guarda as coordenadas anteriores */
+    x2 := x1;
+    y2 := y1;
+  fim;
+fim.

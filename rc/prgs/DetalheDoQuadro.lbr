@@ -1,0 +1,43 @@
+/* Mostra detalhe de quadro obtido de arquivo */
+programa DetalheDoQuadro;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  X1 = 140;
+  Y1 = 270;
+  DXY = 30;
+
+var
+  q: inteiro;
+  x, y: inteiro;
+
+/* temMovMouse - obtém próximo movimento do mouse */
+função temMovMouse(var x, y: inteiro): lógico;
+início
+  evnt_esperePor(EV_MOVIMENTO_MOUSE + EV_TECLADO);
+  se (evnt_ultimoEvento() = EV_TECLADO)
+    retorne não;
+  evnt_mouseXY(x, y);
+  retorne sim;
+fim;
+
+início
+  /* desenhe o quadro na tela */
+  q := gra_quadroNovo();
+  gra_quadroLeiaDeArquivo(q, "vasoefruta.bmp");
+  gra_copieQuadro(q, 10, 10);
+
+  /* pequena moldura para o detalhe */
+  gra_desenheRetângulo(
+    X1-2, Y1-2, X1+2+2*DXY, Y1+2+2*DXY);
+
+  /* desenhe o detalhe */
+  enquanto (temMovMouse(x, y))
+  início
+    gra_quadroCopieDaTela(q, x - DXY, y - DXY, x + DXY, y + DXY);
+    gra_copieQuadro(q, X1, Y1);
+  fim;
+
+  gra_quadroLibere(q);
+fim.

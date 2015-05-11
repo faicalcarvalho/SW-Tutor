@@ -1,0 +1,19 @@
+/* Desenha um retângulo no clique */
+programa retângulo_no_clique;
+inclui "gra*";
+inclui "qualquer_cor.pac";
+inclui "tem_clique.pac";
+
+const
+  LADO = 40;
+
+var
+  x, y: inteiro;
+
+início
+  enquanto (tem_clique(x, y))
+  início
+    alt_cor_pincel(tela, qualquer_cor());
+    dsn_ret(tela, x, y, x + LADO, y + LADO);
+  fim;
+fim.

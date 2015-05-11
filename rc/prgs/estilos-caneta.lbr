@@ -1,0 +1,20 @@
+/* Exibe algumas linhas com diferentes
+   estilos para a caneta */
+programa estilos_caneta;
+inclui "gra*";
+início
+  alt_pos_caneta(tela, 50, 50);
+  dsn_lin(tela, 300, 50); // padrão, EC_SÓLIDO
+
+  alt_pos_caneta(tela, 50, 100);
+  alt_estilo_caneta(tela, EC_TRAÇO);
+  dsn_lin(tela, 300, 100);
+
+  alt_pos_caneta(tela, 50, 150);
+  alt_estilo_caneta(tela, EC_TRAÇO_PONTO);
+  dsn_lin(tela, 300, 150);
+
+  alt_pos_caneta(tela, 50, 200);
+  alt_estilo_caneta(tela, EC_TRAÇO_PONTO_PONTO);
+  dsn_lin(tela, 300, 200);
+fim.

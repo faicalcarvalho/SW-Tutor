@@ -1,0 +1,31 @@
+/* Mostra quadro obtido de arquivo */
+programa VasoFruta;
+inclui "gra*";
+
+var
+  q: inteiro;
+  q1: inteiro;
+
+procedimento retQdr(q: inteiro);
+início
+  escrevaLn("ok");
+fim;
+
+início
+  q := gra_quadroNovo();
+  gra_quadroLeiaDeArquivo(q, "vasoefruta.bmp");
+
+  gra_quadroDesenheRetângulo(q, 0, 0, 
+  gra_copieQuadro(q, 10, 10);
+
+  q1 := gra_quadroNovo();
+  gra_quadroCopieDeQuadro(q1, q, 10, 10, 200, 200);
+  gra_copieQuadro(q1, 10, 300);
+
+  gra_quadroLibere(q);
+fim.
+
+
+
+
+

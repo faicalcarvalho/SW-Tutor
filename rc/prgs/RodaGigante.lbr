@@ -1,0 +1,121 @@
+/* Exibe círculos girando como numa roda gigante */
+programa RodaGigante;
+inclui "gra*";
+inclui "evnt*";
+inclui "roda.pac";
+
+const
+  /* número de rodas */
+  NRD = 30;
+
+  /* origem na janela */
+  X0 = 0; Y0 = 300;
+
+  /* centro */
+  XC = 150.0;
+  YC = 150.0;
+
+  /* distância entre as rodas */
+  DR = 4.0;
+
+  /* ângulo de giro */
+  ANG = 1.0;
+
+  /* intervalo */
+  INTERVALO = 50;
+
+tipo
+  RodaGigante = registro
+    r: arranjo [0..NRD-1] de Roda;
+    jan: Janela;
+    x0, y0: inteiro; // origem na janela
+  fim;
+
+/* iniRodaGigante - inicializa a roda */
+procedimento iniRodaGigante(var rg: RodaGigante);
+var
+  i: inteiro;
+  raio: real;
+  altAng: inteiro;
+início
+  raio := DR;
+  altAng := 1;
+  /* cria as rodas, alternando (via altAng) o sentido do giro */
+  para (i := 0; i < NRD; inc(i))
+  início
+    rg.r[i] := novaRoda(pto(XC, YC), 
+                        (DR * i) + DR, 
+                        ANG, 
+                        altAng * ANG);
+    altAng := -altAng;
+  fim;
+  rg.jan := novaJanela();
+  altTamJanela(rg.jan, Y0, Y0);    
+  rg.x0 := X0;
+  rg.y0 := Y0;
+fim;
+
+/* marque - desenha a marca da roda ind */
+procedimento marqueRoda(var rg: RodaGigante; ind: inteiro);
+var
+  x, y, i, n: inteiro;
+  p, centro: Ponto;
+  raio: real;
+  angAtual: real;
+  angGiro: real;
+início
+  /* obtém próximo ponto do giro */
+  p := próximoPtoRoda(rg.r[ind]);
+
+  /* guarda os atributos */
+  obtRoda(rg.r[ind], centro, raio, angAtual, angGiro);
+
+  /* gira */
+  para (i := 0; i < 10; inc(i))
+  início
+    ptoJanela(p, rg.x0, rg.y0, x, y);
+    dsnRet(rg.jan, x-2, y-2, x+2, y+2);
+    p := próximoPtoRoda(rg.r[ind]);
+  fim;
+
+  /* restaura os atributos */
+  altRoda(rg.r[ind], centro, raio, angAtual, angGiro);
+fim;
+
+/* dsnRodaGigante - desenhe o próximo giro da roda */
+procedimento dsnRodaGigante(var rg: RodaGigante);
+var
+  i: inteiro;
+início
+  /* limpa a janela */
+  dsnRet(rg.jan, -1, -1, Y0+1, Y0+1);
+
+  /* gira */
+  para (i := 0; i < NRD; inc(i))
+    marqueRoda(rg, i);
+fim;
+
+/* temGiro - espera evento tempo */
+função temGiro(): lógico;
+início
+  esperePor(EV_TEMPO + EV_TECLADO);
+  retorne (últimoEvento() = EV_TEMPO);
+fim;
+
+var
+  rg: RodaGigante;
+  
+início
+  /* ajusta a velocidade do giro */
+  altEvTempo(INTERVALO);
+
+  /* inicializa a roda gigante */
+  iniRodaGigante(rg);
+
+  /* gira */
+  enquanto (temGiro())
+  início
+    dsnRodaGigante(rg);
+    copJanela(Tela, 10, 10, rg.jan);
+  fim;
+fim.

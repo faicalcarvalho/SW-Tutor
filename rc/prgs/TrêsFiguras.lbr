@@ -1,0 +1,16 @@
+/* Exibe três figuras coloridas */
+programa TrêsFiguras;
+inclui "gra*";
+início
+  /* primeira figura */
+  altCorPincel(Tela, COR_BRANCO);
+  dsnRet(Tela, 10, 10, 150, 100);
+
+  /* segunda */
+  altCorPincel(Tela, COR_VERMELHO);
+  dsnCir(Tela, 60, 60, 250, 200);
+
+  /* terceira */
+  altCorPincel(Tela, COR_AZUL);
+  dsnTri(Tela, 30, 30, 130, 130);
+fim.

@@ -1,0 +1,42 @@
+/* Desenha um botão de apertar */
+programa botão_3d;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  X = 10;
+  Y = 10;
+  LARG = 100;
+  ALTU = 40;
+
+procedimento dsn_botão_pra_cima(jan: janela;
+                       x, y, larg, altu: inteiro);
+início
+  alt_pos_caneta(jan, x, y + altu);
+  alt_cor_caneta(jan, COR_CINZA_ESCURO);
+  dsn_lin(jan, x + larg, y + altu);
+  dsn_lin(jan, 
+fim;
+                       
+
+/* dsn_botão - desenha um botão conforme os
+   atributos especificados */
+procedimento dsn_botão(jan: janela;
+                       x, y, larg, altu: inteiro;
+                       pra_cima: lógico);
+início
+  dsn_ret_cheio(jan, x, y, x + larg, y + altu);
+  se (pra_cima)
+    dsn_botão_pra_cima(jan, x, y, larg, altu)
+  senão
+    dsn_botão_pra_baixo(jan, x, y, larg, altu);
+fim;
+
+var
+  jan: janela;
+
+início
+  jan := nova_janela();
+  alt_vis_janela(jan, sim);
+  dsn_botão(jan, X, Y, LARG, ALTU, "Teste", sim); 
+fim.

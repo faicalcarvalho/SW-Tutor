@@ -1,0 +1,19 @@
+/* Grava um arquivo cujo conteúdo é o 
+   texto do programa olá */
+programa grava_programa_olá;
+inclui "arq*";
+
+const
+  CRLF = #13#10;
+
+var
+  prg: texto;
+
+início
+  prg := "/* Exibe uma breve saudação na tela */" + CRLF +
+         "programa olá;" + CRLF +
+         "início" + CRLF +
+         "  escreva(\"Olá!\");" + CRLF +
+         "fim." + CRLF;
+  txt_para_arq("olá.pac", prg); 
+fim.

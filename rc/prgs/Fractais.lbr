@@ -1,0 +1,181 @@
+/* Fractais */
+programa Fractais;
+inclui "gra*";
+inclui "geom.pac";
+
+const
+  XORIG = 20;
+  YORIG = 350;
+
+  X1 = 0.0;   Y1 = 0.0;
+  X2 = 0.0;   Y2 = 1.0;
+  X3 = 1.0;   Y3 = 1.0;
+  X4 = 1.0;   Y4 = 0.0;
+
+const
+  NTRANS = 4;
+
+tipo
+  Figura = registro
+    p1, p2, p3, p4: Ponto; // um quadrado
+  fim;
+
+  Transformação = registro
+    a, b, c, d, e, f: real;
+  fim;
+
+  Transformações = arranjo [0..NTRANS-1] de Transformação;
+
+/* dsnFig - desenha uma figura */
+procedimento dsnFig(tela: Janela; fig: Figura);
+var
+  x1, y1, x2, y2, x3, y3, x4, y4: inteiro;
+início
+  ptoJanela(fig.p1, XORIG, YORIG, x1, y1);
+  ptoJanela(fig.p2, XORIG, YORIG, x2, y2);
+  ptoJanela(fig.p3, XORIG, YORIG, x3, y3);
+  ptoJanela(fig.p4, XORIG, YORIG, x4, y4);
+  altXY(tela, x1, y1);
+  dsnLin(tela, x2, y2);
+  dsnLin(tela, x3, y3);
+  dsnLin(tela, x4, y4);
+  dsnLin(tela, x1, y1);
+fim;
+
+/* trans - aplica a transformação t ao ponto p */
+função trans(var t: Transformação; p: Ponto): Ponto;
+var
+  result: Ponto;
+início
+  /* x = ax + by + e */
+  result.x := (t.a * p.x) + (t.b * p.y) + t.e;
+
+  /* y = cx + dy + f */
+  result.y := (t.c * p.x) + (t.d * p.y) + t.f;
+
+  retorne result;
+fim;
+
+/* transFigura - aplica transformação à figura */
+função transFigura(var t: Transformação; 
+                   fig: Figura): Figura;
+var
+  result: Figura;
+início
+  /* aplica t aos pontos da figura */
+  result.p1 := trans(t, fig.p1);
+  result.p2 := trans(t, fig.p2);
+  result.p3 := trans(t, fig.p3);
+  result.p4 := trans(t, fig.p4);
+  retorne result;
+fim;
+
+/* reduz - aplica na figura as transformações sucessivas */
+procedimento reduz(var tr: Transformações;
+                   fig: Figura; n: inteiro);
+var
+  i: inteiro;
+  faux: Figura;
+início
+  para (i := 0; i < NTRANS; inc(i))
+  início
+    faux := transFigura(tr[i], fig);
+    se (n = 0)
+      dsnFig(Tela, faux)
+    senão
+      reduz(tr, faux, n - 1);
+  fim;
+fim;
+
+procedimento iniFigura(var fig: Figura);
+início
+  fig.p1 := pto(0.0, 0.0);
+  fig.p2 := pto(0.0, YORIG);
+  fig.p3 := pto(YORIG, YORIG);
+  fig.p4 := pto(YORIG, 0.0);
+fim;
+
+var
+  fig: Figura;
+  transf: Transformações;
+
+início
+/***** Figure 5.9
+  transf[0].a := 0.5;
+  transf[0].b := 0.0;
+  transf[0].c := 0.0;
+  transf[0].d := 0.5;
+  transf[0].e := 0.0 * YORIG;
+  transf[0].f := 0.0 * YORIG;
+
+  transf[1].a := 0.5;
+  transf[1].b := 0.0;
+  transf[1].c := 0.0;
+  transf[1].d := 0.5;
+  transf[1].e := 0.5 * YORIG;
+  transf[1].f := 0.0 * YORIG;
+
+  transf[2].a := 0.5;
+  transf[2].b := 0.0;
+  transf[2].c := 0.0;
+  transf[2].d := 0.5;
+  transf[2].e := 0.0 * YORIG;
+  transf[2].f := 0.5 * YORIG;
+****************/
+
+/*** Figure 5.11
+  transf[0].a := 0.0;
+  transf[0].b := 0.577;
+  transf[0].c := -0.577;
+  transf[0].d := 0.0;
+  transf[0].e := 0.0951 * YORIG;
+  transf[0].f := 0.5893 * YORIG;
+
+  transf[1].a := 0.0;
+  transf[1].b := 0.577;
+  transf[1].c := -0.577;
+  transf[1].d := 0.0;
+  transf[1].e := 0.4413 * YORIG;
+  transf[1].f := 0.7893 * YORIG;
+
+  transf[2].a := 0.0;
+  transf[2].b := 0.577;
+  transf[2].c := -0.577;
+  transf[2].d := 0.0;
+  transf[2].e := 0.0952 * YORIG;
+  transf[2].f := 0.9893 * YORIG;
+***********************/
+
+  transf[0].a := 0.849;
+  transf[0].b := 0.037;
+  transf[0].c := -0.037;
+  transf[0].d := 0.849;
+  transf[0].e := 0.075 * YORIG;
+  transf[0].f := 0.1830 * YORIG;
+
+  transf[1].a := 0.197;
+  transf[1].b := -0.226;
+  transf[1].c := 0.226;
+  transf[1].d := 0.197;
+  transf[1].e := 0.4 * YORIG;
+  transf[1].f := 0.0490 * YORIG;
+
+  transf[2].a := -0.150;
+  transf[2].b := 0.283;
+  transf[2].c := 0.260;
+  transf[2].d := 0.237;
+  transf[2].e := 0.575 * YORIG;
+  transf[2].f := -0.0840 * YORIG;
+
+  transf[3].a := 0.0;
+  transf[3].b := 0.0;
+  transf[3].c := 0.0;
+  transf[3].d := 0.160;
+  transf[3].e := 0.5 * YORIG;
+  transf[3].f := 0.0 * YORIG;
+
+
+  iniFigura(fig);
+
+  reduz(transf, fig, 10);
+fim.

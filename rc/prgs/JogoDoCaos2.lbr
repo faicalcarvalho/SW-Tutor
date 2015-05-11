@@ -1,0 +1,61 @@
+/* Jogo do Caos */
+programa JogoDoCaos;
+inclui "gra*";
+inclui "evnt*";
+inclui "geom.pac";
+
+const
+  XORIG = -300;
+  YORIG = -300;
+
+tipo
+  Triângulo = arranjo [0..2] de Ponto;
+
+/* espClique - espere um clique */
+função espClique(): Ponto;
+var
+  x, y: inteiro;
+início
+  esperePor(EV_CLIQUE);
+  mouseXY(x, y);
+  retorne ptoGráfico(x, y, XORIG, YORIG);
+fim;
+
+/* marque - desenha pequena marca em p */
+procedimento marque(p: Ponto);
+var
+  x, y: inteiro;
+início
+  ptoJanela(p, XORIG, YORIG, x, y);
+  altPixel(Tela, x, y, COR_VERMELHO);
+fim;
+
+/* próximoPto - obtém o próximo ponto */
+função próximoPto(t: Triângulo; p: Ponto): Ponto;
+início
+  retorne ptoMédio(p, t[random(3)]);
+fim;
+
+const
+  N = 50000; // número de "jogadas"
+
+var
+  t: Triângulo;
+  p: Ponto;
+  i: inteiro;
+início
+  /* obtém os pontos do triângulo */
+  t[0] := espClique(); marque(t[0]);
+  t[1] := espClique(); marque(t[1]);
+  t[2] := espClique(); marque(t[2]);
+
+  /* escolhe o primeiro ponto */
+  p := pto(0, 0);
+
+  /* joga */  
+  para (i := 0; i < N; inc(i))
+  início
+    p := próximoPto(t, p);
+    marque(p);
+  fim;
+fim.

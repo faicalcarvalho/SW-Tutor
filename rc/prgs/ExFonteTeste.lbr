@@ -1,0 +1,15 @@
+programa ExFonteTeste;
+inclui "gra*";
+início
+  gra_mudeNomeDaFonte("Arial");
+  gra_mudeTamanhoDaFonte(50);
+  gra_desenheTexto(10, 10, "T");
+  gra_mudeTamanhoDaFonte(40);
+  gra_desenheTexto(40, 21, "E");
+  gra_mudeTamanhoDaFonte(30);
+  gra_desenheTexto(72, 33, "S");
+  gra_mudeTamanhoDaFonte(20);
+  gra_desenheTexto(97, 43, "T");
+  gra_mudeTamanhoDaFonte(10);
+  gra_desenheTexto(113, 55, "E");
+fim.

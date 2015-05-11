@@ -1,0 +1,48 @@
+/* Exibe na tela alguns itens gráficos */
+programa itens_gráficos;
+inclui "gra*";
+
+var
+  bot: botão;
+  edl: editor_lin;
+  edt: editor_txt;
+  cxm: caixa_marca;
+  cxg: caixa_grupo;
+  qdr: quadro;
+  cxe1, cxe2, cxe3, cxe4: caixa_escolha;
+  rtl: rótulo;
+  img: imagem;
+  i: inteiro;
+
+início
+  bot := novo_botão(tela, 60, 20, 200, 40, "botão");
+  alt_tam_fonte(bot, 12);
+
+  edl := novo_editor_lin(tela, 10, 70, 300, 50, "editor_lin");
+  alt_cor_fonte(edl, COR_AZUL);
+  alt_tam_fonte(edl, 20);
+
+  edt := novo_editor_txt(tela, 10, 140, 300, 100, "editor_txt");
+  alt_nome_fonte(edt, "Courier New");
+
+  cxg := nova_caixa_grupo(tela, 330, 20, 200, 70, "caixa_grupo");
+  cxe1 := nova_caixa_escolha(cxg, 10, 15, 100, 30, "caixa_escolha1");
+  cxe2 := nova_caixa_escolha(cxg, 10, 35, 100, 30, "caixa_escolha2");
+
+  cxe3 := nova_caixa_escolha(tela, 330, 100, 100, 30, "caixa_escolha3");
+  cxe4 := nova_caixa_escolha(tela, 440, 100, 100, 30, "caixa_escolha4");
+
+  qdr := novo_quadro(tela, 330, 140, 200, 70, "quadro");
+  alt_cor_janela(qdr, COR_PRETO);
+  alt_cor_fonte(qdr, COR_BRANCO);
+
+  cxm := nova_caixa_marca(tela, 330, 220, 100, 30, "caixa_marca");
+
+  rtl := novo_rótulo(tela, 10, 250, 300, 100, "rótulo");
+  alt_tam_fonte(rtl, 40);
+
+  img := nova_imagem(tela, 160, 250, 380, 110, "foto-rio-1");
+
+  alt_txt_janela(edl, "editor de uma linha");
+  alt_txt_janela(edt, "editor\nde\nmúltiplas\nlinhas");
+fim.

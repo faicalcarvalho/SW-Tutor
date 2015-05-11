@@ -1,0 +1,37 @@
+/* Ilusão de ótica */
+programa ilusão_de_ótica;
+inclui "gra*";
+
+const
+  X1 = 60; Y1 = 60;
+  X2 = 300; Y2 = Y1;
+  DXY = 30;
+  X3 = X1; Y3 = 150;
+  X4 = X2; Y4 = Y3;
+
+início
+  alt_tam_caneta(tela, 3);
+  alt_pos_caneta(tela, X1, Y1);
+  dsn_lin(tela, X2, Y2);
+
+  alt_pos_caneta(tela, X1-DXY, Y1-DXY);
+  dsn_lin(tela, X1, Y1);
+  alt_pos_caneta(tela, X1-DXY, Y1+DXY);
+  dsn_lin(tela, X1, Y1);
+  alt_pos_caneta(tela, X2+DXY, Y2-DXY);
+  dsn_lin(tela, X2, Y2);
+  alt_pos_caneta(tela, X2+DXY, Y2+DXY);
+  dsn_lin(tela, X2, Y2);
+
+  alt_pos_caneta(tela, X3, Y3);
+  dsn_lin(tela, X4, Y4);
+
+  alt_pos_caneta(tela, X3+DXY, Y3-DXY);
+  dsn_lin(tela, X3, Y3);
+  alt_pos_caneta(tela, X3+DXY, Y3+DXY);
+  dsn_lin(tela, X3, Y3);
+  alt_pos_caneta(tela, X4-DXY, Y4-DXY);
+  dsn_lin(tela, X4, Y4);
+  alt_pos_caneta(tela, X4-DXY, Y4+DXY);
+  dsn_lin(tela, X4, Y4);
+fim.

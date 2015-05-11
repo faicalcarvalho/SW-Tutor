@@ -1,0 +1,12 @@
+/* Exibe um arco e uma fatia */
+programa arco_fatia;
+inclui "gra*";
+início
+  /* arco */
+  dsn_arco(tela, 10, 10, 300, 300, 300, 75, 10, 75);
+
+  /* fatia */
+  alt_cor_pincel(tela, COR_BRANCO);
+  alt_tam_caneta(tela, 2);
+  dsn_fatia(tela, 10, 100, 300, 390, 300, 165, 10, 165);
+fim.

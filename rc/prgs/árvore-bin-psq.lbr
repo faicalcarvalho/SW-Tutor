@@ -1,0 +1,166 @@
+/* Árvore binária de pesquisa */
+programa árvore_bin_psq;
+inclui "gra*";
+
+tipo
+  /* árvore */
+  árvore = ponteiro para descritor_árvore;
+  descritor_árvore = registro
+    elem: texto;
+    esq: árvore;
+    dir: árvore;
+  fim;
+
+/* árvore_ini - inicializa a árvore */
+procedimento árvore_ini(var a: árvore);
+início
+  a := nulo;
+fim;
+
+/* árvore_vazia - informa se a árvore está vazia */
+função árvore_vazia(var a: árvore): lógico;
+início
+  retorne a = nulo;
+fim;
+
+/* árvore_ins - insere elemento na árvore */
+procedimento árvore_ins(var a: árvore; elem: texto);
+início
+  se (árvore_vazia(a))
+  início // cria um novo nodo
+    aloque(a);
+    a^.elem := elem;
+    árvore_ini(a^.esq);
+    árvore_ini(a^.dir);
+  fim
+  senão se (elem < a^.elem)
+    árvore_ins(a^.esq, elem)
+  senão
+    árvore_ins(a^.dir, elem);
+fim;
+
+/* árvore_psq - retorna referência ao nodo contendo
+   o elemento ou nulo se não encontrar */
+função árvore_psq(var a: árvore; elem: texto): árvore;
+início
+  se (árvore_vazia(a))
+    retorne nulo // não encontrou
+  senão se (elem = a^.elem)
+    retorne a    // encontrou
+  senão se (elem < a^.elem)
+    retorne árvore_psq(a^.esq, elem)
+  senão
+    retorne árvore_psq(a^.dir, elem);
+fim;
+
+/* árvore_em_ordem - percorre a árvore seguindo
+   a sequência: esquerda, processa, direita */
+procedimento árvore_em_ordem(var a: árvore);
+início
+  se (árvore_vazia(a) = não)
+  início
+    árvore_em_ordem(a^.esq);
+    escreva(a^.elem, "\n"); // processa
+    árvore_em_ordem(a^.dir);
+  fim;
+fim;
+
+/* árvore_pré_ordem - percorre a árvore seguindo
+   a sequência: processa, esquerda, direita */
+procedimento árvore_pré_ordem(var a: árvore);
+início
+  se (árvore_vazia(a) = não)
+  início
+    escreva(a^.elem, "\n"); // processa
+    árvore_pré_ordem(a^.esq);
+    árvore_pré_ordem(a^.dir);
+  fim;
+fim;
+
+/* árvore_pós_ordem - percorre a árvore seguindo
+   a sequência: esquerda, direita, processa */
+procedimento árvore_pós_ordem(var a: árvore);
+início
+  se (árvore_vazia(a) = não)
+  início
+    árvore_pós_ordem(a^.esq);
+    árvore_pós_ordem(a^.dir);
+    escreva(a^.elem, "\n"); // processa
+  fim;
+fim;
+
+/* para determinar o tamanho da árvore */
+const
+  TAMV = 90;
+  TAMH = 300;
+
+ /* dsn_aresta - desenha uma aresta da árvore */
+procedimento dsn_aresta(dsn: lógico; x1, y1, x2, y2: inteiro);
+início
+  se (dsn = não)
+    retorne;
+  alt_pos_caneta(tela, x1, y1);
+  dsn_lin(tela, x2, y2);
+fim;
+
+/* dsn_nodo - desenha um nodo da árvore */
+procedimento dsn_nodo(x, y: inteiro; txt: texto);
+const
+  DXY = 8;
+início
+  alt_cor_pincel(tela, COR_PRETO);
+  dsn_cir(tela, x - DXY, y - DXY, 2 * DXY, 2 * DXY);
+  dsn_txt(tela, x - DXY * 2, y - DXY * 4, txt);
+fim;
+
+/* dsn_árvore - desenha a árvore com base na
+   sequência pós-ordem */
+função dsn_árvore(var a: árvore; base, dh, dv: inteiro): lógico;
+var
+  result, esq, dir: lógico;
+início
+  se (árvore_vazia(a) = não)
+  início
+    esq := dsn_árvore(a^.esq, base - dh, dh div 2, dv + 1);
+    dir := dsn_árvore(a^.dir, base + dh, dh div 2, dv + 1);
+    dsn_nodo(base, dv * TAMV, a^.elem);
+    dsn_aresta(esq, base, dv * TAMV, base - dh, (dv + 1) * TAMV);
+    dsn_aresta(dir, base, dv * TAMV, base + dh, (dv + 1) * TAMV);
+    retorne sim;
+  fim
+  senão
+    retorne não;
+fim;
+
+var
+  a: árvore;
+
+início
+  /* inicialização */
+  árvore_ini(a);
+  árvore_ins(a, "Brasil");
+  árvore_ins(a, "Itália");
+  árvore_ins(a, "Alemanha");
+  árvore_ins(a, "Argentina");
+  árvore_ins(a, "Uruguai");
+  árvore_ins(a, "França");
+  árvore_ins(a, "Inglaterra");
+
+  /* testes da pesquisa */
+  se (árvore_psq(a, "Brasil") = nulo)
+    termine("Erro em árvore_psq - Brasil não encontrado");
+  se (árvore_psq(a, "Dinamarca") <> nulo)
+    termine("Erro em árvore_psq - Dinamarca encontrada");
+
+  /* percorrendo a árvore */
+  escreva("--- pré-ordem\n");
+  árvore_pré_ordem(a);
+  escreva("--- em-ordem\n");
+  árvore_em_ordem(a);
+  escreva("--- pós-ordem\n");
+  árvore_pós_ordem(a);
+
+  /* desenha a árvore */
+  dsn_árvore(a, TAMH, TAMH div 2, 1);
+fim.
+

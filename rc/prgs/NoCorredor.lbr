@@ -1,0 +1,24 @@
+/* Desenha duas linhas verticais e testa se o próximo
+   clique está dentro do "corredor" formado por elas */
+programa NoCorredor;
+inclui "gra*";
+inclui "evnt*";
+const
+  X1 = 100; X2 = 200;
+var
+  x, y: inteiro;
+início
+  /* desenha o corredor */
+  altXY(Tela, X1, 0);
+  dsnLin(Tela, X1, 1000);
+  altXY(Tela, X2, 0);
+  dsnLin(Tela, X2, 1000);
+
+  /* verifica posição do clique */
+  esperePor(EV_CLIQUE);
+  mouseXY(x, y);
+  se ((x > X1) && (x < X2))
+    dsnTxt(Tela, x, y, "dentro")
+  senão
+    dsnTxt(Tela, x, y, "fora");
+fim.

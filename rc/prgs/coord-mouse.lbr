@@ -1,0 +1,44 @@
+/* Desenha linhas indicando a posição do mouse */
+programa coord_mouse;
+inclui "gra*";
+inclui "evnt*";
+
+/* tem_mov_mouse - detecta movimento do mouse;
+   coloca em (x, y) a posição corrente; se o 
+   usuário usar o teclado, retorna 'não' */
+função tem_mov_mouse(var x, y: inteiro): lógico;
+início
+  espere_por(EV_MOV_MOUSE + EV_TECLADO);
+  se (último_evento() = EV_TECLADO)
+    retorne não;
+  mouse_xy(x, y);
+  retorne sim;
+fim;
+
+/* dsn_apg - desenha/apaga as linhas que se
+   cruzam no ponto (x, y) */
+procedimento dsn_apg(x, y: inteiro);
+const
+  FORA = 1000;
+início
+  alt_pos_caneta(tela, x, -1); // vertical
+  dsn_lin_sel(tela, x, FORA);
+  alt_pos_caneta(tela, -1, y); // horizontal
+  dsn_lin_sel(tela, FORA, y);
+fim;
+
+var
+  x1, y1, x2, y2: inteiro;
+
+início
+  x1 := -1; y1 := -1; // fora da tela
+  enquanto (tem_mov_mouse(x2, y2))
+  início
+    dsn_apg(x1, y1); // apaga a posição anterior
+    dsn_apg(x2, y2); // desenha a posição atual
+
+    /* atualiza a posição atual */
+    x1 := x2;
+    y1 := y2;
+  fim;
+fim.

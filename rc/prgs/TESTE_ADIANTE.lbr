@@ -1,0 +1,17 @@
+tipo
+  b = registro
+    x, y, z: real;
+  fim;
+
+procedimento evento(e: inteiro); adiante;
+
+procedimento clique_fim();
+início
+  evento(123);
+fim;
+
+tipo
+  a = registro
+    x, y, z: real;
+  fim;
+

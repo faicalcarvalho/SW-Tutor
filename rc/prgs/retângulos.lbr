@@ -1,0 +1,25 @@
+/* Exibe alguns retângulos superpostos */
+programa retângulos;
+inclui "gra*";
+
+const
+  X1 = 10; Y1 = 10; LARG = 300; ALTU = 300;
+  DXY = 3;
+
+var
+  x, y, larg, altu: inteiro;
+
+início
+  /* determina o primeiro retângulo */
+  x := X1; y := Y1; larg := LARG; altu := ALTU;
+
+  /* desenha os vários retângulos */
+  enquanto (larg > 0)
+  início
+    dsn_ret(tela, x, y, larg, altu);
+    x := x + DXY;
+    y := y + DXY;
+    larg := larg - (2 * DXY);
+    altu := altu - (2 * DXY);
+  fim;
+fim.

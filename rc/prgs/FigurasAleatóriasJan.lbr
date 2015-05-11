@@ -1,0 +1,44 @@
+/* Desenha várias figuras determinadas de forma aleatória */
+programa FigurasAleatóriasJan;
+inclui "gra*";
+inclui "mat*";
+
+const
+  LADO = 250;
+
+/* qualquerCor - retorna uma cor escolhida de forma aleatória */
+função qualquerCor(): inteiro;
+início
+  retorne corRGB(random(256),  /* vermelho */
+                 random(256),  /* verde */
+                 random(256)); /* azul */
+fim;
+
+/* dsnFigura - desenha figura aleatória */
+procedimento dsnFigura(jan: Janela);
+var
+  x, y, z: inteiro;
+início
+  altCorPincel(jan, qualquerCor());
+  x := random(LADO);
+  y := random(LADO);
+  z := random(LADO div 10);
+  escolha (random(3))
+    caso 0: dsnRet(jan, x, y, x+z, y+z);
+    caso 1: dsnCir(jan, x, y, x+z, y+z);
+    caso 2: dsnTri(jan, x, y, x+z, y+z);
+  fim;
+fim;
+
+var
+  i: inteiro;
+  jan: Janela;
+
+início
+  jan := novaJanela();
+  altTxtJanela(jan, "Figuras");
+  altTamJanela(jan, 350, 350);
+  altVisJanela(jan, sim);
+  para (i := 0; i < 500; inc(i))
+    dsnFigura(jan);
+fim.

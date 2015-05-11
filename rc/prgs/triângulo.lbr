@@ -1,0 +1,6 @@
+/* Exibe um triângulo na tela */
+programa triângulo;
+inclui "gra*";
+início
+  dsn_tri(tela, 20, 20, 200, 150);
+fim.

@@ -1,0 +1,21 @@
+/* A execução passo a passo deste programa mostra o 
+   efeito dos comandos 'aloque' e 'libere', usados, 
+   respectivamente, na alocação e liberação de variáveis
+   na memória dinâmica */
+programa ponteiros;
+var
+  p1, p2: ponteiro para inteiro;
+início
+  /* aloca */
+  aloque(p1);
+  aloque(p2);
+  
+  /* usa */
+  p1^ := 12345;
+  p2^ := 2 * p1^;
+  escreva("O dobro de ", p1^, " é ", p2^);
+  
+  /* libera */
+  libere(p1);
+  libere(p2);
+fim.

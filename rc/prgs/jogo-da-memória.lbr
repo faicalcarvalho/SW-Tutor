@@ -1,0 +1,241 @@
+/* Jogo da Memória */
+programa jogo_da_memória;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  TAM_QUAD = 50;
+  TAM_FONTE = (TAM_QUAD div 2) + 1;
+  NUM_LINHAS = 4; /* NUM_LINHAS deve ser sempre par */
+  NUM_CARTAS = NUM_LINHAS * NUM_LINHAS;
+  EVT_BASE = 1000;
+
+tipo
+  campo = registro
+    carta: inteiro;
+    bt: botão;
+    rt: rótulo;
+    evento: inteiro;
+  fim;
+
+  jogo = registro
+    tab: arranjo [NUM_LINHAS, NUM_LINHAS] de campo;
+    baralho: arranjo [NUM_CARTAS] de inteiro;
+  fim;
+
+/* embaralhe - troca as cartas de posição, aleatoriamente */
+procedimento embaralhe(var jg: jogo);
+const
+  N = 100;
+var
+  i, i1, i2, aux: inteiro;
+início
+  para (i := 0; i < N; i++)
+  início
+    i1 := random(NUM_CARTAS);
+    i2 := random(NUM_CARTAS);
+    /* troque b[i1] com b[i2] */
+    aux := jg.baralho[i1];
+    jg.baralho[i1] := jg.baralho[i2];
+    jg.baralho[i2] := aux;
+  fim;
+fim;
+
+/* dá_as_cartas - coloca os pares de cartas
+   no baralho, e embaralha */
+procedimento dá_as_cartas(var jg: jogo);
+var
+  i, cod: inteiro;
+início
+  cod := 33;
+  i := 0;
+  enquanto (i < NUM_CARTAS)
+  início
+    jg.baralho[i] := cod;
+    jg.baralho[i + 1] := cod;
+    i := i + 2;
+    cod := cod + 1;
+  fim;
+  embaralhe(jg);
+fim;
+
+/* dsn_carta - exibe a carta que está registrada no
+   tabuleiro*/
+procedimento dsn_carta(var jg: jogo;
+    lin, col: inteiro; visível: lógico);
+início
+  alt_vis_janela(jg.tab[lin, col].bt, não visível);
+fim;
+
+/* ini_campo - inicializa o campo (lin, col) do jogo
+   com a ind-ésima carta */
+procedimento ini_campo(var jg: jogo; ind, lin, col: inteiro);
+var
+  rt: rótulo;
+  bt: botão;
+início
+  /* cria o rótulo */
+  rt := novo_rótulo(tela, col * TAM_QUAD, lin * TAM_QUAD, TAM_QUAD,
+                    TAM_QUAD, int_para_crt(jg.baralho[ind]));
+  alt_nome_fonte(rt, "wingdings");
+  alt_tam_fonte(rt, TAM_FONTE);
+  jg.tab[lin, col].rt := rt;
+
+  /* cria o botão e registra a carta */
+  bt := novo_botão(tela, col * TAM_QUAD, lin * TAM_QUAD, TAM_QUAD, TAM_QUAD, "");
+  reg_evento(bt, EV_CLIQUE, ind + EVT_BASE);
+  jg.tab[lin, col].bt := bt;
+  jg.tab[lin, col].evento := ind + EVT_BASE;
+  jg.tab[lin, col].carta := jg.baralho[ind];
+  dsn_carta(jg, lin, col, não); /* invisível */
+fim;
+
+/* ini_jogo - prepara o jogo para começar */
+procedimento ini_jogo(var jg: jogo);
+var
+  i, lin, col: inteiro;
+início
+  dá_as_cartas(jg);
+
+  /* distribui no tabuleiro */
+  i := 0;
+  para (lin := 0; lin < NUM_LINHAS; lin++)
+    para (col := 0; col < NUM_LINHAS; col++)
+    início
+      ini_campo(jg, i, lin, col);
+      i++;
+    fim;
+fim;
+
+/* clicou - verifica se clicou no tabuleiro */
+função clicou(jg: jogo; evt: inteiro; var lin, col: inteiro): lógico;
+início
+  para (lin := 0; lin < NUM_LINHAS; lin++)
+    para (col := 0; col < NUM_LINHAS; col++)
+      se (jg.tab[lin, col].evento = evt)
+        retorne sim;
+  retorne não; // clique foi fora do tabuleiro
+fim;
+
+/* tem_carta - retorna 'sim' se o usuário clicar numa
+   carta válida; (lin, col) fica com a posição no
+   tabuleiro da carta selecionada */
+função tem_carta(var jg: jogo; var lin, col: inteiro): lógico;
+var
+  x, y, evt: inteiro;
+início
+  repita
+    /* aguarda clique ou teclado */
+    espere_por(EV_CLIQUE + EV_TECLADO);
+    evt := último_evento();
+    se (evt = EV_TECLADO)
+      retorne não;
+
+    /* repete se o clique foi fora do tabuleiro, ou
+       se a carta já foi previamente escolhida */
+    se (não clicou(jg, evt, lin, col))
+      continue;
+
+    /* carta ok */
+    retorne sim;
+  até (não);
+fim;
+
+/* terminou - retorna 'sim' se o jogo chegou ao fim */
+função terminou(var jg: jogo): lógico;
+var
+  i, j: inteiro;
+início
+  para (i := 0; i < NUM_LINHAS; i++)
+    para (j := 0; j < NUM_LINHAS; j++)
+      se (jg.tab[i, j].carta <> 0)
+        retorne não;
+  retorne sim;
+fim;
+
+/* tem_jogada - retorna 'sim' se o usuário completa
+   uma jogada, selecionando duas cartas; coloca em
+   (lin1, col1) e (lin2, col2) a posição das cartas */
+função tem_jogada(var jg: jogo; var lin1, col1,
+    lin2, col2: inteiro): lógico;
+início
+  /* se tudo está marcado, não tem mais jogada */
+  se (terminou(jg))
+    retorne não;
+
+  /* primeira carta (lin1, col1) */
+  se (não tem_carta(jg, lin1, col1))
+    retorne não;
+  dsn_carta(jg, lin1, col1, sim); /* visível */
+
+  /* segunda carta (lin2, col2) */
+  se (não tem_carta(jg, lin2, col2))
+    retorne não;
+  dsn_carta(jg, lin2, col2, sim); /* visível */
+
+  retorne sim;
+fim;
+
+/* reg_jogada - registre a jogada com as duas
+   cartas (lin1, col1) e (lin2, col2) */
+procedimento reg_jogada(var jg: jogo;
+    lin1, col1, lin2, col2: inteiro);
+início
+  se (jg.tab[lin1, col1].carta = jg.tab[lin2, col2].carta)
+  início /* acertou: marca as cartas iguais */
+    jg.tab[lin1, col1].carta := 0;
+    jg.tab[lin2, col2].carta := 0;
+  fim
+  senão
+  início /* errou: esconde as cartas */
+    durma(1000); /* dá um tempinho */
+    dsn_carta(jg, lin1, col1, não);
+    dsn_carta(jg, lin2, col2, não);
+  fim;
+fim;
+
+/* resultado - mostra o resultado */
+procedimento resultado(var jg: jogo);
+var
+  c: caractere;
+  rt: rótulo;
+  cor: inteiro;
+início
+  se (terminou(jg))
+  início
+    c := int_para_crt(74);
+    cor := COR_VERDE;
+  fim
+  senão
+  início
+    c := int_para_crt(76);
+    cor := COR_VERMELHO;
+  fim;
+  rt := novo_rótulo(tela, (NUM_LINHAS + 1) * TAM_QUAD,
+                    TAM_QUAD,
+                    NUM_LINHAS * TAM_QUAD div 2,
+                    NUM_LINHAS * TAM_QUAD div 2,
+                    c);
+  alt_nome_fonte(rt, "wingdings");
+  alt_tam_fonte(rt, TAM_FONTE * 3);
+  alt_cor_fonte(rt, cor);
+  alt_vis_janela(rt, sim);
+fim;
+
+var
+  jg: jogo;
+  lin1, col1, lin2, col2: inteiro;
+  result: rótulo;
+
+início
+  /* desenha e inicia o tabuleiro vazio */
+  ini_jogo(jg);
+
+  /* joga */
+  enquanto(tem_jogada(jg, lin1, col1, lin2, col2))
+    reg_jogada(jg, lin1, col1, lin2, col2);
+
+  /* mostra o resultado */
+  resultado(jg);
+fim.

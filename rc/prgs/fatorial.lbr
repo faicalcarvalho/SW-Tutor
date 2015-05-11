@@ -1,0 +1,20 @@
+/* Calcula o fatorial de um número */
+programa fatorial;
+
+/* fatorial - retorna o valor n!
+   (n * n-1 * n-2 ... * 1) */
+função fatorial(n: inteiro): inteiro;
+início
+  se (n <= 0)
+    retorne 1
+  senão
+    retorne n * fatorial(n - 1);
+fim;
+
+var
+  n: inteiro;
+início
+  leia(n);
+  escreva("fatorial(", n, ") = ", fatorial(n));
+fim.
+

@@ -1,0 +1,375 @@
+/* Fractais obtidas através da MRCM (Multiple
+   Reduction Copy Machine), conforme apresentado
+   no livro "Chaos and Fractals - New Frontiers
+   of Science", de Peitgen, Jürgens e Saupe */
+programa fractais_mrcm;
+inclui "gra*";
+inclui "rgra.lbr";
+inclui "qualquer_cor.lbr";
+
+const
+  NTRANSF = 5;
+  DX = 300; DY = 300;
+
+tipo
+  figura = registro
+    p1, p2, p3, p4: ponto; // um quadrado
+  fim;
+
+  transformação = registro
+    a, b, c, d, e, f: real;
+  fim;
+
+  mrcm = registro
+    n: inteiro; // número de transformações
+    t: arranjo [NTRANSF] de transformação;
+  fim;
+
+/* pxy - obtém as coordenadas do ponto */
+procedimento pxy(p: ponto; var x, y: inteiro);
+início
+  x := arredonde(p.x);
+  y := arredonde(p.y);
+fim;
+
+/* dsn_fig - desenha uma figura */
+procedimento dsn_fig(jan: janela; fig: figura);
+var
+  x1, y1, x, y: inteiro;
+início
+  alt_cor_caneta(jan, qualquer_cor());
+  pxy(fig.p1, x1, y1);
+  alt_pos_caneta(jan, x1, y1);
+  pxy(fig.p2, x, y);
+  dsn_lin(tela, x, y);
+  pxy(fig.p3, x, y);
+  dsn_lin(tela, x, y);
+  pxy(fig.p4, x, y);
+  dsn_lin(tela, x, y);
+  dsn_lin(tela, x1, y1);
+fim;
+
+/* trans_pt - aplica a transformação corrente ao ponto p */
+função trans_pt(var t: transformação; p: ponto): ponto;
+var
+  result: ponto;
+início
+  result.x := (t.a * p.x) + (t.b * p.y) + t.e; // x = ax + by + e
+  result.y := (t.c * p.x) + (t.d * p.y) + t.f; // y = cx + dy + f
+  retorne result;
+fim;
+
+/* trans_fig - aplica a transformação t à figura */
+função trans_fig(var t: transformação; var fig: figura): figura;
+var
+  result: figura;
+início
+  /* aplica t aos pontos da figura */
+  result.p1 := trans_pt(t, fig.p1);
+  result.p2 := trans_pt(t, fig.p2);
+  result.p3 := trans_pt(t, fig.p3);
+  result.p4 := trans_pt(t, fig.p4);
+  retorne result;
+fim;
+
+/* reduz - aplica na figura as transformações sucessivas */
+procedimento reduz(var m: mrcm; fig: figura; n: inteiro);
+var
+  i: inteiro;
+  faux: figura;
+início
+  para (i := 0; i < m.n; i++)
+  início
+    faux := trans_fig(m.t[i], fig);
+    se (n = 0)
+      dsn_fig(tela, faux)
+    senão
+      reduz(m, faux, n - 1);
+  fim;
+fim;
+
+procedimento ini_figura(var fig: figura);
+início
+  fig.p1 := pto(0, 0);
+  fig.p2 := pto(DX, 0);
+  fig.p3 := pto(DX, DY);
+  fig.p4 := pto(0, DY);
+fim;
+
+procedimento ini_mrcm_1(var m: mrcm);
+início
+  m.n := 3;
+  m.t[0].a := 0.5;
+  m.t[0].b := 0.0;
+  m.t[0].c := 0.0;
+  m.t[0].d := 0.5;
+  m.t[0].e := 0.0 * DX;
+  m.t[0].f := 0.0 * DX;
+
+  m.t[1].a := 0.5;
+  m.t[1].b := 0.0;
+  m.t[1].c := 0.0;
+  m.t[1].d := 0.5;
+  m.t[1].e := 0.5 * DX;
+  m.t[1].f := 0.0 * DX;
+
+  m.t[2].a := 0.5;
+  m.t[2].b := 0.0;
+  m.t[2].c := 0.0;
+  m.t[2].d := 0.5;
+  m.t[2].e := 0.0 * DX;
+  m.t[2].f := 0.5 * DX;
+fim;
+
+procedimento ini_mrcm_2(var m: mrcm);
+início
+  m.n := 3;
+  m.t[0].a := 0.0;
+  m.t[0].b := -0.5;
+  m.t[0].c := 0.5;
+  m.t[0].d := 0.0;
+  m.t[0].e := 0.5 * DX;
+  m.t[0].f := 0.0 * DX;
+
+  m.t[1].a := 0.0;
+  m.t[1].b := 0.5;
+  m.t[1].c := -0.5;
+  m.t[1].d := 0.0;
+  m.t[1].e := 0.5 * DX;
+  m.t[1].f := 0.5 * DX;
+
+  m.t[2].a := 0.5;
+  m.t[2].b := 0.0;
+  m.t[2].c := 0.0;
+  m.t[2].d := 0.5;
+  m.t[2].e := 0.25 * DX;
+  m.t[2].f := 0.5 * DX;
+fim;
+
+procedimento ini_mrcm_3(var m: mrcm);
+início
+  m.n := 3;
+  m.t[0].a := 0.0;
+  m.t[0].b := 0.577;
+  m.t[0].c := -0.577;
+  m.t[0].d := 0.0;
+  m.t[0].e := 0.0951 * DX;
+  m.t[0].f := 0.5893 * DX;
+
+  m.t[1].a := 0.0;
+  m.t[1].b := 0.577;
+  m.t[1].c := -0.577;
+  m.t[1].d := 0.0;
+  m.t[1].e := 0.4413 * DX;
+  m.t[1].f := 0.7893 * DX;
+
+  m.t[2].a := 0.0;
+  m.t[2].b := 0.577;
+  m.t[2].c := -0.577;
+  m.t[2].d := 0.0;
+  m.t[2].e := 0.0952 * DX;
+  m.t[2].f := 0.9893 * DX;
+fim;
+
+procedimento ini_mrcm_4(var m: mrcm);
+início
+  m.n := 3;
+  m.t[0].a := 0.333;
+  m.t[0].b := 0.0;
+  m.t[0].c := 0.0;
+  m.t[0].d := 0.333;
+  m.t[0].e := 0.333 * DX;
+  m.t[0].f := 0.666 * DX;
+
+  m.t[1].a := 0.0;
+  m.t[1].b := 0.333;
+  m.t[1].c := 1.0;
+  m.t[1].d := 0.0;
+  m.t[1].e := 0.666 * DX;
+  m.t[1].f := 0.0 * DX;
+
+  m.t[2].a := 0.0;
+  m.t[2].b := -0.333;
+  m.t[2].c := 1.0;
+  m.t[2].d := 0.0;
+  m.t[2].e := 0.333 * DX;
+  m.t[2].f := 0.0 * DX;
+fim;
+
+procedimento ini_mrcm_5(var m: mrcm);
+início
+  m.n := 3;
+  m.t[0].a := 0.387;
+  m.t[0].b := 0.430;
+  m.t[0].c := 0.430;
+  m.t[0].d := -0.387;
+  m.t[0].e := 0.256 * DX;
+  m.t[0].f := 0.522 * DX;
+
+  m.t[1].a := 0.441;
+  m.t[1].b := -0.091;
+  m.t[1].c := -0.009;
+  m.t[1].d := -0.322;
+  m.t[1].e := 0.4219 * DX;
+  m.t[1].f := 0.5059 * DX;
+
+  m.t[2].a := -0.4468;
+  m.t[2].b := 0.02;
+  m.t[2].c := -0.113;
+  m.t[2].d := 0.015;
+  m.t[2].e := 0.4 * DX;
+  m.t[2].f := 0.4 * DX;
+fim;
+
+procedimento ini_mrcm_6(var m: mrcm);
+início
+  m.n := 4;
+  m.t[0].a := 0.255;
+  m.t[0].b := 0.0;
+  m.t[0].c := 0.0;
+  m.t[0].d := 0.255;
+  m.t[0].e := 0.3726 * DX;
+  m.t[0].f := 0.6714 * DX;
+
+  m.t[1].a := 0.255;
+  m.t[1].b := 0.0;
+  m.t[1].c := 0.0;
+  m.t[1].d := 0.255;
+  m.t[1].e := 0.1146 * DX;
+  m.t[1].f := 0.2232 * DX;
+
+  m.t[2].a := 0.255;
+  m.t[2].b := 0.0;
+  m.t[2].c := 0.0;
+  m.t[2].d := 0.255;
+  m.t[2].e := 0.6306 * DX;
+  m.t[2].f := 0.2232 * DX;
+
+  m.t[3].a := 0.370;
+  m.t[3].b := -0.642;
+  m.t[3].c := 0.642;
+  m.t[3].d := 0.370;
+  m.t[3].e := 0.6356 * DX;
+  m.t[3].f := -0.0061 * DX;
+fim;
+
+procedimento ini_mrcm_7(var m: mrcm);
+início
+  m.n := 5;
+  m.t[0].a := 0.382;
+  m.t[0].b := 0.0;
+  m.t[0].c := 0.0;
+  m.t[0].d := 0.382;
+  m.t[0].e := 0.3072 * DX;
+  m.t[0].f := 0.6190 * DX;
+
+  m.t[1].a := 0.382;
+  m.t[1].b := 0.0;
+  m.t[1].c := 0.0;
+  m.t[1].d := 0.382;
+  m.t[1].e := 0.6033 * DX;
+  m.t[1].f := 0.4044 * DX;
+
+  m.t[2].a := 0.382;
+  m.t[2].b := 0.0;
+  m.t[2].c := 0.0;
+  m.t[2].d := 0.382;
+  m.t[2].e := 0.0139 * DX;
+  m.t[2].f := 0.4044 * DX;
+
+  m.t[3].a := 0.382;
+  m.t[3].b := 0.0;
+  m.t[3].c := 0.0;
+  m.t[3].d := 0.382;
+  m.t[3].e := 0.1253 * DX;
+  m.t[3].f := 0.0595 * DX;
+
+  m.t[4].a := 0.382;
+  m.t[4].b := 0.0;
+  m.t[4].c := 0.0;
+  m.t[4].d := 0.382;
+  m.t[4].e := 0.4920 * DX;
+  m.t[4].f := 0.0595 * DX;
+fim;
+
+procedimento ini_mrcm_8(var m: mrcm);
+início
+  m.n := 5;
+  m.t[0].a := 0.195;
+  m.t[0].b := -0.488;
+  m.t[0].c := 0.344;
+  m.t[0].d := 0.443;
+  m.t[0].e := 0.4431 * DX;
+  m.t[0].f := 0.2452 * DX;
+
+  m.t[1].a := 0.462;
+  m.t[1].b := 0.414;
+  m.t[1].c := -0.252;
+  m.t[1].d := 0.361;
+  m.t[1].e := 0.2511 * DX;
+  m.t[1].f := 0.5692 * DX;
+
+  m.t[2].a := -0.058;
+  m.t[2].b := -0.070;
+  m.t[2].c := 0.453;
+  m.t[2].d := -0.111;
+  m.t[2].e := 0.5976 * DX;
+  m.t[2].f := 0.0969 * DX;
+
+  m.t[3].a := -0.035;
+  m.t[3].b := 0.070;
+  m.t[3].c := -0.469;
+  m.t[3].d := -0.022;
+  m.t[3].e := 0.4884 * DX;
+  m.t[3].f := 0.5069 * DX;
+
+  m.t[4].a := -0.637;
+  m.t[4].b := 0.0;
+  m.t[4].c := 0.0;
+  m.t[4].d := 0.501;
+  m.t[4].e := 0.8562 * DX;
+  m.t[4].f := 0.2513 * DX;
+fim;
+
+procedimento ini_mrcm_9(var m: mrcm);
+início
+  m.n := 4;
+  m.t[0].a := 0.849;
+  m.t[0].b := 0.037;
+  m.t[0].c := -0.037;
+  m.t[0].d := 0.849;
+  m.t[0].e := 0.075 * DX;
+  m.t[0].f := 0.1830 * DX;
+
+  m.t[1].a := 0.197;
+  m.t[1].b := -0.226;
+  m.t[1].c := 0.226;
+  m.t[1].d := 0.197;
+  m.t[1].e := 0.4 * DX;
+  m.t[1].f := 0.0490 * DX;
+
+  m.t[2].a := -0.150;
+  m.t[2].b := 0.283;
+  m.t[2].c := 0.260;
+  m.t[2].d := 0.237;
+  m.t[2].e := 0.575 * DX;
+  m.t[2].f := -0.0840 * DX;
+
+  m.t[3].a := 0.0;
+  m.t[3].b := 0.0;
+  m.t[3].c := 0.0;
+  m.t[3].d := 0.160;
+  m.t[3].e := 0.5 * DX;
+  m.t[3].f := 0.0 * DX;
+fim;
+
+
+var
+  fig: figura;
+  m: mrcm;
+
+início
+  ini_figura(fig);
+  ini_mrcm_3(m);
+  reduz(m, fig, 8);
+fim.

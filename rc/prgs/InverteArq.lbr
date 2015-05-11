@@ -1,0 +1,39 @@
+/* Gera arquivo com os caracteres invertidos */
+programa InverteArq;
+inclui "arq*";
+
+/* txtInvertido - retorna texto com os caracteres 
+   na ordem inversa à de txt */
+função txtInvertido(txt: texto): texto;
+var
+  i: inteiro;
+  result: texto;
+início
+  result := "";
+  para (i := tamanho(txt) - 1; i >= 0; i--)
+    result := result + caractereEm(txt, i);
+  retorne result;
+fim;
+
+const
+  ARQ1 = "regular.txt";
+  ARQ2 = "invertido.txt";
+  T = "ANOTARAM A DATA DA MARATONA";
+
+var
+  t: texto;
+
+início
+  /* se não existe, cria o arquivo 
+     colocando nele o texto T */
+  se (não existeArq(ARQ1))
+    txtParaArq(ARQ1, T);
+
+  /* lê o arquivo ARQ1, inverte o texto 
+     e grava em ARQ2 */
+  t := arqParaTxt(ARQ1);
+  escrevaLn(t);
+  t := txtInvertido(t);
+  escrevaLn(t);
+  txtParaArq(ARQ2, t);
+fim.

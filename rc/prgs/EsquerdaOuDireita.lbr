@@ -1,0 +1,26 @@
+/* Aguarda um clique e, se o ponto estiver à esquerda
+   de uma linha divisória vertical, escreve a palavra
+   "esquerda", senão escreve a palavra "direita" */
+programa EsquerdaOuDireita;
+inclui "gra*";
+inclui "evnt*";
+const
+  XDIV = 150;
+  YDIV = 500;
+var
+  x, y: inteiro;
+início
+  /* traça a linha divisória vertical */
+  gra_mudeXY(XDIV, 0);
+  gra_desenheLinha(XDIV, YDIV);
+
+  /* aguarda o clique */
+  evnt_esperePor(EV_CLIQUE);
+  evnt_mouseXY(x, y);
+
+  /* escreve conforme a posição do clique */
+  se (x < XDIV)
+    gra_desenheTexto(x, y, "esquerda")
+  senão 
+    gra_desenheTexto(x, y, "direita");
+fim.

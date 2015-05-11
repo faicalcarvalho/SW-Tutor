@@ -1,0 +1,282 @@
+programa serpente;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  /* movimentos */
+  NORTE = 1;
+  SUL   = 2;
+  LESTE = 3;
+  OESTE = 4;
+
+  /* tamanho de cada anel da serpente */
+  TAM = 8;
+
+  /* deslocamento (depende de TAM) */
+  DXY = TAM + 1;
+
+  /* cores */
+  COR_ANEL = COR_AZUL;
+
+tipo
+  /* posição */
+  posição = registro
+    x, y: inteiro;
+  fim;
+
+  /* anel */
+  ptr_anel = ponteiro para anel;
+  anel = registro
+    pos: posição;
+    prox: ptr_anel; // próximo anel
+  fim;
+
+  /* serpente */
+  serpente = registro
+    n: inteiro;         // número de anéis
+    pri, ult: ptr_anel; // primeiro e último anel
+    comida: posição;    // localização da comida
+    dir: inteiro;       // direção corrente: NORTE, SUL, ...
+    pos_novo: posição;  // posição do próximo novo anel
+  fim;
+
+/* dsn_anel - desenha um anel da serpente */
+procedimento dsn_anel(pos: posição);
+início
+  alt_cor_caneta(tela, COR_PRETO);
+  alt_cor_pincel(tela, COR_ANEL);
+  dsn_ret(tela, pos.x, pos.y, pos.x + TAM, pos.y + TAM);
+fim;
+
+/* apg_anel - apaga um anel da serpente */
+procedimento apg_anel(pos: posição);
+início
+  alt_cor_caneta(tela, cor_do_fundo());
+  alt_cor_pincel(tela, cor_do_fundo());
+  dsn_ret(tela, pos.x, pos.y, pos.x + TAM, pos.y + TAM);
+fim;
+
+/* próxima_posição - retorna próxima posição, 
+   conforme valor do campo dir */
+função próxima_posição(serp: serpente): posição;
+var
+  pos: posição;
+início
+  pos := serp.pri^.pos;
+  escolha (serp.dir)
+    caso NORTE: pos.y := pos.y - DXY;
+    caso SUL:   pos.y := pos.y + DXY;
+    caso LESTE: pos.x := pos.x + DXY;
+    caso OESTE: pos.x := pos.x - DXY;
+  fim;
+  retorne pos;
+fim;
+
+/* alt_anel - altera para pos a posição do anel; 
+   retorna posição em que estava */
+função alt_anel(anel: ptr_anel; pos: posição): posição;
+var
+  p: posição;
+início
+  p := anel^.pos;
+  anel^.pos := pos;
+  retorne p;
+fim;
+
+/* mov_serpente - altera a posição dos anéis 
+   da serpente */
+procedimento mov_serpente(var serp: serpente);
+var
+  pos: posição;
+  anel: ptr_anel;
+início
+  /* desenhe o anel na próxima posição da serpente */
+  pos := próxima_posição(serp);
+  dsn_anel(pos);
+
+  /* altera a posição de cada anel */
+  anel := serp.pri;
+  enquanto (anel <> nulo)
+  início
+    /* altera a posição do anel; guarde a posição 
+       a ser aplicada ao seguinte */
+    pos := alt_anel(anel, pos);
+
+    /* próximo anel */
+    anel := anel^.prox;
+  fim;
+
+  /* apaga o último anel */
+  apg_anel(pos);
+
+  /* registra a posição para um (futuro) novo anel,
+     o qual deverá ocupar a posição antes ocupada 
+     pelo último anel */
+  serp.pos_novo := pos;
+fim;
+
+/* mesma_posição - verifica se as posições são iguais */
+função mesma_posição(var pos1, pos2: posição): lógico;
+início
+  se (pos1.x <> pos2.x) retorne não;
+  se (pos1.y <> pos2.y) retorne não;
+  retorne sim;
+fim;
+
+/* houve_erro - verifica se o primeiro anel colidiu com
+   algum outro */
+função houve_erro(var serp: serpente): lógico;
+var
+  anel: ptr_anel;
+  pos: posição;
+início
+  /* guarde a posição do primeiro anel */
+  pos := serp.pri^.pos;
+
+  /* pesquise nos demais anéis */
+  anel := serp.pri^.prox;
+  enquanto (anel <> nulo)
+  início
+    se (mesma_posição(pos, anel^.pos))
+      retorne sim; // colisão
+    anel := anel^.prox;
+  fim;
+  retorne não;
+fim;
+
+/* tem_evento - aguarda próximo evento (tecla de direção),
+   registrando no campo dir; tecla ESC termina o programa */
+função tem_evento(var serp: serpente): lógico;
+var
+  ok: lógico;
+início
+  espere_por(EV_TEMPO + EV_TECLADO);
+  enquanto (último_evento() = EV_TECLADO)
+  início
+    escolha (última_tecla())
+      caso TECLA_CIMA:     serp.dir := NORTE;
+      caso TECLA_BAIXO:    serp.dir := SUL;
+      caso TECLA_DIREITA:  serp.dir := LESTE;
+      caso TECLA_ESQUERDA: serp.dir := OESTE;
+      caso TECLA_ESC:
+        retorne não;
+    fim;
+    espere_por(EV_TEMPO + EV_TECLADO);
+  fim;
+  retorne sim;
+fim;
+
+/* ins_anel - insere novo anel */
+procedimento ins_anel(var serp: serpente);
+var
+  anel: ptr_anel;
+início
+  aloque(anel);
+  anel^.pos := serp.pos_novo;
+  anel^.prox := nulo;
+  se (serp.n = 0)
+  início
+    serp.ult := anel;
+    serp.pri := anel;
+  fim
+  senão
+  início
+    serp.ult^.prox := anel;
+    serp.ult := anel;
+  fim;
+  serp.n++;
+  dsn_anel(serp.pos_novo);
+fim;
+
+/* posição_livre - verifica se pos está livre */
+função posição_livre(var serp: serpente; pos: posição): lógico;
+var
+  anel: ptr_anel;
+início
+  anel := serp.pri;
+  enquanto (anel <> nulo)
+  início
+    se (mesma_posição(pos, anel^.pos))
+      retorne não; // anel está ocupando pos
+    anel := anel^.prox;
+  fim;
+  retorne sim;
+fim;
+
+/* ini_serpente - prepara para começar o jogo */
+procedimento ini_serpente(var serp: serpente);
+const
+  N = 5;
+var
+  i: inteiro;
+início
+  /* valores iniciais */
+  serp.dir := LESTE;
+  serp.n := 0;
+  serp.pos_novo.x := DXY * N;
+  serp.pos_novo.y := 0;
+
+  /* cria os N anéis */
+  para (i := 0; i < N; i++)
+  início
+    ins_anel(serp);
+    serp.pos_novo.x := serp.pos_novo.x - DXY;
+  fim;
+fim;
+
+/* encontrou_comida - verifica se o primeiro anel 
+   coincide com a posição da comida */
+função encontrou_comida(var serp: serpente): lógico;
+início
+  retorne mesma_posição(serp.comida, serp.pri^.pos);
+fim;
+
+/* clq_comida - determina posição para comida */
+procedimento clq_comida(var serp: serpente);
+início
+  repita
+    serp.comida.x := random(30) * DXY;
+    serp.comida.y := random(30) * DXY;
+  até (posição_livre(serp, serp.comida));
+fim;
+
+/* mais_comida - registra localização de comida */
+procedimento mais_comida(var serp: serpente);
+início
+  clq_comida(serp);
+  alt_cor_caneta(tela, COR_PRETO);
+  alt_cor_pincel(tela, COR_VERMELHO);
+  dsn_ret(tela, serp.comida.x, serp.comida.y, 
+      serp.comida.x + TAM, serp.comida.y + TAM);
+fim;
+
+var
+  serp: serpente;
+
+início
+  /* ajusta a velocidade */
+  alt_ev_tempo(100);
+
+  /* prepara a serpente */
+  ini_serpente(serp);
+  mais_comida(serp);
+
+  /* joga */
+  enquanto (tem_evento(serp))
+  início
+    /* movimenta a serpente */
+    mov_serpente(serp);
+
+    /* verifica se houve erro */
+    se (houve_erro(serp))
+      quebre;
+
+    /* verifica se encontrou comida */
+    se (encontrou_comida(serp))
+    início
+      ins_anel(serp);
+      mais_comida(serp);
+    fim;
+  fim;
+fim.

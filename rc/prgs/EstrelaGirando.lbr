@@ -1,0 +1,76 @@
+/* Exibe uma "estrela" girando */
+programa EstrelaGirando;
+inclui "evnt*";
+inclui "ggra.pac";
+inclui "roda.pac";
+
+const
+  /* aspecto da roda */
+  NPTOS = 10;  RAIO = 200;  CTROX = RAIO;  CTROY = RAIO;
+
+  /* origem na tela */
+  XORIG = 0;  YORIG = 2 * RAIO;
+
+  /* giro (graus) */
+  GIRO = 2.0;
+
+/* temEvento - espera pelo teclado ou por tempo;
+   retorna 'não' se for alguma tecla */
+função temEvento(): lógico;
+início
+  esperePor(EV_TECLADO + EV_TEMPO);
+  se (últimoEvento() = EV_TECLADO)
+    retorne não;
+  retorne sim;
+fim;
+
+/* conPtos - liga todos os pontos da roda ao ponto p */
+procedimento conPtos(jan: Janela; roda: Roda; p: Ponto);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NPTOS; inc(i))
+    gDsnLin(jan, p, ptoRoda(roda, i));
+fim;
+
+/* exbRodaGirando - exibe a roda girando */
+procedimento exbRodaGirando(jan: Janela; roda: Roda); 
+var
+  i: inteiro;
+início
+  /* faz a roda girar */
+  gire(roda, GIRO);
+
+  /* limpa a janela */
+  dsnRet(jan, -1, -1, 2 * RAIO + 1, 2 * RAIO + 1);
+
+  /* conecta cada ponto a todos os demais */
+  para (i := 0; i < NPTOS; inc(i))
+    conPtos(jan, roda, ptoRoda(roda, i));
+
+  /* exibe a janela na tela */
+  copJanela(Tela, 0, 0, jan);
+fim;
+
+var
+  roda: Roda;
+  jan: Janela;
+
+início
+  /* ajusta o tempo */
+  altEvTempo(100);
+
+  /* ajusta a origem */
+  gAltOrig(XORIG, YORIG);
+
+  /* cria a roda */
+  roda := novaRoda(pto(CTROX, CTROY), RAIO, NPTOS);
+
+  /* cria a janela */
+  jan := novaJanela();
+  altTamJanela(jan, 2*RAIO, 2*RAIO);
+
+  /* projeta a roda girando */
+  enquanto (temEvento())
+    exbRodaGirando(jan, roda);
+fim.

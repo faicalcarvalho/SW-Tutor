@@ -1,0 +1,11 @@
+/* Preenche um arranjo simples */
+programa arranjo_simples;
+const
+  N = 10;
+var
+  a: arranjo [N] de inteiro;
+  i: inteiro;
+início
+  para (i := 0; i < N; i++)
+    a[i] := i;
+fim.

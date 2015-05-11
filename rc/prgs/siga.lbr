@@ -1,0 +1,12 @@
+/* Siga - Exibe sinal de trânsito "siga em frente" */
+programa siga;
+inclui "gra*";
+início
+  alt_cor_pincel(tela, COR_VERMELHO);
+  dsn_cir(tela, 50, 50, 300, 300);
+  alt_cor_pincel(tela, COR_BRANCO);
+  dsn_cir(tela, 70, 70, 280, 280);
+  alt_cor_pincel(tela, COR_PRETO);
+  dsn_ret(tela, 160, 130, 190, 250);
+  dsn_tri(tela, 145, 100, 205, 150);
+fim.

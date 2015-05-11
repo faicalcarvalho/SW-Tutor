@@ -1,0 +1,17 @@
+/* Desenha um quadrado no clique do mouse */
+programa ClicouAqui;
+inclui "gra*";
+inclui "evnt*";
+var
+  x, y: inteiro;
+início
+  /* aguarda */
+  esperePor(EV_CLIQUE);
+
+  /* obtém as coordenadas do clique */
+  mouseXY(x, y);
+
+  /* mostra as coordenadas e desenha o quadrado */
+  escrevaLn("Clicou: ", x, ", ", y);
+  dsnRet(Tela, x - 3, y - 3, x + 3, y + 3);
+fim.

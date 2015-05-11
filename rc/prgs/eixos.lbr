@@ -1,0 +1,37 @@
+/*
+  Decarva SW-Tutor Beta 0.96
+  Copyright (c) 1999 Decarva Software Ltda
+  Ola.pac
+*/
+programa Olá;
+inclui "rgra.pac";
+
+const
+  XORIG = 200; YORIG = 200;
+
+procedimento figura(rg: rgra);
+início
+  rgra_dsn_lin(rg, pto(0, 0), pto(0, 1));
+  rgra_dsn_lin(rg, pto(0, 1), pto(0.3, 1));
+  rgra_dsn_lin(rg, pto(0.3, 1), pto(0.3, 0.3));
+  rgra_dsn_lin(rg, pto(0.3, 0.3), pto(1, 0.3));
+  rgra_dsn_lin(rg, pto(1, 0.3), pto(1, 0));
+  rgra_dsn_lin(rg, pto(1, 0), pto(0, 0));
+fim;
+
+procedimento eixo(rg: rgra; 
+                  x1, x2, y1, y2, 
+                  dx, dy: real);
+início
+  rgra_dsn_lin(rg, pto(x1, 0), pto(x2, 0));
+  rgra_dsn_lin(rg, pto(0, y1), pto(0, y2));
+  
+fim;
+
+var
+  rg: rgra;
+
+início
+  rg := rgra_novo(tela, XORIG, YORIG, 100.0, 100.0);
+  eixo(rg, -0.25, 1, -0.25, 1, 1, 1);
+fim.

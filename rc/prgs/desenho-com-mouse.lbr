@@ -1,0 +1,27 @@
+/* Desenho livre com o mouse */
+programa desenho_com_mouse;
+inclui "gra*";
+inclui "evnt*";
+
+início
+  /* aguarda o EV_MOUSE_BAIXO e posiciona a
+     origem da primeira linha */
+  espere_por(EV_MOUSE_BAIXO);
+  alt_pos_caneta(tela, mouse_x(), mouse_y());
+  
+  /* altera a cor da caneta, de acordo com 
+     o botão do mouse */
+  se (botão_mouse(BM_DIREITO))
+    alt_cor_caneta(tela, COR_VERMELHO)
+  senão
+    alt_cor_caneta(tela, COR_AZUL);
+
+  repita
+    /* trata o movimento com o botão apertado */
+    espere_por(EV_MOUSE_CIMA + EV_MOV_MOUSE);
+
+    /* traça a (pequena) linha entre a última 
+       posição e a posição corrente */
+    dsn_lin(tela, mouse_x(), mouse_y());
+  até (último_evento() = EV_MOUSE_CIMA);
+fim.

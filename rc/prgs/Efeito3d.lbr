@@ -1,0 +1,80 @@
+inclui "gra*";
+
+tipo
+  Cores = arranjo [0..2] de inteiro;
+
+função novasCores(): Cores;
+início
+fim;
+
+procedimento efeito1();
+início
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(24, 24, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(20, 20, "Efeito 3D");
+fim;
+
+
+início
+  gra_mudeNomeDaFonte("Arial");
+  gra_mudeTamanhoDaFonte(50);
+
+  efeito1();
+
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(24, 24, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(20, 20, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(22, 22, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(24, 84, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(20, 80, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(22, 82, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(24, 144, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(20, 140, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(22, 142, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(24, 204, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(20, 200, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(22, 202, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(24, 264, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(20, 260, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(22, 262, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(24, 324, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(20, 320, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(22, 322, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(24, 384, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(22, 382, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(20, 380, "Efeito 3D");
+
+  gra_mudeCorDaFonte(COR_CINZA);
+  gra_desenheTexto(22, 442, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_BRANCA);
+  gra_desenheTexto(24, 444, "Efeito 3D");
+  gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(20, 440, "Efeito 3D");
+fim.

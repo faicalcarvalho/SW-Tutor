@@ -1,0 +1,15 @@
+/* módulo temclique */
+inclui "evnt*";
+
+/* temClique - obtém próximo clique; retorna sim quando
+   o usuário clica, preenchendo (x, y) com o ponto onde
+   houve o clique; se o usuário apertar alguma tecla do
+   teclado, retorna não */
+função temClique(var x, y: inteiro): lógico;
+início
+  evnt_esperePor(EV_CLIQUE + EV_TECLADO);
+  se (evnt_ultimoEvento() = EV_TECLADO)
+    retorne não;
+  evnt_mouseXY(x, y);
+  retorne sim;
+fim;

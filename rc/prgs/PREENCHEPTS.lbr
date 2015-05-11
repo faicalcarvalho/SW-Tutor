@@ -1,0 +1,54 @@
+programa P;
+inclui "gra*";
+inclui "mat*";
+inclui "evnt*";
+
+const
+  NUM_PTS = 25;
+
+tipo
+  Pts = arranjo [0..NUM_PTS - 1] de
+      registro
+        x, y: inteiro;
+      fim;
+
+procedimento preenchePts(var pts: Pts; cx, cy: inteiro);
+const
+  DXY = 50;
+  DX2 = 25;
+var
+  i: inteiro;
+  x, y: inteiro;
+início
+  para (i := 0; i < NUM_PTS; inc(i))
+  início
+    pts[i].x := cx + mat_random(DXY) - DX2;
+    pts[i].y := cy + mat_random(DXY) - DX2;
+  fim;
+fim;
+
+procedimento dsnPts(var pts: Pts; cor: inteiro);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NUM_PTS; inc(i))
+    gra_mudePixel(pts[i].x, pts[i].y, cor);
+fim;
+
+função temEvento(var x, y: inteiro): lógico;
+início
+  evnt_esperePor(EV_MOVIMENTO_MOUSE + EV_TECLADO);
+  evnt_mouseXY(x, y);
+  retorne evnt_últimoEvento() <> EV_TECLADO;
+fim;
+
+var
+  x, y: inteiro;
+  pts: Pts;
+início
+  enquanto (temEvento(x, y))
+  início
+    preenchePts(pts, x, y);
+    dsnPts(pts, COR_VERMELHO);
+  fim;
+fim.

@@ -1,0 +1,24 @@
+/* Desenha uma oval no clique do mouse */
+programa clicou_aqui_oval;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  RX = 35;
+  RY = 15;
+
+var
+  x, y: inteiro;
+
+início
+  /* aguarda */
+  espere_por(EV_CLIQUE);
+
+  /* obtém as coordenadas do clique */
+  mouse_xy(x, y);
+
+  /* mostra as coordenadas e desenha o círculo */
+  escreva("Clicou: ", x, ", ", y);
+  alt_cor_pincel(tela, COR_VERMELHO);
+  dsn_cir(tela, x - RX, y - RY, 2 * RX, 2 * RY);
+fim.

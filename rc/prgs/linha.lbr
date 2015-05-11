@@ -1,0 +1,7 @@
+/* Exibe uma linha reta */
+programa linha;
+inclui "gra*";
+início
+  alt_pos_caneta(tela, 50, 50);
+  dsn_lin(tela, 200, 150);
+fim.

@@ -1,0 +1,7 @@
+programa GeraProgOlá;
+início
+  escrevaLn("programa Olá!");
+  escrevaLn("início");
+  escrevaLn("  escrevaLn(""Olá!"");");
+  escrevaLn("fim.");
+fim.

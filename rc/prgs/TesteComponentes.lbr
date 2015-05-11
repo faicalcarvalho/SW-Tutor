@@ -1,0 +1,27 @@
+programa TesteComponentes;
+inclui "gra*";
+
+var
+  jan: Janela;
+  cxg: CxGrupo;
+  pnl: Painel;
+  i: inteiro;
+início
+  jan := novaJanela(500, 150, 500, 350, "novaJanela");
+  novoBotão(jan, 20, 20, 100, 25, "novoBotão");
+  novoEdtLin(jan, 150, 20, 100, 25, "novoEdtLin");
+  novoRótulo(jan, 270, 20, 100, 30, "novoRótulo");
+  novoEdtLinhas(jan, 20, 70, 105, 125, "novoEdtLinhas");
+  novaCxMarca(jan, 150, 60, 100, 30, "novaCxMarca");
+  novaCxEscolha(jan, 270, 45, 120, 25, "novaCxEscolha(1)");
+  novaCxEscolha(jan, 270, 65, 120, 25, "novaCxEscolha(2)");
+  cxg := novaCxGrupo(jan, 150, 100, 280, 95, "novaCxGrupo");
+  novaCxEscolha(cxg, 15, 15, 120, 25, "novaCxEscolha(1)");
+  novaCxEscolha(cxg, 15, 35, 120, 25, "novaCxEscolha(2)");
+  pnl := novoPainel(jan, 20, 210, 150, 85, "novoPainel");
+  novaImagem(jan, 320, 210, 150, 100, "angra1");
+  dsnTxt(jan, 320, 310, "novaImagem");
+  novaCxCmb(jan, 180, 210, 120, 25, "novaCxCmb");
+
+  escrevaLn("Olá!");
+fim.

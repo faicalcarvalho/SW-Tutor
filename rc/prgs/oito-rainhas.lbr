@@ -1,0 +1,196 @@
+/* Soluções para o problema das 8 rainhas
+   colocadas num tabuleiro de xadrez */
+programa oito_rainhas;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  N = 8; // tabuleiro 8 x 8
+
+tipo
+  /* posição */
+  posição = registro
+    lin, col: inteiro;
+  fim;
+
+  /* tabuleiro */
+  tabuleiro = registro
+    tab: arranjo [N, N] de inteiro; // tabuleiro
+    pilha: arranjo [N] de posição;  // armazena as rainhas
+    topo: inteiro;                  // topo da pilha
+    finalizado: lógico;             // fim de todas as soluções
+    cnt: inteiro;                   // contador de soluções
+  fim;
+
+/* ini_tab - inicializa o tabuleiro */
+procedimento ini_tab(var tab: tabuleiro);
+var
+  lin, col: inteiro;
+início
+  para (lin := 0; lin < N; lin++)
+    para (col := 0; col < N; col++)
+      tab.tab[lin, col] := 0;
+  tab.topo := -1; // pilha vazia
+  tab.finalizado := não;
+  tab.cnt := 0;
+fim;
+
+/* dsn_tab - desenha o tabuleiro */
+procedimento dsn_tab(var tab: tabuleiro);
+const
+  TAM = 30;
+var
+  lin, col: inteiro;
+início
+  para (lin := 0; lin < N; lin++)
+    para (col := 0; col < N; col++)
+      se (tab.tab[lin, col] = 0)
+      início
+        alt_cor_pincel(tela, COR_BRANCO);
+        dsn_ret(tela, col*TAM, lin*TAM, TAM, TAM);
+      fim
+      senão
+      início
+        alt_cor_pincel(tela, COR_VERMELHO);
+        dsn_ret(tela, col*TAM, lin*TAM, TAM, TAM);
+      fim;
+  durma(20);
+fim;
+
+/* empilha - empilha uma rainha na posição p;
+   retorna a próxima posição, no início da linha seguinte */
+função empilha(var tab: tabuleiro; var p: posição): posição;
+var
+  result: posição;
+início
+  tab.topo++;
+  se (tab.topo >= N)
+    termine("empilha: Ultrapassada a capacidade da pilha");
+  tab.pilha[tab.topo] := p;
+  tab.tab[p.lin, p.col] := 1; // marca no tabuleiro
+  se (tab.topo + 1 = N)
+    tab.cnt++; // uma solução completa foi encontrada
+
+  /* próxima posição na próxima linha */
+  result.lin := p.lin + 1;
+  result.col := 0;
+
+  /* desenha o tabuleiro e retorna */
+  dsn_tab(tab);
+  retorne result;
+fim;
+
+/* desempilha - desempilha uma rainha do topo da pilha;
+   retorna a próxima posição, na coluna seguinte */
+função desempilha(var tab: tabuleiro): posição;
+var
+  result: posição;
+início
+  se (tab.topo < 0)
+    termine("desempilha: Pilha vazia");
+  result := tab.pilha[tab.topo];
+  tab.topo--;
+  tab.tab[result.lin, result.col] := 0; // desmarca no tabuleiro
+  se ((result.lin = 0) && (result.col = N - 1))
+    tab.finalizado := sim; // soluções esgotadas
+
+  /* próxima posição na próxima coluna */
+  result.col++;
+
+  /* desenha o tabuleiro e retorna */
+  dsn_tab(tab);
+  retorne result;
+fim;
+
+/* num_rainhas - número de rainhas no tabuleiro */
+função num_rainhas(var tab: tabuleiro): inteiro;
+início
+  retorne tab.topo + 1;
+fim;
+
+/* ameaça - verifica se a posição p ameaça alguma outra
+   rainha já presente no tabuleiro */
+função ameaça(var tab: tabuleiro; var p: posição): lógico;
+var
+  lin, col, diag: inteiro;
+início
+  /* descartar posição fora do tabuleiro */
+  se (p.col >= N)
+    retorne sim;
+
+  /* verifica as linhas anteriores */
+  diag := 1;
+  para (lin := p.lin - 1; lin >= 0; lin--)
+  início
+    se (tab.tab[lin, p.col] > 0) // na coluna
+      retorne sim;
+    col := p.col - diag;         // na diagonal esquerda
+    se ((col >= 0) && (tab.tab[lin, col] > 0))
+      retorne sim;
+    col := p.col + diag;         // na diagonal direita
+    se ((col < N) && (tab.tab[lin, col] > 0))
+      retorne sim;
+    diag++;
+  fim;
+  retorne não;
+fim;
+
+/* tem_mais_na_linha - tenta avançar de posição na linha */
+função tem_mais_na_linha(var tab: tabuleiro; var p: posição): lógico;
+início
+  p.col++;
+  retorne p.col < N;
+fim;
+
+/* rainhas - descobre uma configuração para N rainhas */
+procedimento rainhas(var tab: tabuleiro; var p: posição);
+início
+  repita
+    se (não ameaça(tab, p))
+      p := empilha(tab, p)
+    senão se (não tem_mais_na_linha(tab, p))
+      p := desempilha(tab);
+  até ((num_rainhas(tab) = N) || (tab.finalizado = sim));
+fim;
+
+/* impr_tab - imprime o tabuleiro em formato texto */
+procedimento impr_tab(var tab: tabuleiro);
+var
+  t: texto;
+  lin, col: inteiro;
+início
+  escreva("--------------- ", tab.cnt, "\n");
+  para (lin := 0; lin < N; lin++)
+  início
+    t := "";
+    para (col := 0; col < N; col++)
+      se (tab.tab[lin, col] = 1)
+        t := t + "1 "
+      senão
+        t := t + "0 ";
+    escreva(t, "\n");
+  fim;
+fim;
+
+var
+  tab: tabuleiro;
+  p: posição;
+
+início
+  /* prepara o tabuleiro */
+  ini_tab(tab);
+
+  /* primeira rainha */
+  p.lin := 0;
+  p.col := 0;
+
+  /* descobre todas as variações */
+  rainhas(tab, p);
+  enquanto (tab.finalizado = não)
+  início
+    impr_tab(tab);
+    p := desempilha(tab);
+    rainhas(tab, p);
+  fim;
+fim.
+

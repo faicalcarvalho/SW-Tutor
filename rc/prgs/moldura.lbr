@@ -1,0 +1,21 @@
+/* Exibe imagens numa pequena moldura */
+programa moldura;
+inclui "gra*";
+inclui "mat*";
+
+const
+  IMG = "Renoir-1";
+  X1 = 30; Y1 = 30;
+  LARG = 400; ALTU = 470;
+
+var
+  img: imagem;
+
+início
+  /* cria a moldura */
+  dsn_ret(tela, X1 - 3, Y1 - 3, LARG + 6, ALTU + 6);
+
+  /* carrega a imagem e exibe na moldura */
+  img := nova_imagem_crg(IMG);
+  cop_imagem_ret(tela, X1, Y1, LARG, ALTU, img);
+fim.

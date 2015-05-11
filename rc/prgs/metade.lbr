@@ -1,0 +1,15 @@
+/* Lê um número (x) e mostra a sua metade (x / 2) */
+programa metade;
+var
+  x, metade: real;
+início
+  /* obtém o número */
+  escreva("Entre com o número: ");
+  leia(x);
+
+  /* calcula a metade */
+  metade := x / 2.0;
+
+  /* mostra o resultado */
+  escreva("A metade de ", x, " é ", metade);
+fim.

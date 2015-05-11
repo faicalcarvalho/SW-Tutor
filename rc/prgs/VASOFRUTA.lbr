@@ -1,0 +1,33 @@
+/* Mostra quadro "Vaso e fruta" */
+programa EsticaQuadro;
+inclui "gra*";
+inclui "mat*";
+
+função quadroDeArquivo(): inteiro;
+var
+  q: inteiro;
+início
+  q := gra_quadroNovo();
+  gra_quadroLeiaDeArquivo(q, "vasoefruta.bmp");
+  retorne q;
+fim;
+
+var
+  q: inteiro;
+início
+  q := quadroDeArquivo();
+
+  /* reproduz algumas cópias "esticadas" */
+  gra_estiqueQuadro(q, 10, 10, 40, 40);
+  gra_estiqueQuadro(q, 50, 20, 90, 100);
+  gra_estiqueQuadro(q, 20, 110, 140, 150);
+  gra_estiqueQuadro(q, 100, 5, 190, 100);
+  gra_estiqueQuadro(q, 10, 60, 30, 80);
+
+  /* original */
+  gra_desenheTexto(10, 184, "Original:");
+  gra_copieQuadro(q, 10, 200);
+  
+  /* libera */
+  gra_quadroLibere(q);
+fim.

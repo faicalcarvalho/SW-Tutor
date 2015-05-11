@@ -1,0 +1,68 @@
+/* Exibe forma circular com os pontos interligados */
+programa Estrela;
+inclui "gra*";
+inclui "geom.pac";
+
+const
+  NPTOS = 23;
+  RAIO = 240;
+  XORIG = 20;
+  YORIG = 510;
+
+tipo
+  Estrela = registro
+    pts: arranjo [0..NPTOS - 1] de Ponto;
+    tela: Janela;
+  fim;
+
+/* glin - traça na estrela uma linha entre p1 e p2 */
+procedimento glin(var estrela: Estrela;
+                  p1, p2: Ponto);
+var
+  x, y: inteiro;
+início
+  ptoJanela(p1, XORIG, YORIG, x, y);
+  altXY(estrela.tela, x, y);
+  ptoJanela(p2, XORIG, YORIG, x, y);
+  dsnLin(estrela.tela, x, y);
+fim;
+
+/* ligEstrela - liga todos os pontos ao ponto p */
+procedimento ligEstrela(var estrela: Estrela; p: Ponto);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NPTOS; inc(i))
+    glin(estrela, p, estrela.pts[i]);
+fim;
+
+/* conEstrela - conecta todos os pontos entre si */
+procedimento conEstrela(var estrela: Estrela);
+var
+  i: inteiro;
+início
+  para (i := 0; i < NPTOS; inc(i))
+    ligEstrela(estrela, estrela.pts[i]);
+fim;
+
+/* iniEstrela - prepara os NPTOS pontos da estrela */
+procedimento iniEstrela(var estrela: Estrela);
+var
+  centro: Ponto;
+  graus: real;
+  i: inteiro;
+início
+  graus := 360.0 / NPTOS;
+  centro := pto(RAIO, RAIO);
+  estrela.tela := Tela;
+  para (i := 0; i < NPTOS; inc(i))
+    estrela.pts[i] := ptoCir(centro, RAIO, graus * i);
+fim;
+
+var
+  estrela: Estrela;
+
+início
+  iniEstrela(estrela);
+  conEstrela(estrela);
+fim.

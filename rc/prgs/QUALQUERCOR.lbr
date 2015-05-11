@@ -1,0 +1,11 @@
+/* módulo qualquercor */
+inclui "gra*";
+inclui "mat*";
+
+/* qualquerCor - retorna uma cor escolhida de forma aleatória */
+função qualquerCor(): inteiro;
+início
+  retorne gra_cor(mat_random(256),  /* vermelho */
+                  mat_random(256),  /* verde */
+                  mat_random(256)); /* azul */
+fim;

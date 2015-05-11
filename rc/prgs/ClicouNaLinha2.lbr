@@ -1,0 +1,31 @@
+/* Desenha um quadrado quando o clique do mouse
+   for sobre um ponto da linha */
+programa ClicouNaLinha;
+inclui "gra*";
+inclui "evnt*";
+const
+  XDIV = 1000;
+  YDIV = 100;
+  DX = 15;
+  DY = 5;
+var
+  x, y: inteiro;
+início
+  /* traça a linha */
+  altXY(Tela, 0, YDIV);
+  dsnLin(Tela, XDIV, YDIV);
+
+  /* aguarda e registra o clique */
+  esperePor(EV_CLIQUE);
+  mouseXY(x, y);
+
+  /* verifica se clicou na linha */
+  se (y = YDIV)
+  início
+    dsnRet(Tela, x - DX, y - DY, x + DX, y + DY);
+    dsnRet(Tela, x - DY, y - DX, x + DY, y + DX);
+  fim;
+    
+  /* mostra as coordenadas */
+  escrevaLn("Clicou: ", x, ", ", y);
+fim.

@@ -1,0 +1,10 @@
+/* Exibe "SW-Tutor" em partes da tela */
+programa CopBH;
+inclui "gra*";
+var
+  jan: Janela;
+início
+  jan := novaJanela();
+  crgImg(jan, "Foto-BH-1");
+  copJanela(Tela, 40, 40, jan);
+fim.

@@ -1,0 +1,26 @@
+/* Alguns procedimentos simples */
+programa p1p2p3;
+
+/* p1 */
+procedimento p1();
+início
+  escreva("Este é o procedimento p1\n");
+fim;
+
+/* p2 */
+procedimento p2();
+início
+  escreva("Este é o procedimento p2\n");
+fim;
+
+/* p3 */
+procedimento p3();
+início
+  escreva("Este é o procedimento p3\n");
+fim;
+
+início
+  p1();
+  p2();
+  p3();
+fim.

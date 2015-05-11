@@ -1,0 +1,16 @@
+/* Montagem com uma foto da Praça da
+   Liberdade, em Belo Horizonte */
+programa PraçaDaLiberdade;
+inclui "gra*";
+var
+  jan: Janela;
+início
+  jan := novaJanela();
+  crgImg(jan, "Foto-BH-1"); // Praça da Liberdade, em BH
+  copJanelaDist(Tela, 100, 100, 400, 300, jan);
+  copJanelaDist(Tela, 100, 10, 240, 90, jan);
+  copJanelaDist(Tela, 260, 10, 400, 90, jan);
+  copJanelaDist(Tela, 20, 100, 90, 300, jan);
+  copJanelaDist(Tela, 410, 100, 480, 300, jan);
+  copJanelaDist(Tela, 100, 310, 400, 390, jan);
+fim.

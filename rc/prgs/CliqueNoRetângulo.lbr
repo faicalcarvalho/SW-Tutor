@@ -1,0 +1,30 @@
+/* Clicando no retângulo */
+programa CliqueNoRetângulo;
+inclui "gra*";
+inclui "evnt*";
+const
+  X1 = 10;   Y1 = 10;
+  X2 = 300;  Y2 = 300;
+var
+  x, y: inteiro;
+  clicouFora: lógico;
+início
+  /* desenha o retângulo grande */
+  dsnRet(Tela, X1, Y1, X2, Y2);
+
+  repita
+    /* aguarde o clique e obtenha as coordenadas */
+    esperePor(EV_CLIQUE);
+    mouseXY(x, y);
+
+    /* verifique se foi fora do retângulo */
+    clicouFora := (x < X1) || (y < Y1) ||
+                  (x > X2) || (y > Y2);
+    se (não clicouFora)
+      dsnRet(Tela, x - 3, y - 3, x + 3, y + 3);
+  até (clicouFora);
+
+  /* desenhe o clique fora com outra cor */
+  altCorPincel(Tela, COR_VERMELHO);
+  dsnRet(Tela, x - 3, y - 3, x + 3, y + 3);
+fim.

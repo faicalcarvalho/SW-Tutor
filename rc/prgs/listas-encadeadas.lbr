@@ -1,0 +1,166 @@
+/* Operações com listas encadeadas */
+programa listas_encadeadas;
+
+tipo
+  /* lista */
+  lista = ponteiro para descritor_lista;
+  descritor_lista = registro
+    elem: inteiro; // informação genérica, elemento da lista
+    suc: lista;    // próximo item da lista
+  fim;
+
+/* lista_erro - exibe msg e termina */
+procedimento lista_erro(msg: texto);
+início
+  termine(msg);
+fim;
+
+/* lista_ini - inicializa a lista lst */
+procedimento lista_ini(var lst: lista);
+início
+  lst := nulo;
+fim;
+
+/* lista_vazia - informa se está vazia */
+função lista_vazia(var lst: lista): lógico;
+início
+  retorne lst = nulo;
+fim;
+
+/* lista_ins_ini - insere elemento no início da lista */
+procedimento lista_ins_ini(var lst: lista; elem: inteiro);
+var
+  item: lista;
+início
+  aloque(item);
+  item^.suc := lst;
+  item^.elem := elem;
+  lst := item;
+fim;
+
+/* lista_último - retorna referência ao último
+   item da lista, ou nulo caso esteja vazia */
+função lista_último(var lst: lista): lista;
+var
+  p: lista;
+início
+  se (lista_vazia(lst))
+    retorne nulo;
+  p := lst;
+  enquanto (p^.suc <> nulo)
+    p := p^.suc;
+  retorne p;
+fim;
+
+/* lista_ins_fim - insere elemento no final da lista */
+procedimento lista_ins_fim(var lst: lista; elem: inteiro);
+var
+  item: lista; // novo item
+  ult: lista;  // último da lista
+início
+  aloque(item);
+  item^.suc := nulo;
+  item^.elem := elem;
+  ult := lista_último(lst);
+  se (ult = nulo) // lista vazia?
+    lst := item
+  senão
+    ult^.suc := item;
+fim;
+
+/* lista_ins_fim_rec - insere elemento no final
+   da lista; implementação recursiva */
+procedimento lista_ins_fim_rec(var lst: lista; elem: inteiro);
+início
+  se (lista_vazia(lst))
+  início
+    aloque(lst);
+    lst^.suc := nulo;
+    lst^.elem := elem;
+  fim
+  senão
+    lista_ins_fim_rec(lst^.suc, elem);
+fim;
+
+/* lista_psq - retorna referência ao primeiro item
+   contendo o elemento ou nulo caso não encontre */
+função lista_psq(var lst: lista; elem: inteiro): lista;
+var
+  p: lista;
+início
+  para (p := lst; p <> nulo; p := p^.suc)
+    se (p^.elem = elem)
+      retorne p; // encontrou
+  retorne nulo;  // não encontrou
+fim;
+
+/* lista_psq_rec - retorna referência ao primeiro item
+   contendo o elemento ou nulo caso não encontre;
+   implementação recursiva */
+função lista_psq_rec(var lst: lista; elem: inteiro): lista;
+início
+  se (lista_vazia(lst))
+    retorne nulo;
+  se (lst^.elem = elem)
+    retorne lst
+  senão
+    retorne lista_psq_rec(lst^.suc, elem);
+fim;
+
+/* lista_ret_ini - retira da lista o primeiro elemento */
+função lista_ret_ini(var lst: lista): inteiro;
+var
+  pri: lista;       // o que vai ser retirado
+  result: inteiro;  // conteúdo do item retirado
+início
+  se (lista_vazia(lst))
+    lista_erro("Erro em lista_ret_ini: lista vazia");
+
+  pri := lst;
+  lst := lst^.suc;
+  result := pri^.elem;
+  libere(pri);
+  retorne result;
+fim;
+
+/* lista_ret_fim - retira da lista o último elemento */
+função lista_ret_fim(var lst: lista): inteiro;
+var
+  ult: lista;       // o que vai ser retirado
+  result: inteiro;  // conteúdo do item retirado
+  p: lista;         // auxiliar para percorrer a lista
+início
+  ult := lista_último(lst);
+  se (ult = nulo)
+    lista_erro("Erro em lista_ret_fim: lista vazia");
+
+  se (lst^.suc = nulo)
+    lst := nulo // lista tinha apenas um elemento
+  senão
+  início
+    p := lst;
+    enquanto (p^.suc <> ult)
+      p := p^.suc;
+    p^.suc := nulo;
+  fim;
+  result := ult^.elem;
+  libere(ult);
+  retorne result;
+fim;
+
+var
+  p, lst: lista;
+  i: inteiro;
+
+início
+  lista_ini(lst);
+
+  para (i := 0; i<10; i++)
+    lista_ins_fim(lst, i);
+
+  enquanto (lista_vazia(lst) = não)
+    escreva(lista_ret_fim(lst), "\n");
+
+  p := lista_psq_rec(lst, 3);
+  escreva("Olá!");
+fim.

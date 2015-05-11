@@ -1,0 +1,44 @@
+/* Detecta movimento do mouse e exibe
+   informações relacionadas */
+programa MovimentoMouse;
+inclui "gra*";
+inclui "evnt*";
+
+var
+  x, y: inteiro;
+  numMovs: inteiro;
+  msg: texto;
+
+/* temMovimento - obtém próximo evento de movimento do
+   mouse; retorna sim quando o usuário movimenta o mouse,
+   preenchendo (x, y) com o ponto onde está o mouse;
+   se o usuário usar o teclado, retorna não */
+função temMovimento(var x, y: inteiro): lógico;
+início
+  evnt_esperePor(EV_MOVIMENTO_MOUSE + EV_TECLADO);
+  se (evnt_ultimoEvento() = EV_TECLADO)
+    retorne não;
+  evnt_mouseXY(x, y);
+  retorne sim;
+fim;
+
+/* msgMovimento - monta mensagem com informações sobre
+   o movimento do mouse */
+função msgMovimento(x, y, num: inteiro): texto;
+início
+  retorne intParaTxt(x) + ", " + intParaTxt(y) + " - " +
+          "Cont = " + intParaTxt(num);
+fim;
+
+início
+  /* inicia a contagem */
+  numMovs := 0;
+
+  /* trata os eventos */
+  enquanto (temMovimento(x, y))
+  início
+    inc(numMovs);
+    gra_desenheRetângulo(0, 0, 200, 15);
+    gra_desenheTexto(0, 0, msgMovimento(x, y, numMovs));
+  fim;
+fim.

@@ -1,0 +1,29 @@
+/* Comando repetitivo implementado através de recursão */
+programa recursão_enquanto;
+
+/* sem_recursão - imprime valores entre v1 e v2 */
+procedimento sem_recursão(v1, v2: inteiro);
+inicio
+  enquanto (v1 <= v2)
+  início
+    escreva(v1, "\n");
+    v1 := v1 + 1;
+  fim;
+fim;
+
+/* com_recursão - imprime valores entre v1 e v2 */
+procedimento com_recursão(v1, v2: inteiro);
+inicio
+  se (v1 <= v2)
+  início
+    escreva(v1, "\n");
+    com_recursão(v1 + 1, v2);
+  fim;
+fim;
+
+início
+  sem_recursão(1, 4);
+  escreva("---\n");
+  com_recursão(1, 4);
+  escreva("---\n");
+fim.

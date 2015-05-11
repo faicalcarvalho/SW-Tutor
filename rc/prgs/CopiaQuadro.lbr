@@ -1,0 +1,40 @@
+/* Copia quadro para a tela */
+programa CopiaQuadro;
+inclui "gra*";
+
+/* quadroComFiguras - retorna um quadro contendo 
+   algumas figuras */
+função quadroComFiguras(): inteiro;
+var
+  q: inteiro;
+início
+  q := gra_quadroNovo();
+  gra_quadroMudeAltura(q, 50);
+  gra_quadroMudeLargura(q, 50);
+  gra_quadroMudeCorDoPincel(q, COR_AMARELO);
+  gra_quadroDesenheRetângulo(q, 10, 10, 40, 40);
+  gra_quadroMudeCorDoPincel(q, COR_AZUL);
+  gra_quadroDesenheElipse(q, 5, 15, 35, 35);
+  gra_quadroMudeCorDoPincel(q, COR_VERMELHO);
+  gra_quadroDesenheTriângulo(q, 20, 25, 40, 45);
+  retorne q;
+fim;
+
+var
+  q: inteiro;
+  x, y, i, j: inteiro;
+
+início
+  /* cria quadro com algumas figuras */
+  q := quadroComFiguras();
+
+  /* copia para a tela */
+  x := gra_quadroLargura(q);
+  y := gra_quadroAltura(q);
+  para (i := 0; i < 4; inc(i))
+    para (j := 0; j < 4; inc(j))
+      gra_copieQuadro(q, j * x, i * y);
+      
+  /* libera */
+  gra_quadroLibere(q);
+fim.

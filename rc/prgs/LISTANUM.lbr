@@ -1,0 +1,25 @@
+programa ListaNum;
+
+inclui "\sw-tutor\modulos\lista.pac";
+
+var
+  lista: Lista;
+  n: inteiro;
+início
+  lista := lista_nova();
+  repita
+    leia(n);
+    se (lista_pesquise(lista, n))
+    início /* número encontrado */
+      lista_excl(lista, n);
+      escrevaLn(n, " estava presente e foi excluído");
+    fim
+    senão
+    início /* número não encontrado */
+      lista_inclFinal(lista, n);
+      escrevaLn(n, " incluído");
+    fim;
+  até (n = -1);
+  lista_imprima(lista);
+  lista_fim(lista);  
+fim.

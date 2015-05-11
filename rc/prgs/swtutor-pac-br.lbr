@@ -1,0 +1,841 @@
+Hieraquia Delphi:
+  TObject - TPersistent - TComponent - TControl - TWinControl- 
+  TScrollingWinControl
+  
+Verbos		
+    alt	    altere; alterar
+    apg     apague; apagar
+    clq     coloque; colocar
+    cop     copie; copiar
+    crg     carregue; carregar
+    dsn	    desenhe; desenhar
+    edt     edite; editar
+    espere  espere; esperar
+    exb     exiba; exibir; mostrar
+    ini     inicie; iniciar; inicializar
+    ins     insira; inserir
+    mov     movimente; movimentar
+    obt	    obtenha; obter
+    reg     registre
+    ret     retire; retirar
+    slv     salve; salvar
+    toq	    toque; tocar
+    tst	    teste; testar
+    
+Objetos		
+    altu      altura
+    arq       arquivo
+    botão     botão
+    caixa     caixa
+    caneta    caneta
+    cir	      círculo
+    crt       caractere (na linguagem, é 'caractere' mesmo)
+    dim       dimensão
+    edt       editor
+    escritor  escritor
+    evento    evento
+    fonte     fonte
+    img       imagem
+    int       inteiro (na linguagem, é 'inteiro' mesmo)
+    janela    janela
+    larg      largura
+    leitor    leitor
+    lin	      linha
+    lst       lista
+    marca     marca
+    nome      nome
+    pincel    pincel
+    pos       posição
+    pto       ponto
+    result    resultado
+    ret	      retângulo
+    rótulo    rótulo
+    tam       tamanho
+    tempo     tempo
+    txt       texto
+    vis       visibilidade
+    
+Outros
+???    n         número (como prefixo de constantes: NPTO, NTXT, NARQ)
+???    num       NUM_xxx
+
+// itens gráficos
+janela
+caixa_grupo
+quadro
+
+botão
+rótulo
+editor_lin
+editor_txt
+caixa_marca
+caixa_escolha
+caixa_lst
+caixa_comb
+imagem
+filme
+
+// classe item_visual
+posição/dimensão
+fonte
+
+// interface ou classe "janela"
+dsn_ret
+dsn_lin
+dsn_tri
+dsn_cir
+caneta
+fonte
+pincel
+...
+
+// hierarquia
+item_visual
+   item_visual_composto 
+      janela
+         formulário
+         quadro
+         caixa_grupo
+   item_visual_simples
+      botão
+      rótulo
+      editor_linha
+      editor_texto
+      caixa_marca
+      caixa_escolha
+      caixa_lista
+      caixa_comb
+      imagem
+      filme
+
+// janelas mãe
+função nova_janela        (): janela;
+função novo_quadro        (jan: janela; x, y, larg, altu: inteiro; txt: texto): quadro;
+função novo_quadro_grupo  (jan: janela; x, y, larg, altu: inteiro; txt: texto): caixa_grupo;
+
+// controles gráficos
+função novo_botão         (jan: janela; x, y, larg, altu: inteiro; txt: texto): botão;
+função novo_rótulo        (jan: janela; x, y, larg, altu: inteiro; txt: texto): rótulo;
+função novo_editor_lin    (jan: janela; x, y, larg, altu: inteiro; txt: texto): editor_lin;
+função novo_editor_txt    (jan: janela; x, y, larg, altu: inteiro; txt: texto): editor_txt;
+função nova_caixa_marca   (jan: janela; x, y, larg, altu: inteiro; txt: texto): caixa_marca;
+função nova_caixa_escolha (jan: janela; x, y, larg, altu: inteiro; txt: texto): caixa_escolha;
+função nova_caixa_lista   (jan: janela; x, y, larg, altu: inteiro; txt: texto): caixa_lista;
+função nova_caixa_comb    (jan: janela; x, y, larg, altu: inteiro; txt: texto): caixa_comb;
+função novo_quadro        (jan: janela; x, y, larg, altu: inteiro; nome_imagem: texto): imagem;
+função nova_imagem        (jan: janela; x, y, larg, altu: inteiro; nome_imagem: texto): imagem;
+função novo_filme         (jan: janela; x, y, larg, altu: inteiro; nome_filme: texto): filme;
+
+
+// rotinas que se aplicam às janelas/componentes
+ alt_pos_janela
+ alt_txt_janela
+ alt_nome_fonte
+ alt_tam_fonte
+ alt_cor_fonte
+ alt_estilo_fonte
+ alt_vis_janela
+ alt_hab_janela
+
+// constantes para representar eventos
+ const
+   EVT_OK       = 1; // qualquer valor serve;
+                     // é só cuidar para não haver conflitos
+   EVT_CANCELAR = 2;
+
+// criando um "componente"
+ var
+   b: botão;
+ ...
+   b := novo_botão(tela, x, y, larg, altu, "Ok");
+
+// registra os eventos do "componente"
+   reg_evento(b, EV_CLIQUE, EVT_OK);
+
+
+// tratando eventos
+ espere_por(EVENTOS);
+ e := último_evento();
+ escolha (e)
+   caso EVT_OK: trat_ok();
+   caso EV_CANCELAR: trat_cancelar();
+...
+
+
+
+
+
+    
+Janela:
+
+função novaJanela(): Janela;
+procedimento libJanela(jan: Janela); // ??? libComp ???
+
+procedimento altVisJanela(jan: Janela; vis: lógico);
+função obtVisJanela(jan: Janela): lógico;
+
+procedimento altTxtJanela(jan: Janela; txt: texto);
+função obtTxtJanela(jan: Janela): texto;
+
+procedimento altPosJanela(jan: Janela; x, y: inteiro);
+procedimento obtPosJanela(jan: Janela; var x, y: inteiro);
+
+procedimento altTamJanela(jan: Janela; largura, altura: inteiro);
+procedimento obtTamJanela(jan: Janela; var largura, altura: inteiro);
+
+/* copia o conteúdo de janOrig na posição (x, y) de jan */
+procedimento copJanela(jan: Janela;     
+                       x, y: inteiro; 
+                       janOrig: Janela);
+
+/* copia o conteúdo de janOrig para o retângulo (x1, y1, x2, y2) 
+   de jan, com distorção caso o tamanho de janOrig não seja 
+   semelhante ao do retãngulo (x1, y1, x2, y2) */
+procedimento copJanelaDist(jan: Janela; 
+                           x1, y1, x2, y2: inteiro; 
+                           janOrig: Janela);
+
+/* copia o conteúdo de janOrig para o retângulo (x1, y1, x2, y2) 
+   de jan, com distorção caso o tamanho de janOrig não seja 
+   semelhante ao do retãngulo (x1, y1, x2, y2); a cópia terá
+   uma rotação de rot graus no sentido anti-horário; a rotação, 
+   se especificada, será em torno do ponto (cx, cy); não há 
+   rotação quando rot=0.0 */
+procedimento copJanelaDistRot(jan: Janela; 
+                              x1, y1, x2, y2: inteiro;
+                              rot: real;
+                              cx, cy: inteiro;
+                              janOrig: Janela);
+
+/* carrega jan com o conteúdo da imagem nomeImg */
+procedimento crgImg(jan: Janela; nomeImg: texto);
+
+/* carrega jan com o conteúdo do retângulo de janOrig 
+   especificado por (x1, y1, x2, y2) */
+procedimento crgJanela(jan, janOrig: Janela; x1, y1, x2, y2: inteiro;
+
+/* obtém número de pixels da largura e altura de txt,
+   conforme a fonte de caracteres da janela jan */
+procedimento obtTamTxt(jan: Janela; 
+                       txt: texto; 
+                       var largura, altura: inteiro);
+
+ATENÇÃO: http://commons.wikimedia.org/wiki/Commons:Featured_pictures
+
+Programas - Primeiros Programas
+-------------------------------
+1   /* Exibe breve saudação na tela */
+    programa Olá;
+    
+2   /* Exibe os versos de uma antiga canção */
+    programa FatoOuFita;
+    
+3   /* Exibe um retângulo na tela */
+    programa Retângulo;
+    
+4   /* Exibe um círculo na tela */
+    programa Círculo;
+    
+5   /* Exibe uma linha reta */
+    programa Linha;
+    
+6   /* Exibe algumas linhas unidas */
+    programa Linhas;
+    
+7   /* Exibe alguns retângulos sobrepostos */
+    programa RetângulosColoridos;
+    
+8   /* Exibe algumas linhas com diferentes
+       tamanhos para a caneta */
+    programa TamanhosCaneta;
+    
+9   /* Exibe algumas linhas com diferentes
+       estilos para a caneta */
+    programa EstilosCaneta;
+    
+Programas - Variáveis e Tipos
+-----------------------------
+1   /* Exibe um quadrado cujo tamanho do lado é 
+       determinado pelo usuário */
+    programa Quadrado;
+    
+2   /* Lê um número (n) e mostra o seu sucessor (n + 1) */
+    programa Sucessor;
+    
+3   /* Lê um número (n) e mostra a sua metade (n / 2) */
+    programa Metade;
+    
+4   /* Lê um número (n) e mostra a sua metade (n / 2) */
+    programa Metade2;
+    
+5   /* Altera atributos da fonte de caracteres
+       e exibe um texto na saída gráfica */
+    programa TextoGráfico;
+    
+Programas - Expressões Lógicas
+------------------------------
+1   /* Aguarda clique do mouse */
+    programa Clicou;
+    
+2   /* Desenha um quadrado no clique do mouse */
+    programa ClicouAqui;
+    
+3   /* Desenha um retângulo no clique do mouse */
+    programa ClicouAquiRet;
+    
+4   /* Desenha um quadrado quando o clique do mouse
+       for sobre um ponto da linha */
+    programa ClicouNaLinha;
+    
+5   /* Aguarda um clique e, se o ponto estiver à esquerda
+       de uma linha divisória vertical, escreve a palavra
+       "esquerda", senão escreve a palavra "direita" */
+    programa EsquerdaOuDireita;
+    
+6   /* Desenha duas linhas verticais e testa se o próximo
+       clique está dentro do "corredor" formado por elas */
+    programa NoCorredor;
+    
+7   /* Desenha duas linhas verticais e testa se o próximo
+       clique está fora do "corredor" formado por elas */
+    programa ForaDoCorredor;
+    
+8   /* Exibe nove retângulos superpostos */
+    programa NoveRetângulos;
+    
+9   /* Exibe alguns retângulos superpostos */
+    programa Retângulos;
+    
+10  /* Desenha um cone curvo */
+    programa ConeCurvo;
+    
+11  /* Mostra os N primeiros quadrados (n * n) */
+    programa TabQuadrados;
+    
+12  /* Traça curvas Bezier variando os pontos 
+       de controle */
+    programa CurvasBezier;
+    
+13  /* Clica no retângulo */
+    programa ClicaNoRetângulo;
+    
+14  /* Registra N cliques do mouse e, caso estejam
+       dentro de um retângulo, marca a posição e
+       traça uma linha reta conectando os cliques */
+    programa NCliques;
+    
+15  /* Contagem regressiva de 10 a 0 */
+    programa ContagemRegressiva;
+    
+16  /* Contagem regressiva de 10 a 0 */
+    programa ContagemRegressivaDez;
+    
+17  /* Toca uma música baseada em percussão */
+    programa Percussão1;
+    
+18  /* Toca uma música baseada em percussão. Esta 
+       implementação baseia-se na "Idea #2" publicada 
+       no livro "Linear Time Playing", de Gary Chaffee,
+       Belwin-Mills Publishing Corp., 1993 */
+    programa GaryChaffee_Idea_2;
+    
+19  /* Exibe um arco e uma fatia */
+    programa ArcoFatia;
+    
+  <><> Continuar enumerando os programas dos demais capítulos <><>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+    
+    
+var
+  art: ArqTxt;
+  
+arq := novoArqTxt();
+crgArq(arq, "nomeArq");
+
+var
+  lst: ListaTxt;
+  
+lst := novaListaTxt();
+crgArq(lst, "nomeArq");
+
+
+var
+  et: EnumTxt;
+  t: texto;
+  
+et := obtArqEnumTxt(arq);
+
+enquanto (obtTxt(et, t))
+  montaLista(t);
+
+
+
+
+
+Componente:
+procedimento libComp(c: Componente);
+procedimento altPos(c: Componente; x, y: inteiro);
+procedimento obtPos(c: Componente; var x, y: inteiro);
+procedimento altTam(c: Componente; largura, altura: inteiro);
+procedimento obtTam(c: Componente; var largura, altura: inteiro);
+procedimento altTxt(c: Componente; txt: texto);
+procedimento obtTxt(c: Componente; var txt: texto);
+procedimento altFonte(c: Componente; nome: texto; tam, estilo, cor: inteiro);
+procedimento obtFonte(c: Componente; var nome: texto; var tam, estilo, cor: inteiro);
+procedimento altCor(c: Componente; cor: inteiro); // não vale para Botão
+procedimento obtCor(c: Componente; var cor: inteiro);
+
+função novaJanela(x, y, largura, altura: inteiro; txt: texto): Janela;
+função novoBotão      (jan: Janela; x, y, largura, altura: inteiro; txt: texto): Botão;
+função novoRótulo     (jan: Janela; x, y, largura, altura: inteiro; txt: texto): Rótulo;
+função novoEdtLin     (jan: Janela; x, y, largura, altura: inteiro; txt: texto): EdtLin;
+função novoEdtLinhas  (jan: Janela; x, y, largura, altura: inteiro; txt: texto): EdtLinhas;
+função novaCxMarca    (jan: Janela; x, y, largura, altura: inteiro; txt: texto): CxMarca;
+função novaCxEscolha  (jan: Janela; x, y, largura, altura: inteiro; txt: texto): CxEscolha;
+função novaCxLst      (jan: Janela; x, y, largura, altura: inteiro; txt: texto): CxLst;
+função novaCxCmb      (jan: Janela; x, y, largura, altura: inteiro; txt: texto): CxCmb;
+função novaCxGrupo    (jan: Janela; x, y, largura, altura: inteiro; txt: texto): CxGrupo;
+função novoPainel     (jan: Janela; x, y, largura, altura: inteiro; txt: texto): Painel;
+função novaImagem     (jan: Janela; x, y, largura, altura: inteiro; nomeImagem: texto): Imagem;
+
+
+
+Estilos de Fonte:
+  EF_NEGRITO = 1;
+  EF_ITALICO = 2;
+  EF_SUBLINHADO = 4;
+  EF_RISCADO = 8;
+
+Eventos:
+
+  EV_CLIQUE
+  EV_ALT_TAM
+
+  EV_MOV_MOUSE
+  EV_MOUSE_BAIXO
+  EV_MOUSE_CIMA
+  
+  EV_TECLADO
+  
+  EV_TEMPO
+  
+  { Estados do mouse }
+  EV_DIR = 1;
+  EV_ESQ = 2;
+
+  { Estados do teclado }
+  EV_SHIFT = 1;
+  EV_ALT = 2;
+  EV_CTRL = 4;
+
+  procedimento esperePor(eventos: inteiro);
+  função tstEvento(c: Componente; evento: inteiro): lógico;
+  procedimento mouseXY(var x, y: inteiro);
+  função últimaTecla(): caractere;
+  
+Rotinas aplicadas a qualquer componente:
+  altPos(c: Componente; x, y: inteiro);
+  obtPos(c: Componente; var x, y: inteiro);
+  
+  altTam(c: Componente; largura, altura: inteiro);
+  obtTam(c: Componente; var largura, altura: inteiro);
+  
+  altFonte(c: Componente; nome: texto; tam, estilo: inteiro);
+  obtFonte(c: Componente; var nome: texto; var tam, estilo: inteiro);
+  
+  altTxt(c: Componente; txt: texto);
+  obtTxt(c: Componente; var txt: texto);
+
+
+
+
+
+var
+  l: Leitor;         ltr: Leitor;
+  e: Escritor;       etr: Escritor;
+  
+l := novoLeitor("arq://config.txt");
+e := novoEscritor("arq://novo-config.txt");
+enquanto (obtLinha(l, lin))
+  escLinha(e, lin);
+libereLeitor(l);
+
+função obtCaractere(l: Leitor; var c: caractere): lógico;
+função obtLinha(l: Leitor; var txt: texto): lógico;
+
+procedimento escCaractere(l: Leitor; c: caractere);
+procedimento escLinha(l: Leitor; lin: texto);
+
+ltr
+etr
+
+
+Para criação/destruição dos componentes:
+  var c: Xxxx;
+  ...
+  novo(c);
+  ...
+  libere(c);
+  
+Para criação e manipulação de Janela:
+  var jan: Janela;
+  ...
+  novo(jan);
+  altJanela(jan: Janela;            // janela mãe (ou nulo p/ janela form)
+            txt: texto;             // caption ou texto
+            x, y: inteiro);         // posição na tela ou na janela mãe
+            
+  
+Alteração de propriedades - Rótulo:
+  altRótulo(r: Rótulo; 
+            jan: Janela;           // janela mãe
+            txt: texto;            // texto
+            x, y: inteiro;         // posição na janela
+            nomeFonte: texto;      // fonte
+            tamFonte: inteiro;
+            estiloFonte: inteiro);
+            
+  altBotão(b: Botão;
+           jan: Janela;
+           txt: texto;
+           x, y: inteiro;
+           largura, altura: inteiro);
+
+
+  
+Para configuração inicial dos componentes:
+
+Para
+  altJanela(jan: Janela; 
+
+Componentes:
+  Label - Rótulo
+                         r := novoRótulo();
+                         altTexto(r, "Rótulo");
+                         altFonte(r, "Arial", 10, NEGRITO);
+                                               
+  Edit - EdLin
+  Memo - EdLinhas
+  Button - Botão
+                         b := novoBotão();
+                         altTexto(b, "OK");
+  CheckBox - CxMarca
+  RadioButton - CxEscolha
+
+                         novo(b);
+                         altBotão(b, Tela, "OK", 20, 20, 50, 50);
+                         
+                         novo(b);
+                         altTxt(b, "OK");
+                         altJanela(b, Tela);
+                         altPos
+                         
+  
+var
+  rtl: Rótulo;
+  
+...
+rtl := novoRótulo();
+
+var
+  b: gra_Botão;
+  b: Gra_Botão; // GRA_COR_VERDE;
+  
+gra_dsnTxt(Tela, x, y, "xxx");
+
+gra_altCorPincel(Tela, COR_AZUL);     | 
+gra_altCorCaneta(Tela, COR_VERMELHO); | gra_altProp(Tela, "CorPincel(COR_AZUL) CorCaneta(COR_BRANCO)");
+gra_altTamCaneta(Tela, tam);          | 
+
+
+jan := gra_novaJanela();
+gra_altDim(jan, x, y, larg, alt);
+gra_altTxt(jan, "Título da Janela");
+gra_altAlnmt(jan, POS_CENTRO_VH);
+
+jan.altDim(x, y, larg, alt);
+
+btOk := gra_novoBotão(jan);
+btOk.altPos(x, y);
+
+gra_dsnRet(Tela, x1, y1, x2, y2);                       bt = gra_novoBotão(Tela);
+gra_dsnCir(Tela, x1, y1, x2, y2);                       gra_altProp(bt, "X(100) Y(10) Txt(Cancelar)");
+gra_altPos(Tela, x, y);                                 
+gra_dsnLin(Tela, x, y);                                 procedimento btOkClique()
+gra_dsnTxt(Tela, x, y, txt);                            início
+                                                        fim;
+/* pincel, caneta e fonte */
+gra_altCorPincel(Tela, cor);                            evnt_esperePor(CLIQUE);
+gra_altCorCaneta(Tela, cor);                            se (evnt_comp(bt))
+gra_altTamCaneta(Tela, tam);                              btOkClique();
+gra_altEstiloCaneta(Tela, est);                         se 
+gra_altNomeFonte(Tela, nome);
+gra_altCorFonte(Tela, cor);
+gra_altTamFonte(Tela, tam);
+
+/* eventos */
+evnt_esperePor(eventos);
+
+
+evnt_mouseXY(x, y);
+
+/* clique botão ok */
+procedimento btOk_clique()
+início
+fim;
+
+/* clique botão cancelar */
+procedimento btCancelar_clique()
+início
+fim;
+
+/* clique botão ok */
+procedimento evento_clique_btOk()
+início
+fim;
+
+controle ok;
+início
+  aoClique:
+  
+  aoMouseSobre:
+  
+  aoMouseFora:
+  
+fim;
+
+A = rede
+  protocolo TCP;
+  servidor s1;
+  servidor s2;
+  servidor s3;
+fim;
+
+/* trata eventos */
+procedimento trataEventos();
+início
+  evnt_esperePor(eventos);
+  evnt_execute();
+  
+  se (evnt_teste(btOk, CLIQUE))
+    btOk_clique()
+  senão se (evnt_teste(btCancelar, CLIQUE))
+    btCancelar_clique()
+  senão se 
+fim;
+
+início
+  prg := swtutor_novoPrograma("Teste");
+  prg.inicie();
+  prg.execute();
+  prg.termine();
+  se (prg.terminouComErro())
+    exiba(prg.msgErro());
+  swtutor_fimPrograma(prg);
+fim.
+
+
+/* nova janela */
+var
+  jan: Janela;
+início
+  jan := gra_novaJanela();
+  gra_altProp(jan, "Posição(CCCC) Título(SW-Tutor) ...");
+  
+  gra_exbJanela(jan);
+
+  ...  
+  
+fim;
+
+<-*>
+|*|
+| [Ok] [Cancelar] |
+<-...->
+|
+
+procedimento bto_clique(comp: Objeto; x, y: inteiro);
+início
+fim;
+
+  
+  pnl := gra_novoPainel(jan);
+  gra_altProp(pnl, "Alinhamento(Esq)");
+  
+  bto := gra_novoBotão(pnl);
+  gra_altProp(bto, "X(100) Y(100)");
+  evnt_altEvnt(bto, EV_CLIQUE, 
+
+
+
+
+
+var
+  jan: Janela;
+  btnOk: Botão;
+  edt: EdtLinha;
+  cxa: CaixaLista;
+
+  cxa := gra_novaCaixaLista(Tela);
+  
+  
+  evnt_reg
+
+var
+  btn: Botão;
+  
+janela principal();
+
+menu m
+  
+componente btnOk()
+início
+fim;
+  
+procedimento btn.btnOk_clique(x, y: inteiro);
+início
+fim;
+
+evento EV_CLIQUE(c: Componente; x, y: inteiro);
+início
+fim;
+
+Janela jan;
+início
+  título($arq + " * SciTE");
+  menu("File|Edit|Search|View|Tools|Options|Help");
+  vertical(barra, h1, h2, h3);
+  v2(
+  
+fim
+
+procedimento p(c: Componente); evento
+
+
+procedimento btnOk_movMouse(btn: inteiro; x, y: inteiro);
+início
+fim;
+
+procedimento dxdy(dir: inteiro; var dx, dy: inteiro);
+início
+  escolha (dir)
+    caso NORTE:
+    início
+    fim;
+    
+    caso SUL:
+  fim;
+fim;
+
+procedimento gra_movComp(comp: Componente; dir, vel: inteiro);
+
+PontosCardeais = enum
+  Norte, Sul, Leste, Oeste, Nordeste, Sudeste, Noroeste, Sudoeste;
+fim;
+
+procedimento movComponente(comp: Componente; dir, vel: inteiro);
+var
+  x, y, dx, dy: inteiro;
+início
+  x := gra_obtProp(comp, "X");
+  y := gra_obtProp(comp, "Y");
+  para (i := 0; i < N; i++)
+    gra_altProp(comp, "X(" + intParaTxt(x++) + ");
+  
+
+  gra_altProp(comp, "X
+fim;
+
+tipo
+  Fonte = registro
+    nome: texto;
+    tam: inteiro;
+    
+  fim;
+
+tipo
+  DescritorComponente = registro
+    tipoComp: inteiro; // CP_BOTÃO, CP_EDTLIN, CP_RÓTULO
+    janMãe: Janela;
+    txt: texto;
+    x, y: inteiro;
+    largura, altura: inteiro;
+    fonte: Fonte;
+  fim;
+  
+  Componente = ponteiro para DescritorComponente;
+  
+  DescritorBotão = registro
+    comp: Componente;
+  fim;
+  
+  Botão = ponteiro para DescritorBotão;
+  
+  função novoBotão(
+ 
+  função obtComponente 
+  
+  -------------------------------
+  
+  tipo
+    Func = função (n: inteiro): real;
+    
+    Proc = procedimento (t: texto; var n: inteiro);
+    
+  função fn(n: inteiro): real;
+  início
+    retorn n * 3.1;
+  fim;
+  
+  var
+    f: Func;
+    p: Proc;
+    
+  início
+    f := @fn;
+  fim;
+  
+  -------------------------------
+  
+  função intParaCtr(cod: inteiro): caractere;
+  função ctrParaInt(c: caractere): inteiro;
+  
+  função ctrNaPos(t: texto; pos: inteiro): caractere;
+  
+  função intParaTxt(n: inteiro): texto;
+  função txtParaInt(t: texto): inteiro;
+  
+  
+  
+  função novaJanela(x, y, largura, altura: inteiro; txt: texto): Janela;

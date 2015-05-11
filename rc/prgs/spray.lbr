@@ -1,0 +1,55 @@
+/* Simula um spray */
+programa spray;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+/* rand_neg - calcula x = random(n) e, 
+   aleatoriamente, retorna x ou -x */
+função rand_neg(n: inteiro): inteiro;
+var
+  result: inteiro;
+início
+  result := random(n);
+  se (random(2) = 0)
+    result := -result; // inverte, talvez
+  retorne result;
+fim;
+
+/* pto_perto - retorna um ponto próximo a (x, y) */
+procedimento pto_perto(x, y: inteiro; 
+                       var xp, yp: inteiro);
+const
+  RAIO = 20;
+início
+  xp := x + rand_neg(RAIO);
+  yp := y + rand_neg(RAIO);
+fim;
+
+/* desenha NUM_PTOS ao redor de (x, y) */
+procedimento spray(x, y, cor: inteiro);
+const
+  NUM_PTOS = 50;
+var
+  i, xp, yp: inteiro;
+início
+  para (i := 0; i < NUM_PTOS; i++)
+  início
+    pto_perto(x, y, xp, yp);
+    alt_pixel(tela, xp, yp, cor);
+  fim;
+fim;
+
+início
+  /* aguarda o EV_MOUSE_BAIXO */
+  espere_por(EV_MOUSE_BAIXO);
+
+  /* desenha */  
+  repita
+    /* trata o movimento com o botão apertado */
+    espere_por(EV_MOUSE_CIMA + EV_MOV_MOUSE);
+
+    /* aperta o spray */
+    spray(mouse_x(), mouse_y(), COR_VERMELHO);
+  até (último_evento() = EV_MOUSE_CIMA);
+fim.

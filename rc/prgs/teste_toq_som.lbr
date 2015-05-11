@@ -1,0 +1,20 @@
+programa Olá;
+inclui "mm*";
+inclui "evnt*";
+
+const 
+  TPO = 400;
+
+var
+  s: som;
+  i: inteiro;
+
+início
+  alt_ev_tempo(TPO);
+  s := novo_som("Caixa1");
+  para (i:=0; i<8; i++)
+  início
+    toq_som(s);
+    espere_por(EV_TEMPO);
+  fim;
+fim.

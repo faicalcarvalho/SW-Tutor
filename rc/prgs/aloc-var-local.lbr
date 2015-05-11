@@ -1,0 +1,22 @@
+/* A execução passo a passo deste programa ilustra como
+   as áreas de memória para os parâmetros e variáveis
+   locais de uma rotina são alocadas dinamicamente. */
+programa aloc_var_local;
+
+procedimento proc_aloc(n: inteiro);
+var
+  i: inteiro;
+inicio
+  i := n;
+  n := 1234;
+  escreva("proc_aloc\n");
+fim;
+
+var
+  v: inteiro;
+
+início
+  v := 1000;
+  proc_aloc(v);
+  escreva("v = ", v);
+fim.

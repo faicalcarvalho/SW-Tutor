@@ -1,0 +1,85 @@
+/* módulo geom */
+tipo
+  /* Ponto */
+  Ponto = registro
+    x, y: real;
+  fim;
+
+  /* Retângulo */
+  Retângulo = registro
+    p1, p2: Ponto;
+  fim;
+
+/* geom_pt - retorna registro tipo Ponto */
+função geom_pt(x, y: real): Ponto;
+var
+  p: Ponto;
+início
+  p.x := x;
+  p.y := y;
+  retorne p;
+fim;
+
+/* geom_rt - retorna registro tipo Retângulo */
+função geom_rt(p1, p2: Ponto): Retângulo;
+var
+  r: Retângulo;
+início
+  r.p1 := p1;
+  r.p2 := p2;
+  retorne r;
+fim;
+
+/* geom_ptMédio - retorna o ponto médio entre p1 e p2 */
+função geom_ptMédio(p1, p2: Ponto): Ponto;
+var
+  p: Ponto;
+início
+  p.x := p1.x + ((p2.x - p1.x) / 2);
+  p.y := p1.y + ((p2.y - p1.y) / 2);
+  retorne p;
+fim;
+
+/* geom_ptMult - retorna um ponto que é resultado da
+   multiplicação dos valores das suas coordenadas por 
+   um fator escala */
+função geom_ptMult(p: Ponto; escala: real): Ponto;
+var
+  pt: Ponto;
+início
+  pt.x := p.x * escala;
+  pt.y := p.y * escala;
+  retorne pt;
+fim;
+
+/* geom_ptMultXY - retorna um ponto que é resultado da
+   multiplicação dos valores das suas coordenadas por 
+   fatores x e y */
+função geom_ptMultXY(p: Ponto; x, y: real): Ponto;
+var
+  pt: Ponto;
+início
+  pt.x := p.x * x;
+  pt.y := p.y * y;
+  retorne pt;
+fim;
+
+/* geom_ptMais - retorna ponto p+pMais */
+função geom_ptMais(p, pMais: Ponto): Ponto;
+var
+  pt: Ponto;
+início
+  pt.x := p.x + pMais.x;
+  pt.y := p.y + pMais.y;
+  retorne pt;
+fim;
+
+/* geom_ptMult - retorna ponto p*pMais */
+função geom_ptVezes(p, pVezes: Ponto): Ponto;
+var
+  pt: Ponto;
+início
+  pt.x := p.x * pVezes.x;
+  pt.y := p.y * pVezes.y;
+  retorne pt;
+fim;

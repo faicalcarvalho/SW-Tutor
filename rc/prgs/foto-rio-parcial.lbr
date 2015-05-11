@@ -1,0 +1,23 @@
+/* Exibe na tela parte de uma foto 
+   do Rio de Janeiro */
+programa foto_rio_parcial;
+inclui "gra*";
+
+const
+  X1 = 10; Y1 = 10; X2 = 340; Y2 = 250;
+  IX1 = 480; IY1 = 50; IX2 = 610; IY2 = 190;
+
+var
+  img: imagem;
+
+início
+  /* cria a imagem */
+  img := nova_imagem_crg("Foto-Rio-1");
+  
+  /* pequena moldura */
+  dsn_ret(tela, X1-3, Y1-3, X2+3, Y2+3);
+
+  /* copia */
+  cop_imagem_ret(tela, X1, Y1, X2, Y2, 
+                 img, IX1, IY1, IX2, IY2);
+fim.

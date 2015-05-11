@@ -1,0 +1,11 @@
+programa TesteNovaCxMarca;
+inclui "gra*";
+var
+  j: Janela;
+  c: CxMarca;
+início
+  j := novaJanela(150, 150, 300, 300, "Teste");
+  c := novaCxMarca(j, 30, 30, 50, 50, "Teste");
+  altCor(c, COR_VERDE);
+  escrevaLn("Olá!");
+fim.

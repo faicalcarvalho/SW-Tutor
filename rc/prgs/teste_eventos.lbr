@@ -1,0 +1,33 @@
+programa teste_eventos;
+inclui "gra*";
+inclui "evnt*";
+
+const
+  EVT_CLQ = 2313233;
+  EVT_MD = 123;
+  EVT_MU = 321;
+
+var
+  b: botão;
+  e: inteiro;
+
+início
+  b := novo_botão(tela, 10, 10, 100, 30, "Teste");
+  reg_evento(b, EV_CLIQUE, EVT_CLQ);
+  reg_evento(b, EV_MOUSE_BAIXO, EVT_MD);
+  reg_evento(b, EV_MOUSE_CIMA, EVT_MU);
+
+
+  para (;;)
+  início
+    espere_por(EV_CLIQUE+EV_MOUSE_BAIXO+EV_MOUSE_CIMA);
+    e := último_evento();
+    escolha (e)
+      caso EVT_CLQ: escreva("EVT_CLQ\n");
+      caso EV_CLIQUE: escreva("EV_CLIQUE\n");
+      senão escreva("senão\n");
+    fim;
+  fim;
+
+  escreva("Olá!");
+fim.

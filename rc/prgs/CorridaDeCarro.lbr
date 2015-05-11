@@ -1,0 +1,52 @@
+/* Corrida de Carro */
+programa CorridaDeCarro;
+inclui "gra*";
+
+const
+  LARG = 3;
+  COMP = 40;
+  ESP = 10;
+
+tipo
+  Estrada = registro
+    baseX, baseY: inteiro;
+    
+  fim;
+
+procedimento gra_limpaRet(x1, y1, x2, y2: inteiro);
+var
+  corPincel, corCaneta: inteiro;
+início
+  corPincel := gra_corDoPincel();
+  corCaneta := gra_corDaCaneta();
+  gra_mudeCorDoPincel(gra_corDoFundo());
+  gra_mudeCorDaCaneta(gra_corDoFundo());
+  gra_desenheRetângulo(x1, y1, x2, y2);
+  gra_mudeCorDoPincel(corPincel);
+  gra_mudeCorDaCaneta(corCaneta);
+fim;
+
+/* faixa - desenha trecho de faixa */
+procedimento faixa(x, y: inteiro);
+início
+  gra_desenheRetângulo(x, y, x + LARG, y + COMP);
+fim;
+
+procedimento estrada(xBase, numFaixas: inteiro);
+var
+  i: inteiro;
+início
+  /* limpa a estrada */
+  gra_limpaRet(xBase, 0, xBase + LARG, numFaixas * (COMP + ESP));
+
+  /* desenha as faixas */
+  para (i := 0; i < numFaixas; inc(i))
+  início
+    faixa(x
+  fim;
+  
+fim;
+
+início
+  faixa(10, 14);
+fim.

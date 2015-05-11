@@ -1,0 +1,12 @@
+/* Mostra o número de caracteres de um texto */
+programa tamanho_texto;
+inclui "gra*";
+var
+  t: texto;
+  tam: inteiro;
+início
+  leia(t);
+  tam := tamanho(t);
+  dsn_txt(tela, 0, 0, "O texto \"" + t + "\" tem " +
+          int_para_txt(tam) + " caracteres.");
+fim.

@@ -1,0 +1,24 @@
+/* Determina o menor dentre dois valores */
+programa menor;
+
+/* min - retorna o menor entre n1 e n2 */
+função min(n1, n2: inteiro): inteiro;
+início
+  se (n1 < n2)
+    retorne n1
+  senão
+    retorne n2;
+fim;
+
+var
+  x1, x2: inteiro;
+  menor: inteiro;
+
+início
+  escreva("Entre com o primeiro número: ");
+  leia(x1);
+  escreva("Entre com o segundo número: ");
+  leia(x2);
+  menor := min(x1, x2);
+  escreva("Entre ", x1, " e ", x2, ", o menor é ", menor);
+fim.

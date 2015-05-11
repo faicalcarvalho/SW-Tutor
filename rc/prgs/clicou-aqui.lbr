@@ -1,0 +1,18 @@
+/* Desenha uma figura no clique do mouse */
+programa clicou_aqui;
+inclui "gra*";
+inclui "evnt*";
+var
+  x, y: inteiro;
+início
+  /* aguarda */
+  espere_por(EV_CLIQUE);
+
+  /* obtém as coordenadas do clique */
+  mouse_xy(x, y);
+
+  /* mostra as coordenadas e desenha o círculo */
+  escreva("Clicou: ", x, ", ", y);
+  alt_cor_pincel(tela, COR_VERMELHO);
+  dsn_cir(tela, x - 15, y - 15, 2 * 15, 2 * 15);
+fim.

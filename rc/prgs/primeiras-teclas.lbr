@@ -1,0 +1,20 @@
+/* Trata eventos do teclado */
+programa primeiras_teclas;
+inclui "evnt*";
+
+var
+  tecla: caractere;
+
+início
+  repita
+    /* aguarda uma tecla */
+    espere_por(EV_TECLADO);
+    tecla := última_tecla();
+
+    /* exibe a tecla e seu código numérico */
+    escreva("[", tecla, "]", " Código = ", 
+            crt_para_int(tecla), "\n");
+
+    /* tecla ESPAÇO termina o loop */
+  até (tecla = " ");
+fim.

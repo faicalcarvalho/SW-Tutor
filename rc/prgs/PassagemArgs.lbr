@@ -1,0 +1,38 @@
+/* A execução passo a passo deste programa mostra as
+   duas formas de passagem de argumentos: por valor 
+   e por referência. */
+programa PassagemArgs;
+
+/* porValor */
+procedimento porValor(n: inteiro);
+var
+  k: inteiro;
+inicio
+  k := n * 2;
+  n := 4321; // este comando NÃO TEM efeito externo
+  escrevaLn("porValor");
+fim;
+
+/* porReferência */
+procedimento porReferência(var n: inteiro);
+var
+  k: inteiro;
+inicio
+  k := n * 2;
+  n := 4321; // este comando TEM efeito externo
+  escrevaLn("porReferência");
+fim;
+
+var
+  v1, v2: inteiro;
+
+início
+  v1 := 1000;
+  v2 := 500;
+  porValor(v1);
+  porValor(v2);
+  porReferência(v1);
+  porReferência(v2);
+  escrevaLn(v1);
+  escrevaLn(v2);
+fim.

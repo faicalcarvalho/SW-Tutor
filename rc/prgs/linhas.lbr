@@ -1,0 +1,13 @@
+/* Exibe algumas linhas unidas */
+programa linhas;
+inclui "gra*";
+início
+  alt_pos_caneta(tela, 50, 50);
+  dsn_lin(tela, 150, 80);
+  dsn_lin(tela, 10, 100);
+  dsn_lin(tela, 200, 150);
+  dsn_lin(tela, 170, 240);
+  dsn_lin(tela, 100, 150);
+  dsn_lin(tela, 70, 190);
+  dsn_lin(tela, 10, 150);
+fim.

@@ -1,0 +1,183 @@
+programa JogoDaMemória;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+const
+  TAM_QUAD = 50;
+  NUM_LINHAS = 4; /* NUM_LINHAS deve ser sempre par */
+  NUM_CARTAS = NUM_LINHAS * NUM_LINHAS;
+ 
+tipo
+  Tabuleiro = arranjo [0..NUM_LINHAS - 1, 0..NUM_LINHAS - 1]
+    de inteiro;
+  Baralho = arranjo [0..NUM_CARTAS - 1] de inteiro;
+
+/* embaralhe - troca as cartas de posição, aleatoriamente */
+procedimento embaralhe(var b: Baralho);
+const
+  N = 100;
+var
+  i, i1, i2, aux: inteiro;
+início
+  para (i := 0; i < N; inc(i))
+  início
+    i1 := random(NUM_CARTAS);
+    i2 := random(NUM_CARTAS);
+    /* troque b[i1] com b[i2] */
+    aux := b[i1];
+    b[i1] := b[i2];
+    b[i2] := aux;
+  fim;
+fim;
+
+/* prepareBaralho - coloca os pares de cartas no baralho,
+   e embaralha as cartas */
+procedimento prepareBaralho(var b: Baralho);
+var
+  i, cod: inteiro;
+início
+  cod := 33;
+  i := 0;
+  enquanto (i < NUM_CARTAS)
+  início
+    b[i] := cod;
+    b[i + 1] := cod;
+    i := i + 2;
+    cod := cod + 1;
+  fim;
+  embaralhe(b);
+fim;
+
+/* desenheCarta - exibe a carta que está registrada no
+   tabuleiro*/
+procedimento desenheCarta(var tab: Tabuleiro; 
+    lin, col: inteiro; visível: lógico);
+início
+  dsnRet(Tela, col * TAM_QUAD, lin * TAM_QUAD,
+      (col * TAM_QUAD) + TAM_QUAD,
+      (lin * TAM_QUAD) + TAM_QUAD);
+  se (visível)
+    dsnTxt(Tela, col * TAM_QUAD, lin * TAM_QUAD, 
+        intParaCrt(tab[lin, col]));
+fim;
+
+/* prepareTabuleiro - desenha na tela um tabuleiro,
+   inicia a matriz */
+procedimento prepareTabuleiro(var tab: Tabuleiro;
+    var b: Baralho);
+var
+  i, lin, col: inteiro;
+início
+  prepareBaralho(b);
+  altNomeFonte(Tela, "wingdings");
+  altTamFonte(Tela, 27);
+
+  /* distribui as cartas no tabuleiro */
+  i := 0;
+  para (lin := 0; lin < NUM_LINHAS; inc(lin))
+    para (col := 0; col < NUM_LINHAS; inc(col))
+    início
+      tab[lin, col] := b[i];
+      inc(i);
+      desenheCarta(tab, lin, col, não); /* invisível */
+    fim;
+fim;
+
+/* temCarta - retorna 'sim' se o usuário clicar numa
+   carta válida; (lin, col) fica com a posição no
+   tabuleiro da carta selecionada */
+função temCarta(var tab: Tabuleiro; var lin, col: inteiro)
+    : lógico;
+var
+  x, y: inteiro;
+início
+  repita
+    /* aguarda clique ou teclado */
+    esperePor(EV_CLIQUE + EV_TECLADO);
+    se (últimoEvento() = EV_TECLADO)
+      retorne não;
+
+    /* transforma posição na tela (x, y) em posição 
+       na matriz (lin, col) */
+    mouseXY(x, y);
+    lin := y div TAM_QUAD;
+    col := x div TAM_QUAD;
+
+    /* repete se o clique foi fora do tabuleiro, ou
+       se a carta já foi previamente escolhida */
+    se ((lin >= NUM_LINHAS) || (col >= NUM_LINHAS) ||
+        (tab[lin, col] = 0))
+      continue;
+
+    /* carta ok */
+    retorne sim;
+  até (não);
+fim;
+
+/* terminou - retorna 'sim' se o jogo chegou ao fim */
+função terminou(var tab: Tabuleiro): lógico;
+var
+  i, j: inteiro;
+início
+  para (i := 0; i < NUM_LINHAS; inc(i))
+    para (j := 0; j < NUM_LINHAS; inc(j))
+      se (tab[i, j] <> 0)
+        retorne não;
+  retorne sim;
+fim;
+
+/* temJogada - retorna 'sim' se o usuário completa
+   uma jogada, selecionando duas cartas; coloca em
+   (lin1, col1) e (lin2, col2) a posição das cartas */
+função temJogada(var tab: Tabuleiro; var lin1, col1, 
+    lin2, col2: inteiro): lógico;
+início
+  /* se tudo está marcado, não tem mais jogada */
+  se (terminou(tab))
+    retorne não;
+
+  /* primeira carta (lin1, col1) */
+  se (não temCarta(tab, lin1, col1))
+    retorne não;
+  desenheCarta(tab, lin1, col1, sim); /* visível */
+
+  /* segunda carta (lin2, col2) */
+  se (não temCarta(tab, lin2, col2))
+    retorne não;
+  desenheCarta(tab, lin2, col2, sim); /* visível */
+
+  retorne sim;
+fim;
+
+/* registreJogada - registre a jogada com as duas
+   cartas (lin1, col1) e (lin2, col2) */
+procedimento registreJogada(var tab: Tabuleiro; 
+    lin1, col1, lin2, col2: inteiro);
+início
+  se (tab[lin1, col1] = tab[lin2, col2])
+  início /* acertou: marca as cartas iguais */
+    tab[lin1, col1] := 0;
+    tab[lin2, col2] := 0;
+  fim
+  senão
+  início /* errou: esconde as cartas */
+    evnt_durma(1000); /* dá um tempinho */
+    desenheCarta(tab, lin1, col1, não);
+    desenheCarta(tab, lin2, col2, não);
+  fim;
+fim;
+
+var
+  tab: Tabuleiro;
+  baralho: Baralho;
+  lin1, col1, lin2, col2: inteiro;
+
+início
+  /* desenha e inicia o tabuleiro vazio */
+  prepareTabuleiro(tab, baralho);
+
+  /* joga */
+  enquanto(temJogada(tab, lin1, col1, lin2, col2))
+    registreJogada(tab, lin1, col1, lin2, col2);
+fim.

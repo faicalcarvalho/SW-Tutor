@@ -1,0 +1,49 @@
+/* Exibe parte de uma foto do Rio de Janeiro */
+programa FotoRioParcial;
+inclui "gra*";
+inclui "evnt*";
+
+/* cria uma janela com o texto "SW-Tutor" */
+função sw_tutor(): Janela;
+const
+  LARG = 360;
+  ALTU = 120;
+var
+  jan: Janela;
+início
+  jan := novaJanela();
+  altTamJanela(jan, LARG, ALTU);
+  altTamFonte(jan, 60);
+  dsnTxt(jan, 0, 0, "SW-Tutor");
+  retorne jan;
+fim;
+
+var
+  jan, janTela, janForm: Janela;
+  i: inteiro;
+  a: real;
+início
+  /* cria a janela com o texto */
+  jan := sw_tutor();
+
+  /* cria a janela que servirá de tela */
+  janTela := novaJanela();
+  altTamJanela(janTela, 500, 500);
+
+//  janForm := novaJanela();
+//  altVisJanela(janForm, sim);
+
+  altEvTempo(50);
+
+  /* desenha */
+  a := 0.0;
+  para (;;)
+  início
+    dsnRet(janTela, 10, 10, 200, 200);
+    copJanelaRot(janTela, 250, 250, a, jan);
+    copJanelaDist(Tela, 10, 10, 200, 50, janTela);
+    a := a + 5.0;
+    esperePor(EV_TEMPO);
+  fim;
+fim.
+

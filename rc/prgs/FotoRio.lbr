@@ -1,0 +1,6 @@
+/* Exibe na tela uma foto do Rio de Janeiro */
+programa FotoRio;
+inclui "gra*";
+início
+  crgImg(Tela, "Foto-Rio-1");
+fim.

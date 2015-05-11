@@ -1,0 +1,58 @@
+/* Pequeno editor de uma linha centralizada horizontalmente */
+programa EditorCentralizado;
+inclui "evnt*";
+inclui "gra*";
+
+const
+  X1 = 10; Y1 = 10;
+  X2 = 200; Y2 = 30;
+
+var
+  t: texto;
+  c: caractere;
+
+/* centralizeH - retorna o valor para exibição do texto t
+   centralizado horizontalmente entre x1 e x2 */
+função centralizeH(t: texto; x1, x2: inteiro): inteiro;
+var
+  largTexto, largTela: inteiro;
+início
+  largTela := x2 - x1 + 1;
+  largTexto := gra_larguraDoTexto(t);
+  se (largTexto > largTela)
+    retorne x1 - (largTexto - largTela) div 2
+  senão
+    retorne x1 + (largTela - largTexto) div 2;
+fim;
+
+/* temTecla - obtém próxima tecla; retorna sempre sim
+   exceto quando for a tecla ESC */
+função temTecla(var c: caractere): lógico;
+início
+  evnt_esperePor(EV_TECLADO);
+  c := evnt_tecla();
+  retorne (c <> TECLA_ESC);
+fim;
+
+/* exibaCentralizado - exibe o texto t centralizado no
+   retângulo (X1, Y1), (X2, Y2) */
+procedimento exibaCentralizado(t: texto);
+var
+  x: inteiro;
+início
+  gra_desenheRetângulo(X1, Y1, X2, Y2);
+  x := centralizeH(t, X1, X2);
+  gra_desenheTexto(x, Y1 + 2, t);
+fim;
+
+início
+  /* inicie o texto e desenhe o fundo */
+  t := "";
+  gra_desenheRetângulo(X1, Y1, X2, Y2);
+  enquanto (temTecla(c))
+  início
+    t := t + c;
+    exibaCentralizado(t);
+  fim;
+fim.
+

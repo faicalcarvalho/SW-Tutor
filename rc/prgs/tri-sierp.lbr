@@ -1,0 +1,36 @@
+/* Triângulo de Sierpinski */
+programa tri_sierp;
+inclui "rgra.lbr";
+
+/* tri - traça triângulo entre p1, p2 e p3 */
+procedimento tri(p1, p2, p3: ponto);
+início
+  rgra_dsn_lin(tela, p1, p2);
+  rgra_dsn_lin(tela, p2, p3);
+  rgra_dsn_lin(tela, p3, p1);
+fim;
+
+/* tri_sierp - imagem do triângulo de Sierpinski */
+procedimento tri_sierp(p1, p2, p3: ponto);
+const
+  DELTA = 1.0;
+início
+  /* verifica se o triângulo é grande o suficiente
+     para ser desenhado */
+  se (dist_pto(p1, p2) > DELTA)
+  início
+    /* desenha o triângulo */
+    tri(p1, p2, p3);
+    
+    /* desenha os três triângulos (inferior esquerdo,
+       superior e inferior direito) formados com base
+       nos pontos médios dos três lados */
+    tri_sierp(p1, pto_médio(p1, p2), pto_médio(p1, p3));
+    tri_sierp(pto_médio(p1, p2), p2, pto_médio(p2, p3));
+    tri_sierp(pto_médio(p1, p3), pto_médio(p2, p3), p3);
+  fim;
+fim;
+
+início
+  tri_sierp(pto(30, 300), pto(200, 30), pto(370, 300));
+fim.

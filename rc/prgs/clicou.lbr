@@ -1,0 +1,10 @@
+/* Aguarda clique do mouse */
+programa clicou;
+inclui "evnt*";
+início
+  /* aguarda */
+  espere_por(EV_CLIQUE);
+
+  /* avisa que clicou */
+  escreva("Clicou!");
+fim.

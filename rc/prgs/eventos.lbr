@@ -1,0 +1,41 @@
+/* Trata cliques e teclas */
+programa eventos;
+inclui "gra*";
+inclui "evnt*";
+
+/* exb_clique - mostra o evento clique */
+função exb_clique(): caractere;
+var
+  x, y: inteiro;
+início
+  x := mouse_x();
+  y := mouse_y();
+  dsn_ret(tela, x, y, 6, 6);
+  retorne "x"; // um valor <> ESC
+fim;
+
+/* exb_tecla - mostra o evento teclado */
+função exb_tecla(): caractere;
+var
+  tecla: caractere;
+início
+  tecla := última_tecla();
+  escreva("Tecla: ", tecla, "\n");
+  retorne tecla;
+fim;
+
+var
+  tecla: caractere;
+
+início
+  repita
+    /* aguarda clique ou tecla */
+    espere_por(EV_CLIQUE + EV_TECLADO);
+
+    /* trata */
+    se (último_evento() = EV_CLIQUE)
+      tecla := exb_clique()
+    senão
+      tecla := exb_tecla();
+  até (tecla = TECLA_ESC);
+fim.

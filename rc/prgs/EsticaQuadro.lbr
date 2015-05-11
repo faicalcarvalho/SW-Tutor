@@ -1,0 +1,49 @@
+/* Posiciona quadro distorcendo-os na tela */
+programa EsticaQuadro;
+inclui "gra*";
+inclui "mat*";
+
+/* quadroComFiguras - retorna um quadro contendo 
+   algumas figuras */
+função quadroComFiguras(): inteiro;
+var
+  q: inteiro;
+início
+  q := gra_quadroNovo();
+  gra_quadroMudeAltura(q, 50);
+  gra_quadroMudeLargura(q, 50);
+  gra_quadroMudeCorDoPincel(q, COR_AMARELO);
+  gra_quadroDesenheRetângulo(q, 10, 10, 40, 40);
+  gra_quadroMudeCorDoPincel(q, COR_CINZA);
+  gra_quadroDesenheElipse(q, 5, 15, 35, 35);
+  gra_quadroMudeCorDoPincel(q, COR_VERMELHO);
+  gra_quadroDesenheTriângulo(q, 20, 25, 40, 45);
+  retorne q;
+fim;
+
+/* mostra o quadro q na sua forma original */
+procedimento copieOriginal(q: inteiro);
+início
+  gra_desenheTexto(10, 184, "Original:");
+  gra_copieQuadro(q, 10, 200);
+fim;
+
+var
+  q: inteiro;
+início
+  /* cria quadro com algumas figuras */
+  q := quadroComFiguras();
+
+  /* original */
+  copieOriginal(q);
+
+  /* reproduz algumas cópias "esticadas" */
+  gra_estiqueQuadro(q, 10, 10, 40, 40);
+  gra_estiqueQuadro(q, 50, 20, 90, 100);
+  gra_estiqueQuadro(q, 20, 110, 140, 150);
+  gra_estiqueQuadro(q, 100, 5, 190, 100);
+  gra_estiqueQuadro(q, 10, 60, 30, 80);
+  
+  /* libera */
+  gra_quadroLibere(q);
+fim.

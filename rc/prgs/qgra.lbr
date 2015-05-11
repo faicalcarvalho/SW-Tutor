@@ -1,0 +1,255 @@
+/* módulo QGRA */
+inclui "gra*";
+inclui "evnt*";
+
+const
+  NUM_BOTÕES = 10;
+
+tipo
+  /* Botão */
+  Botão = ponteiro para DescritorBotão;
+
+  /* DescritorBotão */
+  DescritorBotão = registro
+    id: inteiro;
+    x, y: inteiro;
+    largura, altura: inteiro;
+    t: texto;
+    pressionado: lógico;
+  fim;
+
+var
+  lstBotões: arranjo [0..NUM_BOTÕES - 1] de Botão;
+
+/* botão_clique */
+procedimento botão_clique(botão: Botão); adiante;
+
+/* botão_posiçãoLivre - retorna índice de uma posição livre */
+função botão_posiçãoLivre(): inteiro;
+var
+  i: inteiro;
+início
+  para (i := 0; i < NUM_BOTÕES; inc(i))
+    se (lstBotões[i] = nulo)
+      retorne i;
+  retorne -1;
+fim;
+
+/* botão_posiçãoOcupada - retorna índice da 
+   posição ocupada por botão */
+função botão_posiçãoOcupada(botão: Botão): inteiro;
+var
+  i: inteiro;
+início
+  para (i := 0; i < NUM_BOTÕES; inc(i))
+    se (lstBotões[i] = botão)
+      retorne i;
+  retorne -1;
+fim;
+
+/* botão_novo - cria um novo botão */
+função botão_novo(id: inteiro): Botão;
+var
+  botão: Botão;
+  ind: inteiro;
+início
+  /* novo botão com id; demais atributos zero */
+  novo(botão);
+  botão^.id := id;
+  botão^.x := 0;
+  botão^.y := 0;
+  botão^.largura := 0;
+  botão^.altura := 0;
+  botão^.t := "";
+
+  /* insere na lista */
+  ind := botão_posiçãoLivre();
+  se (ind = -1)
+    termine("botão_novo: atingido o limite NUM_BOTÕES");
+  lstBotões[ind] := botão;
+  retorne botão;
+fim;
+
+/* botão_termine - libera a área do botão */
+procedimento botão_termine(botão: Botão);
+var
+  ind: inteiro;
+início
+  ind := botão_posiçãoOcupada(botão);
+  se (ind = -1)
+    termine("botão_termine: referência inválida");
+  lstBotões[ind] := nulo;
+  libere(botão);
+fim;
+
+/* botão_desenheTexto - desenha texto centralizado */
+procedimento botão_desenheTexto(botão: Botão);
+var
+  x, y, largura, altura: inteiro;
+início
+  largura := gra_larguraDoTexto(botão^.t);
+  altura := gra_alturaDoTexto(botão^.t);
+  x := botão^.x + ((botão^.largura - largura) div 2);
+  y := botão^.y + ((botão^.altura - altura) div 2);
+  se (botão^.pressionado)
+    gra_mudeCorDaFonte(COR_BRANCA)
+  senão
+    gra_mudeCorDaFonte(COR_PRETA);
+  gra_desenheTexto(x, y, botão^.t);
+fim;
+
+/* botão_desenhe - desenha o botão */
+procedimento botão_desenhe(botão: Botão);
+início
+  se (botão^.pressionado)
+    gra_mudeCorDoPincel(COR_PRETA)
+  senão
+    gra_mudeCorDoPincel(COR_BRANCA);
+  gra_desenheRetângulo(botão^.x, botão^.y, 
+      botão^.x + botão^.largura,
+      botão^.y + botão^.altura);
+  botão_desenheTexto(botão);
+fim;
+
+/* botão_acertou - verifica se o botão contém
+   as coordenadas x,y */
+função botão_acertou(botão: Botão; x, y: inteiro): lógico;
+início
+  se (x < botão^.x) retorne não;
+  se (x > botão^.x + botão^.largura) retorne não;
+  se (y < botão^.y) retorne não;
+  se (y > botão^.y + botão^.altura) retorne não;
+  retorne sim;
+fim;
+
+/* botão_pesquise - pesquisa botão relacionado
+   com o evento e */
+função botão_pesquise(e, x, y: inteiro): Botão;
+var
+  i: inteiro;
+início
+  para (i := 0; i < NUM_BOTÕES; inc(i))
+  início
+    se (lstBotões[i] = nulo)
+      continue;
+    se (botão_acertou(lstBotões[i], x, y))
+      retorne lstBotões[i];
+  fim;
+  retorne nulo;
+fim;
+
+/* botão_trateClique */
+procedimento botão_trateClique(botão: Botão);
+início
+  se (botão^.pressionado)
+  início
+    botão^.pressionado := não;
+    botão_desenhe(botão);
+    botão_clique(botão);
+  fim;
+fim;
+
+/* botão_trateMouseParaBaixo */
+procedimento botão_trateMouseParaBaixo(botão: Botão);
+início
+  se (não botão^.pressionado)
+  início
+    botão^.pressionado := sim;
+    botão_desenhe(botão);
+  fim;
+fim;
+
+/* botão_trateEvento - trata evento */
+procedimento botão_trateEvento(e, x, y: inteiro);
+var
+  botão: Botão;
+início
+  botão := botão_pesquise(e, x, y);
+  se (botão = nulo)
+    retorne; // nada a fazer
+  escolha (e)
+    caso EV_CLIQUE:
+      botão_trateClique(botão);
+    caso EV_MOUSE_PARA_BAIXO:
+      botão_trateMouseParaBaixo(botão);
+  fim;
+fim;
+
+/* botão_visível - retorna se botão está visível */
+função botão_visível(botão: Botão): lógico;
+início
+  retorne ((botão^.largura > 0) && (botão^.altura > 0));
+fim;
+
+/* botão_altPosição - altera posição */
+procedimento botão_altPosição(botão: Botão; 
+    x, y, largura, altura: inteiro);
+início
+  botão^.x := x;
+  botão^.y := y;
+  botão^.largura := largura;
+  botão^.altura := altura;
+  se (botão_visível(botão))
+    botão_desenhe(botão);
+fim;
+
+/* botão_altTexto - altera texto */
+procedimento botão_altTexto(botão: Botão; t: texto);
+início
+  botão^.t := t;
+  se (botão_visível(botão))
+    botão_desenhe(botão);
+fim;
+
+const
+  BT_CANCELAR = 1;
+  BT_FECHAR = 2;
+
+/* leiaute - determina o leiaute da interface */
+procedimento leiaute();
+var
+  botão: Botão;
+início
+  gra_mudeNomeDaFonte("Arial");
+
+  botão := botão_novo(BT_CANCELAR);
+  botão_altPosição(botão, 10, 10, 50, 30);
+  botão_altTexto(botão, "Cancelar");
+
+  botão := botão_novo(BT_FECHAR);
+  botão_altPosição(botão, 10, 50, 50, 30);
+  botão_altTexto(botão, "Fechar");
+fim;
+
+/* execute - trata os eventos */
+procedimento execute();
+const
+  EVENTOS = EV_TECLADO + EV_CLIQUE + 
+            EV_MOUSE_PARA_BAIXO + EV_MOVIMENTO_MOUSE;
+var
+  e, x, y: inteiro;
+início
+  enquanto (sim)
+  início
+    evnt_esperePor(EVENTOS);
+    e := evnt_últimoEvento();
+    se ((e = EV_TECLADO) && (evnt_tecla() = TECLA_ESC))
+      quebre;
+    evnt_mouseXY(x, y);
+    botão_trateEvento(e, x, y);
+  fim;
+fim;
+
+/* botão_clique - trata clique nos botões */
+procedimento botão_clique(botão: Botão);
+início
+  escolha (botão^.id)
+    caso BT_CANCELAR: escrevaLn("Cancelar");
+    caso BT_FECHAR: termine("Fechar");
+  fim;
+fim;
+
+início
+  leiaute();
+  execute();
+fim.

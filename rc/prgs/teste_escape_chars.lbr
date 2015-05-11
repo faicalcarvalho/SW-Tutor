@@ -1,0 +1,25 @@
+/*
+  Decarva SW-Tutor Beta 0.96
+  Copyright (c) 1999 Decarva Software Ltda
+  Ola.pac
+*/
+programa Olá;
+
+procedimento teste(t: texto);
+var
+  i, n: inteiro;
+  c: caractere;
+início
+  n := tamanho(t);
+  escreva("tam: ", n, "\n");
+  para (i:=0; i<n; i++)
+  início
+    c := caractere_em(t, i);
+    escreva(c, " cod:", crt_para_int(c), "\n");
+  fim;
+fim;
+
+início
+  teste("\"###\"");
+  escreva("fim\n");
+fim.

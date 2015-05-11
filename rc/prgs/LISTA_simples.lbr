@@ -1,0 +1,166 @@
+/* módulo lista */
+
+tipo
+  /* ponteiro para item da lista */
+  Lista = ponteiro para ItemLista;
+
+  /* item da lista */
+  ItemLista = registro
+    elem: inteiro;
+    prox: Lista;
+  fim;
+
+/* lista_nova - cria nova lista */
+função lista_nova(): Lista;
+início
+  retorne nulo;
+fim;
+
+/* lista_fim - finaliza uma lista */
+procedimento lista_fim(lista: Lista);
+var
+  prox: Lista;
+início
+  enquanto (lista <> nulo)
+  início
+    prox := lista^.prox;
+    libere(lista);
+    lista := prox;
+  fim;
+fim;
+
+/* lista_erro - registra erro */
+procedimento lista_erro(msg: texto);
+início
+  termine(msg);
+fim;
+
+/* lista_vazia - retorna 'sim' quando lista vazia */
+função lista_vazia(lista: Lista): lógico;
+início
+  retorne (lista = nulo);
+fim;
+
+/* lista_tamanho - retorna número de itens da lista */
+função lista_tamanho(lista: Lista): inteiro;
+var
+  tam: inteiro;
+início
+  tam := 0;
+  enquanto (lista <> nulo)
+  início
+    inc(tam);
+    lista := lista^.prox;
+  fim;
+  retorne tam;
+fim;
+
+/* lista_inclInício - inclui elem no início da lista */
+procedimento lista_inclInício(var lista: Lista; elem: inteiro);
+var
+  item: Lista;
+início
+  /* cria novo item */
+  novo(item);
+  item^.elem := elem;
+  item^.prox := lista;
+
+  /* lista passa a apontar para o primeiro item */
+  lista := item;
+fim;
+
+/* lista_últimoItem - retorna referência ao último item */
+função lista_últimoItem(lista: Lista): Lista;
+início
+  se (não lista_vazia(lista))
+    enquanto (lista^.prox <> nulo)
+      lista := lista^.prox;
+  retorne lista;
+fim;
+
+/* lista_inclFinal - inclui elem no final da lista */
+procedimento lista_inclFinal(var lista: Lista; elem: inteiro);
+var
+  item, último: Lista;
+início
+  /* cria novo item */
+  novo(item);
+  item^.elem := elem;
+  item^.prox := nulo;
+
+  /* obtém referência ao último item */
+  último := lista_últimoItem(lista);
+
+  /* insere */
+  se (último = nulo)
+    lista := item
+  senão
+    último^.prox := item;
+fim;
+
+/* lista_itemElemAnt - retorna referência ao item com elem;
+   coloca em ant referência ao item anterior, se houver */
+função lista_itemElemAnt(lista: Lista; elem: inteiro; var ant: Lista): Lista;
+início
+  ant := nulo;
+  enquanto (lista <> nulo)
+  início
+    se (lista^.elem = elem)
+      retorne lista;
+    ant := lista;
+    lista := lista^.prox;
+  fim;
+  retorne lista;
+fim;
+
+/* lista_excl - exclui item com elem */
+procedimento lista_excl(var lista: Lista; elem: inteiro);
+var
+  item, ant: Lista;
+início
+  item := lista_itemElemAnt(lista, elem, ant);
+  se (item = nulo)
+    retorne; /* nada a fazer */
+  se (ant <> nulo)
+    ant^.prox := item^.prox
+  senão
+    lista := lista^.prox;
+  libere(item);
+fim;
+
+/* lista_primeiroItem - retorna referência ao primeiro item */
+função lista_primeiroItem(lista: Lista): Lista;
+início
+  retorne lista;
+fim;
+
+/* lista_último - retorna o último elemento */
+função lista_último(lista: Lista): inteiro;
+início
+  se (lista_vazia(lista))
+    lista_erro("lista_último: lista vazia");
+  lista := lista_últimoItem(lista);
+  retorne lista^.elem;
+fim;
+
+/* lista_pesquise - retorna 'sim' caso elem esteja na lista */
+função lista_pesquise(lista: Lista; elem: inteiro): lógico;
+início
+  enquanto (lista <> nulo)
+  início
+    se (lista^.elem = elem)
+      retorne sim;
+    lista := lista^.prox;
+  fim;
+  retorne não;
+fim;
+
+/* lista_imprima - mostra os elementos da lista */
+procedimento lista_imprima(lista: Lista);
+início
+  enquanto (lista <> nulo)
+  início
+    escrevaLn(lista^.elem);
+    lista := lista^.prox;
+  fim;
+fim;

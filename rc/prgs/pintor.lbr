@@ -1,0 +1,78 @@
+/* Transforme-se num pintor movimentando
+   o mouse sobre a tela */
+programa pintor;
+inclui "gra*";
+inclui "evnt*";
+inclui "mat*";
+
+/* rand_neg - calcula x = random(n) e,
+   aleatoriamente, retorna x ou -x */
+função rand_neg(n: inteiro): inteiro;
+var
+  result: inteiro;
+início
+  result := random(n);
+  se (random(2) = 0)
+    result := -result; // inverte, talvez
+  retorne result;
+fim;
+
+/* pto_perto - retorna um ponto próximo a (x, y) */
+procedimento pto_perto(x, y: inteiro;
+                       var xp, yp: inteiro);
+const
+  RAIO = 40;
+início
+  xp := x + rand_neg(RAIO);
+  yp := y + rand_neg(RAIO);
+fim;
+
+/* tem_mov_mouse - detecta movimento do mouse;
+   coloca em (x, y) a posição corrente;
+   se o usuário usar o teclado, retorna 'não' */
+função tem_mov_mouse(var x, y: inteiro): lógico;
+início
+  espere_por(EV_MOV_MOUSE + EV_TECLADO);
+  se (último_evento() = EV_TECLADO)
+    retorne não;
+  mouse_xy(x, y);
+  retorne sim;
+fim;
+
+/* desenha NUM_PTOS ao redor de (x, y) */
+procedimento pinta(dest, orig: janela;
+                   x, y: inteiro);
+const
+  NUM_PTOS = 1000;
+var
+  i, xp, yp, cor: inteiro;
+início
+  para (i := 0; i < NUM_PTOS; i++)
+  início
+    pto_perto(x, y, xp, yp);
+    cor := obt_pixel(orig, xp, yp);
+    alt_pixel(dest, xp, yp, cor);
+  fim;
+fim;
+
+var
+  orig: janela;
+  img: imagem;
+  x, y: inteiro;
+
+início
+  // cria a janela e deixa o fundo preto
+  orig := nova_janela();
+  alt_cor_pincel(orig, COR_PRETO);
+  dsn_ret_cheio(orig, 0, 0, 1000, 1000);
+  alt_cor_pincel(tela, COR_PRETO);
+  dsn_ret_cheio(tela, 0, 0, 1000, 1000);
+
+  // carrega a imagem
+  img := nova_imagem_crg("VanGogh-3");
+  cop_imagem_ret(orig, 30, 30, 400, 400, img);
+
+  /* pinta */
+  enquanto (tem_mov_mouse(x, y))
+    pinta(tela, orig, mouse_x(), mouse_y());
+fim.

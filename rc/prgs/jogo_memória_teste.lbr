@@ -1,0 +1,25 @@
+programa Olá;
+inclui "gra*";
+
+const
+  N = 8;
+  TAM = 32;
+
+var
+  b: arranjo [N, N] de botão;
+  i, j: inteiro;
+
+início
+  para (i:=0; i<N; i++)
+    para (j:=0; j<N; j++)
+      b[i, j] := novo_botão(tela, 
+                            j*TAM+10, 
+                            i*TAM+10, 
+                            TAM-5, 
+                            TAM-5, 
+                            "");
+
+  alt_vis_janela(b[3,3], não);
+  alt_vis_janela(b[2,6], não);
+  escreva("Olá!");
+fim.

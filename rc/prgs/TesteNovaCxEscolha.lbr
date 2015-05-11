@@ -1,0 +1,20 @@
+programa TesteNovaCxEscolha;
+inclui "gra*";
+inclui "evnt*";
+
+var
+  j: Janela;
+  c1, c2, c3: CxEscolha;
+início
+  j := novaJanela(150, 150, 300, 300, "Teste");
+  c1 := novaCxEscolha(Tela, 30, 30, 150, 25, "Teste 1");
+  c2 := novaCxEscolha(Tela, 30, 130, 150, 50, "Teste 2");
+  c3 := novaCxEscolha(Tela, 30, 230, 150, 50, "Teste 3");
+  novoEdtLin(Tela, 30, 80, 150, 25, "Testando...");
+
+  altCor(c1, COR_VERDE);
+  esperePor(EV_CLIQUE);
+  escrevaLn("Olá!");
+
+
+fim.

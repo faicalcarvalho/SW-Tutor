@@ -1,0 +1,25 @@
+/* Traça série de linhas conectadas */
+programa linhas_conectadas;
+inclui "gra*";
+inclui "evnt*";
+
+/* tem_clique - obtém em (x, y) as coordenadas do
+   próximo clique e retorna 'sim'; se o usuário
+   pressionar o teclado, retorna 'não' */
+função tem_clique(var x, y: inteiro): lógico;
+início
+  espere_por(EV_CLIQUE + EV_TECLADO);
+  se (último_evento() = EV_TECLADO)
+    retorne não;
+  mouse_xy(x, y);
+  retorne sim;
+fim;
+
+var
+  x, y: inteiro;
+
+início
+  /* obtém a sequência de pontos e traça as linhas */
+  enquanto (tem_clique(x, y))
+    dsn_lin(tela, x, y);
+fim.

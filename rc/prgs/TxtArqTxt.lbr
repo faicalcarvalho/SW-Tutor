@@ -1,0 +1,20 @@
+
+programa TxtArqTxt;
+inclui "arq*";
+var
+  t: texto;
+  n1, n2, i: inteiro;
+início
+  t := arqParaTxt("teste.txt");
+  n1 := tamanho(t);
+  txtParaArq("teste5.txt", t);
+
+  t := arqParaTxt("teste5.txt");
+  n2 := tamanho(t);
+
+  se (n1=n2)
+    escrevaLn("OK")
+  senão
+    escrevaLn("ERRO");
+  escrevaLn(n2);
+fim.

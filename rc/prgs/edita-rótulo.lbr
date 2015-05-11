@@ -1,0 +1,26 @@
+/* Edita o rótulo */
+programa edita_rótulo;
+inclui "gra*";
+inclui "evnt*";
+
+var
+  edt: editor_lin;
+  rtl: rótulo;
+  cxm: caixa_marca;
+  t: texto;
+
+início
+  /* cria os itens */
+  edt := novo_editor_lin(tela, 10, 10, 200, 30, "");
+  alt_tam_fonte(edt, 12);
+  cxm := nova_caixa_marca(tela, 220, 10, 100, 30, "fim");
+  rtl := novo_rótulo(tela, 10, 80, 100, 35, "");
+  alt_tam_fonte(rtl, 24);
+
+  /* edita o rótulo */
+  repita
+    espere_por(EV_TEMPO);
+    t := obt_txt_janela(edt);
+    alt_txt_janela(rtl, t);
+  até ((t = "fim") || (caixa_marcada(cxm)));
+fim.
