@@ -6,7 +6,7 @@ programa aloc_var_local;
 procedimento proc_aloc(n: inteiro);
 var
   i: inteiro;
-inicio
+início
   i := n;
   n := 1234;
   escreva("proc_aloc\n");

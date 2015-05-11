@@ -3,7 +3,7 @@ programa recursão_enquanto;
 
 /* sem_recursão - imprime valores entre v1 e v2 */
 procedimento sem_recursão(v1, v2: inteiro);
-inicio
+início
   enquanto (v1 <= v2)
   início
     escreva(v1, "\n");
@@ -13,7 +13,7 @@ fim;
 
 /* com_recursão - imprime valores entre v1 e v2 */
 procedimento com_recursão(v1, v2: inteiro);
-inicio
+início
   se (v1 <= v2)
   início
     escreva(v1, "\n");

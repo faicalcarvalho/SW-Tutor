@@ -6,7 +6,7 @@ inclui "gra*";
    (x, y) é a posição do canto superior esquerdo,
    larg a largura e altu a altura do X */
 procedimento dsn_marca(x, y, larg, altu: inteiro);
-inicio
+início
   alt_pos_caneta(tela, x, y);
   dsn_lin(tela, x + larg, y + altu);
   alt_pos_caneta(tela, x, y + altu);

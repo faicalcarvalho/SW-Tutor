@@ -27,6 +27,8 @@ After these steps, the resource file is ready to be linked to the application. N
 Building SW-Tutor.exe
 -------
 
+Before generating a new version, make sure the new version number is correctly updated. You will need do edit the *port_UFrmAbout.dfm* file. The version number is registered as the *Caption* property of the *Label3* component.
+
 To build SW-Tutor.exe, you will need *MSBuild*. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately, so that *MSBuild* runs smoothly.
 
 In that command window, change the current directory (`cd`) to the working directory, and run *MSBuild* using *DSL_PORT.dproj* as argument:
@@ -34,4 +36,14 @@ In that command window, change the current directory (`cd`) to the working direc
     $ MSBuild DSL_PORT.dproj
 	
 The build must have zero errors, although some warnings may be shown.
+
+
+Making the 'dist'
+-------
+
+Now you can update the *dist* directory, running the *gendist* batch file:
+
+    $ .\gendist.bat
+
+*gendist.bat* will copy *DSL_PORT.exe* to the *dist* directory, renaming it to *SW-Tutor.exe*. *gendist.bat* will also copy the *./rc/mdls* files to *dist/mdls*. If you need to update the module files which are distributed, you must update the *./rc/mdls* directory before running the *.\gendist* batch file.
 

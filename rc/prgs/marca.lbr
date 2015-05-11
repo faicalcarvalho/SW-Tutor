@@ -6,7 +6,7 @@ inclui "gra*";
    O retângulo delimitado por (x1, y1) e (x2, y2) 
    define a localização e o tamanho do X */
 procedimento dsnMarca(x1, y1, x2, y2: inteiro);
-inicio
+início
   altXY(Tela, x1, y1);
   dsnLin(Tela, x2, y2);
   altXY(Tela, x1, y2);

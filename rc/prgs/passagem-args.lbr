@@ -7,7 +7,7 @@ programa passagem_args;
 procedimento por_valor(n: inteiro);
 var
   k: inteiro;
-inicio
+início
   k := n * 2;
   n := 4321; // este comando NÃO TEM efeito externo
   escreva("por valor\n");
@@ -17,7 +17,7 @@ fim;
 procedimento por_referência(var n: inteiro);
 var
   k: inteiro;
-inicio
+início
   k := n * 2;
   n := 4321; // este comando TEM efeito externo
   escreva("por referência\n");
