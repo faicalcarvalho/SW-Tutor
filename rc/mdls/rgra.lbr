@@ -1,0 +1,41 @@
+/* módulo rgra */
+inclui "gra*";
+inclui "geom.lbr";
+
+/* rgra_dsn_lin - traça na janela uma linha entre p1 e p2 */
+procedimento rgra_dsn_lin(jan: janela; p1, p2: ponto);
+início
+  alt_pos_caneta(jan, arredonde(p1.x), arredonde(p1.y));
+  dsn_lin(jan, arredonde(p2.x), arredonde(p2.y));
+fim;
+
+/* rgra_alt_pixel - altera na janela a cor do ponto p */
+procedimento rgra_alt_pixel(jan: janela; p: ponto; cor: inteiro);
+início
+  alt_pixel(jan, arredonde(p.x), arredonde(p.y), cor);
+fim;
+
+/* rgra_dsn_ret - desenha na janela um retângulo; o ponto p
+   especifica o vértice superior esquerdo; larg e altu são,
+   respectivamente, a largura e a altura */
+procedimento rgra_dsn_ret(jan: janela; p: ponto; larg, altu: real);
+início
+  dsn_ret(jan,
+          arredonde(p.x),
+          arredonde(p.y),
+          arredonde(larg),
+          arredonde(altu));
+fim;
+
+/* rgra_dsn_cir - desenha na janela uma elipse; o ponto p
+   especifica o centro da elipse; larg e altu são,
+   respectivamente, a largura e a altura */
+procedimento rgra_dsn_cir(jan: janela; p: ponto; larg, altu: real);
+início
+  dsn_cir(jan,
+          arredonde(p.x - (larg / 2.0)),
+          arredonde(p.y - (altu / 2.0)),
+          arredonde(larg),
+          arredonde(altu));
+fim;
+
