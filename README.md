@@ -10,14 +10,12 @@ You can find more information by visiting the site [O Jovem Programador] (http:/
 Building the resource file
 -------
 
-Before building SW-Tutor.exe, you need an updated version of *sw_tutor.res*, the Windows resource file that is linked with the application. Change the current directory to *rc* and run the resource compiler:
+Before building SW-Tutor.exe, you need an updated version of the *sw_tutor.res* file, the Windows resource file that is linked with the application. Change the current directory to *rc* and run the resource compiler:
 
     $ cd rc
-    $ copy .\bin-bk\rc.exe-orig .\rc.exe
-    $ copy .\bin-bk\rcdll.dll-orig .\rcdll.dll
     $ rc /r sw_tutor.rc
 
-The two binary files necessary to run the resource compiler are preserved in the *bin-bk* direcoty. So the two *copy* commands above.
+The two binary files necessary to run the resource compiler (*rc.exe* and *rcdll.dll*) are preserved in the *rc* directory.
 
 The resource compiler produces the *sw_tutor.res* file. You must copy this file to the main directory:
 
@@ -29,10 +27,11 @@ After these steps, the resource file is ready to be linked to the application. N
 Building SW-Tutor.exe
 -------
 
-To build SW-Tutor.exe, you will need *MSBuild*. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately.
+To build SW-Tutor.exe, you will need *MSBuild*. Use Windows' search engine to find and run the *RAD Studio Command Prompt*. A command window will open, with some environment variables set appropriately, so that *MSBuild* runs smoothly.
 
-In the command window, change the current directory (`cd`) to the working directory, and run MSBuild using DSL_PORT.dproj as argument:
+In that command window, change the current directory (`cd`) to the working directory, and run *MSBuild* using *DSL_PORT.dproj* as argument:
 
     $ MSBuild DSL_PORT.dproj
 	
 The build must have zero errors, although some warnings may be shown.
+
