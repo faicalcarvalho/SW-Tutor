@@ -1,0 +1,62 @@
+/* módulo geom */
+inclui "mat*";
+
+tipo
+  ponto = registro
+    x, y: real;
+  fim;
+
+/* pto_médio - retorna o ponto médio entre p1 e p2 */
+função pto_médio(p1, p2: ponto): ponto;
+var
+  p: ponto;
+início
+  p.x := p1.x + ((p2.x - p1.x) / 2);
+  p.y := p1.y + ((p2.y - p1.y) / 2);
+  retorne p;
+fim;
+
+/* pto - retorna registro tipo ponto */
+função pto(x, y: real): ponto;
+var
+  p: ponto;
+início
+  p.x := x;
+  p.y := y;
+  retorne p;
+fim;
+
+/* pto_cir - retorna o ponto localizado no círculo
+   com centro e raio especificados, considerando
+   o ângulo especificado em graus */
+função pto_cir(centro: ponto; raio, graus: real): ponto;
+var
+  p: ponto;
+início
+  /* transforma graus em radianos */
+  graus := graus * PI / 180;
+
+  /* aplica fórmula considerando círculo de raio 1 */
+  p.x := cos(graus);
+  p.y := sen(graus);
+
+  /* aplica o fator raio */
+  p.x := p.x * raio;
+  p.y := p.y * raio;
+  p.y := -p.y; // ajusta o eixo y
+
+  /* aplica o deslocamento determinado pelo centro */
+  p.x := p.x + centro.x;
+  p.y := p.y + centro.y;
+  retorne p;
+fim;
+
+/* dist_pto - retorna a distância entre p1 e p2 */
+função dist_pto(p1, p2: ponto): real;
+var
+  dx, dy: real;
+início
+  dx := potência(p2.x - p1.x, 2);
+  dy := potência(p2.y - p1.y, 2);
+  retorne raiz(dx + dy);
+fim;

@@ -1,0 +1,16 @@
+/* módulo da_um_tempo */
+inclui "evnt*";
+inclui "mat*";
+
+/* da_um_tempo - aguarda um tempo aleatório ou fixo;
+   se o usuário usar o teclado, retorna não */
+função da_um_tempo(tpo_ms: inteiro; aleat: lógico): lógico;
+início
+  se (aleat)
+    tpo_ms := random(tpo_ms) + 1; // melhor evitar 0
+  alt_ev_tempo(tpo_ms);
+  espere_por(EV_TEMPO + EV_TECLADO);
+  se (último_evento() = EV_TECLADO)
+    retorne não;
+  retorne sim;
+fim;
